@@ -19,7 +19,7 @@ public class playerMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update(){
 		float rotation = Input.GetAxis(horizontalAxis) * Time.deltaTime * rotationSpeed;
-		float direction = Input.GetAxis(verticalAxis) * Time.deltaTime * movementSpeed;
+		float direction = Input.GetAxis(verticalAxis) *  movementSpeed;
 		
 		transform.Rotate(new Vector3(0, rotation, 0) );
 		rigidbody.velocity = transform.forward * direction;
