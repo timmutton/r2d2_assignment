@@ -2,8 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class spellBehaviour : MonoBehaviour {
-	public float movementSpeed;
-	public float maxDistance = 100.0f;
+	public float movementSpeed, maxDistance = 100.0f, damageAmt;
 	private Vector3 startPos;
 	
 	// Use this for initialization
@@ -14,8 +13,9 @@ public class spellBehaviour : MonoBehaviour {
 	}
 	
 	void OnCollisionEnter(Collision col){
-		if(col.collider.tag == "player")
-			Debug.Log("Hit Player");
+		Debug.Log(col.gameObject.name);
+		if(col.gameObject.tag == "Player")
+			col.gameObject.SendMessage("applyDamage", damageAmt);
 		Destroy(gameObject);
 	}
 	

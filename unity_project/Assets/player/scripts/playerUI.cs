@@ -2,12 +2,12 @@ using UnityEngine;
 using System.Collections;
 
 public class playerUI : MonoBehaviour {
-	public Texture2D healthBar, emptyBar;
 	public Transform target;
+	public Texture2D healthBar, emptyBar;
 	public float pBarX, pBarY, pBarWidth, pBarHeight;
 	
 	private float barLeft, barTop, barWidth, barHeight;
-	private Rect cameraRect;
+	private Rect camRect;
 	private playerProperties myPlayerProperties;
 	
 	void OnGUI(){
@@ -18,11 +18,13 @@ public class playerUI : MonoBehaviour {
 	
 	void Start(){
 		myPlayerProperties = target.GetComponent<playerProperties>();
-		cameraRect = camera.pixelRect;
-		barLeft = cameraRect.x + cameraRect.width * pBarX/100;
-		barTop = cameraRect.y + cameraRect.height * pBarY/100;
-		barWidth = cameraRect.width * pBarWidth/100;
-		barHeight = cameraRect.height * pBarHeight/100;
+		camRect = camera.pixelRect;
+		barLeft = camRect.x + camRect.width * pBarX/100;
+		Debug.Log(camRect.y);
+		barTop = Screen.height - camRect.y - camRect.height + camRect.height * pBarY/100;
+		//barTop = camRect.y + camRect.height * pBarY/100;
+		barWidth = camRect.width * pBarWidth/100;
+		barHeight = camRect.height * pBarHeight/100;
 	}
 	
 	private void drawBar(float barLeft, float barTop, float barWidth, float barHeight,

@@ -10,8 +10,14 @@ public class playerProperties : MonoBehaviour {
 		Health = startHealth;
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	private void applyDamage(float damageAmt){
+		Health -= damageAmt;	
+		Debug.Log(gameObject.name);
+		if(Health <= 0)
+			playerDeath();
+	}
 	
+	private void playerDeath(){
+		Destroy(gameObject);
 	}
 }
