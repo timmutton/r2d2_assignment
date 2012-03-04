@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class spellBehaviour : MonoBehaviour {
+public class offensiveSpellBehaviour : MonoBehaviour {
 	public float movementSpeed, maxDistance = 100.0f, damageAmt;
 	private Vector3 startPos;
 	

@@ -11,8 +11,7 @@ public class playerProperties : MonoBehaviour {
 	}
 	
 	private void applyDamage(float damageAmt){
-		Health -= damageAmt;	
-		Debug.Log(gameObject.name);
+		Health -= damageAmt;
 		if(Health <= 0)
 			playerDeath();
 	}

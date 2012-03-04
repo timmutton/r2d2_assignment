@@ -20,9 +20,7 @@ public class playerUI : MonoBehaviour {
 		myPlayerProperties = target.GetComponent<playerProperties>();
 		camRect = camera.pixelRect;
 		barLeft = camRect.x + camRect.width * pBarX/100;
-		Debug.Log(camRect.y);
 		barTop = Screen.height - camRect.y - camRect.height + camRect.height * pBarY/100;
-		//barTop = camRect.y + camRect.height * pBarY/100;
 		barWidth = camRect.width * pBarWidth/100;
 		barHeight = camRect.height * pBarHeight/100;
 	}

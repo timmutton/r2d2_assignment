@@ -10,7 +10,10 @@ public class playerAttack : MonoBehaviour {
 		if(Input.GetKeyDown("space")){
 			Vector3 spawnPos = rightHand.transform.position + 
 				new Vector3(0, 0, rightHand.renderer.bounds.extents.z + spell.renderer.bounds.size.z);
-			GameObject.Instantiate(spell, spawnPos, transform.rotation);
+			GameObject temp = (GameObject)GameObject.Instantiate(spell, 
+				spawnPos, transform.rotation);
+			temp.SendMessage("setSpellType", 
+				offensiveSpellProperties.spellTypeEnum.fire);
 		}
 	}
 	
