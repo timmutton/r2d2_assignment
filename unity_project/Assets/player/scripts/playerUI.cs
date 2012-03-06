@@ -43,7 +43,7 @@ public class playerUI : MonoBehaviour {
 			GUI.BeginGroup(new Rect(0, 0, drawWidth, barHeight));
 				GUI.DrawTexture(drawRect, fullBarTex);
 			GUI.EndGroup();
-		//.Label(new Rect(, 
+		GUI.Label(new Rect(0, 0, barWidth, barHeight), new GUIContent(curValue/maxValue * 100 + "%"));
 		GUI.EndGroup();
 	}
 	
@@ -52,7 +52,7 @@ public class playerUI : MonoBehaviour {
 		//normalized view port rect
 		camRect = camera.pixelRect;
 		barLeft = camRect.x + camRect.width * pBarX/100;
-		barTop = Screen.height - camRect.y - camRect.height + camRect.height * pBarY/100;
+		barTop = camRect.height * pBarY/100;
 		barWidth = camRect.width * pBarWidth/100;
 		barHeight = camRect.height * pBarHeight/100;
 		
