@@ -8,17 +8,22 @@ public class offensiveSpellBehaviour : MonoBehaviour {
 	// Use this for initialization
 	void Start() {
 		//tag = "spell";
-		rigidbody.velocity = transform.forward * movementSpeed;
+		//start position is used to destroy object after a certain distance
 		startPos = transform.position;
+		//set velocity in forward direction
+		rigidbody.velocity = transform.forward * movementSpeed;
 	}
 	
+	//if it collides with player, apply damage and destroy it
 	void OnCollisionEnter(Collision col){
-		Debug.Log(col.gameObject.name);
-		if(col.gameObject.tag == "Player")
+		//Debug.Log(col.gameObject.name);
+		if(col.gameObject.tag == "Player"){
 			col.gameObject.SendMessage("applyDamage", damageAmt);
-		Destroy(gameObject);
+			Destroy(gameObject);
+		}
 	}
 	
+	//if its gone too far without hitting the player, destroy it
 	void Update(){
 		if(Vector3.Distance(startPos, transform.position) > maxDistance)
 			Destroy(this.gameObject);

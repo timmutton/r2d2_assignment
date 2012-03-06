@@ -11,20 +11,25 @@ public class playerUI : MonoBehaviour {
 	private playerProperties myPlayerProperties;
 	
 	void OnGUI(){
+		//draw the health bar
 		drawBar(barLeft, barTop, barWidth, barHeight,
 			emptyBar, healthBar, myPlayerProperties.maxHealth,
 			myPlayerProperties.Health);
 	}
 	
 	void Start(){
+		//link to player properties
 		myPlayerProperties = target.GetComponent<playerProperties>();
+		//link to normalized view port rect
 		camRect = camera.pixelRect;
+		//set bar dimentions and pos (by converting size percentage to pixels)
 		barLeft = camRect.x + camRect.width * pBarX/100;
 		barTop = Screen.height - camRect.y - camRect.height + camRect.height * pBarY/100;
 		barWidth = camRect.width * pBarWidth/100;
 		barHeight = camRect.height * pBarHeight/100;
 	}
 	
+	//draws a bar of given dimensions and pos using a full and empty bar texture
 	private void drawBar(float barLeft, float barTop, float barWidth, float barHeight,
 		Texture2D emptyBarTex, Texture2D fullBarTex, float maxValue, float curValue){
 		Rect locationRect = new Rect(barLeft, barTop, barWidth, 
@@ -38,7 +43,6 @@ public class playerUI : MonoBehaviour {
 			GUI.BeginGroup(new Rect(0, 0, drawWidth, barHeight));
 				GUI.DrawTexture(drawRect, fullBarTex);
 			GUI.EndGroup();
-			//GUI.Label();
 		GUI.EndGroup();
 	}
 }

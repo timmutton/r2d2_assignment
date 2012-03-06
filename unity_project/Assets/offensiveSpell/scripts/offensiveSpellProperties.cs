@@ -6,14 +6,10 @@ public class offensiveSpellProperties : MonoBehaviour {
 	private spellTypeEnum spellType;
 	public Material[] spellMat;
 	
-	// Use this for initialization
+	// set the element type of the spell
+	//and update the material used by the renderer
 	void setSpellType(spellTypeEnum type) {
 		spellType = type;
 		renderer.material = spellMat[(int)type];
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
 	}
 }

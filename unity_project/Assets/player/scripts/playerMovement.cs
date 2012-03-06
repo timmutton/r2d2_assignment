@@ -6,22 +6,21 @@ public class playerMovement : MonoBehaviour {
 	public string inputPrefix = string.Empty;
 	private string horizontalAxis = string.Empty, verticalAxis = string.Empty;
 	
-	// Use this for initialization
+	// if we've supllied a prefix, get the movement axis'
 	void Start(){
 		if(inputPrefix == string.Empty)
 			Debug.Log("No player input prefix");
 		horizontalAxis = inputPrefix + "Hor";
-		//Debug.Log(horizontalAxis);
 		verticalAxis = inputPrefix + "Vert";
-		//Debug.Log(verticalAxis);
 	}
 	
-	// Update is called once per frame
 	void Update(){
 		float rotation = Input.GetAxis(horizontalAxis) * Time.deltaTime * rotationSpeed;
 		float direction = Input.GetAxis(verticalAxis) *  movementSpeed;
 		
-		transform.Rotate(new Vector3(0, rotation, 0) );
+		//rotate player
+		transform.Rotate(new Vector3(0, rotation, 0));
+		//set velocity in forward direction
 		rigidbody.velocity = transform.forward * direction;
 	}
 }
