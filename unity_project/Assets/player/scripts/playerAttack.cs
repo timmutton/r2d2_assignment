@@ -23,7 +23,7 @@ public class playerAttack : MonoBehaviour {
 	
 	void Start(){
 		//link to the right hand
-		rightHand = transform.Find("Model/rightHand");
+		rightHand = transform.Find("model/rightHand");
 		if(rightHand == null){
 			Debug.Log("Could not find right hand");
 		}
