@@ -43,6 +43,7 @@ public class playerUI : MonoBehaviour {
 			GUI.BeginGroup(new Rect(0, 0, drawWidth, barHeight));
 				GUI.DrawTexture(drawRect, fullBarTex);
 			GUI.EndGroup();
+		//.Label(new Rect(, 
 		GUI.EndGroup();
 	}
 	

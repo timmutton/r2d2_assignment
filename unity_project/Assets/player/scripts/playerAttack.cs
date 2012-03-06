@@ -17,7 +17,7 @@ public class playerAttack : MonoBehaviour {
 				spawnPos, transform.rotation);
 			//set the spell type
 			temp.SendMessage("setSpellType", 
-				offensiveSpellProperties.spellTypeEnum.fire);
+				offensiveSpellProperties.spellTypeEnum.water);
 		}
 	}
 	
