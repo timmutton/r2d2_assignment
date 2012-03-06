@@ -9,8 +9,13 @@ public class playerUI : MonoBehaviour {
 	private float barLeft, barTop, barWidth, barHeight;
 	private Rect camRect;
 	private playerProperties myPlayerProperties;
+	private Resolution gameRes;
 	
 	void OnGUI(){
+		if(gameRes.width != Screen.currentResolution.width && 
+			gameRes.height != Screen.currentResolution.height)
+			updateResolution();
+		
 		//draw the health bar
 		drawBar(barLeft, barTop, barWidth, barHeight,
 			emptyBar, healthBar, myPlayerProperties.maxHealth,
@@ -22,11 +27,9 @@ public class playerUI : MonoBehaviour {
 		myPlayerProperties = target.GetComponent<playerProperties>();
 		//link to normalized view port rect
 		camRect = camera.pixelRect;
-		//set bar dimentions and pos (by converting size percentage to pixels)
-		barLeft = camRect.x + camRect.width * pBarX/100;
-		barTop = Screen.height - camRect.y - camRect.height + camRect.height * pBarY/100;
-		barWidth = camRect.width * pBarWidth/100;
-		barHeight = camRect.height * pBarHeight/100;
+		
+		updateResolution();
+
 	}
 	
 	//draws a bar of given dimensions and pos using a full and empty bar texture
@@ -44,5 +47,15 @@ public class playerUI : MonoBehaviour {
 				GUI.DrawTexture(drawRect, fullBarTex);
 			GUI.EndGroup();
 		GUI.EndGroup();
+	}
+	
+	//set bar dimentions and pos (by converting size percentage to pixels)
+	void updateResolution(){
+		barLeft = camRect.x + camRect.width * pBarX/100;
+		barTop = Screen.height - camRect.y - camRect.height + camRect.height * pBarY/100;
+		barWidth = camRect.width * pBarWidth/100;
+		barHeight = camRect.height * pBarHeight/100;
+		
+		gameRes = Screen.currentResolution;
 	}
 }

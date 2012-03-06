@@ -11,7 +11,7 @@ public class playerAttack : MonoBehaviour {
 			//the spawn position will be the players right hand
 			//plus the radius of the hand and the diameter of the spell
 			Vector3 spawnPos = rightHand.transform.position + 
-				new Vector3(0, 0, rightHand.renderer.bounds.extents.z + spell.renderer.bounds.size.z);
+				transform.forward * (rightHand.renderer.bounds.extents.z + spell.renderer.bounds.size.z);
 			//instantiate the spell at given position, facing the players forward direction
 			GameObject temp = (GameObject)GameObject.Instantiate(spell, 
 				spawnPos, transform.rotation);
@@ -28,4 +28,6 @@ public class playerAttack : MonoBehaviour {
 			Debug.Log("Could not find right hand");
 		}
 	}
+	
+	
 }
