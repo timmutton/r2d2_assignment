@@ -51,7 +51,7 @@ public class playerUI : MonoBehaviour {
 		//normalized view port rect
 		camRect = camera.pixelRect;
 		barLeft = camRect.x + camRect.width * pBarX/100;
-		barTop = camRect.y + camRect.height * pBarY/100;
+		barTop = Screen.height - camRect.y - camRect.height + camRect.height * pBarY/100;
 		barWidth = camRect.width * pBarWidth/100;
 		barHeight = camRect.height * pBarHeight/100;
 		

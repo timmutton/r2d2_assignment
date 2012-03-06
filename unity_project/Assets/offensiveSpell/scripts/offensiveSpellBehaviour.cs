@@ -16,9 +16,13 @@ public class offensiveSpellBehaviour : MonoBehaviour {
 	
 	//if it collides with player, apply damage and destroy it
 	void OnCollisionEnter(Collision col){
-		//Debug.Log(col.gameObject.name);
-		if(col.gameObject.tag == "Player"){
-			col.gameObject.SendMessage("applyDamage", damageAmt);
+		Destroy(gameObject);
+	}
+	
+	void OnTriggerEnter(Collider col){
+		//Debug.Log(col.name);
+		if(col.tag == "Player"){
+			col.SendMessage("applyDamage", damageAmt);
 			Destroy(gameObject);
 		}
 	}
