@@ -1,2 +1,7 @@
+*.suo
+*.userprefs
 Library/
 Temp/
+obj/
+*ReSharper*
+*.pidb
