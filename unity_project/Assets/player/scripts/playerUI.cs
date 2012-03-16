@@ -8,7 +8,7 @@ public class playerUI : MonoBehaviour {
 	
 	private float barLeft, barTop, barWidth, barHeight;
 	private Rect camRect;
-	private playerProperties myPlayerProperties;
+	private PlayerProperties myPlayerProperties;
 	private float screenWidth, screenHeight;
 	
 	void OnGUI(){
@@ -23,7 +23,7 @@ public class playerUI : MonoBehaviour {
 	
 	void Start(){
 		//link to player properties
-		myPlayerProperties = target.GetComponent<playerProperties>();
+		myPlayerProperties = target.GetComponent<PlayerProperties>();
 		
 		updateDimensions();
 

@@ -20,9 +20,9 @@ public class offensiveSpellBehaviour : MonoBehaviour {
 	}
 	
 	void OnTriggerEnter(Collider col){
-		//Debug.Log(col.name);
-		if(col.tag == "Player"){
-			col.SendMessage("applyDamage", damageAmt);
+		var properties = col.GetComponent<PlayerProperties>();
+		if(properties != null) {
+			properties.Damage(damageAmt);
 			Destroy(gameObject);
 		}
 	}
