@@ -1,10 +1,16 @@
+using Assets.player;
 using UnityEngine;
-using System.Collections;
 using System;
 
 public class PlayerProperties : MonoBehaviour {
 	
-	[SerializeField]
+    private Inventory inventory = new Inventory();
+
+    public Inventory Inventory {
+        get { return this.inventory; }
+    }
+
+    [SerializeField]
 	private float health;
 	
 	public float Health {
@@ -51,4 +57,12 @@ public class PlayerProperties : MonoBehaviour {
 		this.OnDeath();
 		Destroy(gameObject);
 	}
+
+    public void Update() {
+       
+    }
+
+    public void OnGui() {
+        this.inventory.Draw();
+    }
 }
