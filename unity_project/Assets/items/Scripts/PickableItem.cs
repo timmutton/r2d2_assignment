@@ -24,6 +24,7 @@ public abstract class PickableItem : MonoBehaviour {
     private float secondsToNextRespawn = 0;
 
     public Texture2D Icon;
+    public AudioClip pickupSound;
 
     // Use this for initialization
     private void Start() {}
@@ -48,8 +49,8 @@ public abstract class PickableItem : MonoBehaviour {
         }
     }
 
-    private void Pickup(Collider collider)
-    {
+    private void Pickup(Collider collider) {
+        AudioSource.PlayClipAtPoint(this.pickupSound, this.transform.position);
         this.Visible = false;
         this.secondsToNextRespawn = this.RespawnSeconds;
         var playerProperties = collider.GetComponent<PlayerProperties>();
