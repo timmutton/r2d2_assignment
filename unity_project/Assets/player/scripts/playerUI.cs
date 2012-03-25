@@ -10,8 +10,12 @@ public class playerUI : MonoBehaviour {
 	private Rect camRect;
 	private PlayerProperties myPlayerProperties;
 	private float screenWidth, screenHeight;
-	
-	void OnGUI(){
+
+    public Rect CameraRect {
+        get { return this.camRect; }
+    }
+
+    void OnGUI(){
 		if(screenWidth != Screen.width && screenHeight != Screen.height)
 			updateDimensions();
 		

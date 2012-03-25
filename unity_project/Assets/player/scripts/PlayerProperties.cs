@@ -3,8 +3,8 @@ using UnityEngine;
 using System;
 
 public class PlayerProperties : MonoBehaviour {
-	
-    private Inventory inventory = new Inventory();
+
+    private Inventory inventory;
 
     public Inventory Inventory {
         get { return this.inventory; }
@@ -35,9 +35,13 @@ public class PlayerProperties : MonoBehaviour {
 			handler(this, EventArgs.Empty);
 		}
 	}
-	
-	
-	// Use this for initialization
+
+    public PlayerProperties() {
+        this.inventory = new Inventory(this);
+    }
+
+
+    // Use this for initialization
 	void Start () {
 		//init health
 		this.Health = startHealth;
@@ -62,7 +66,7 @@ public class PlayerProperties : MonoBehaviour {
        
     }
 
-    public void OnGui() {
+    public void OnGUI() {
         this.inventory.Draw();
     }
 }

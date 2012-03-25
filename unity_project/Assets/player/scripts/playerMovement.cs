@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class playerMovement : MonoBehaviour {
-	public float rotationSpeed = 1.0f, movementSpeed = 1.0f;
+	public float rotationSpeed = 1f, movementSpeed = 1.0f;
 	public string inputPrefix = string.Empty;
 	private string horizontalAxis = string.Empty, verticalAxis = string.Empty;
 	
