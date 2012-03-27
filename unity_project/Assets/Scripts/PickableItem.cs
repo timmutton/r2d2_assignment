@@ -53,9 +53,9 @@ public abstract class PickableItem : MonoBehaviour {
         AudioSource.PlayClipAtPoint(this.pickupSound, this.transform.position);
         this.Visible = false;
         this.secondsToNextRespawn = this.RespawnSeconds;
-        var playerProperties = collider.GetComponent<PlayerProperties>();
+        var playerProperties = collider.gameObject;
         this.DoActionOnPlayer(playerProperties);
     }
 
-    protected abstract void DoActionOnPlayer(PlayerProperties playerProperties);
+    protected abstract void DoActionOnPlayer(GameObject player);
 }

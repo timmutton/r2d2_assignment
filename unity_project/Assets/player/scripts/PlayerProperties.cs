@@ -1,15 +1,7 @@
-using Assets.player;
 using UnityEngine;
 using System;
 
 public class PlayerProperties : MonoBehaviour {
-
-    private Inventory inventory;
-
-    public Inventory Inventory {
-        get { return this.inventory; }
-    }
-
     [SerializeField]
 	private float health;
 	
@@ -36,10 +28,6 @@ public class PlayerProperties : MonoBehaviour {
 		}
 	}
 
-    public PlayerProperties() {
-        this.inventory = new Inventory(this);
-    }
-
 
     // Use this for initialization
 	void Start () {
@@ -64,9 +52,5 @@ public class PlayerProperties : MonoBehaviour {
 
     public void Update() {
        
-    }
-
-    public void OnGUI() {
-        this.inventory.Draw();
     }
 }
