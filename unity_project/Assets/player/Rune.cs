@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using Assets.Code;
+using UnityEngine;
 
-public class Rune {
-    public Texture2D Icon;
+public class Rune : IInventoryItem {
     public RuneType Type;
+    public Texture2D Icon { get; set; }
 }

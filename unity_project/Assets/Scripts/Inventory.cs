@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
+using Assets.Code;
 using UnityEngine;
 using System.Linq;
 
 public class Inventory : MonoBehaviour {
-    private List<Rune> items;
+    private List<IInventoryItem> items;
 
     public void Start() {
-        this.items = new List<Rune>();
+        this.items = new List<IInventoryItem>();
     }
 
     public void Add(Rune item) {
