@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 7aa340c5aa216419ebf4b0d2764bcf3f
+guid: fe40c7bcc60954e108fd7f70bb7840f6
 ModelImporter:
   fileIDToRecycleName:
     4300000: pPlane1
@@ -20,11 +20,11 @@ ModelImporter:
     clipAnimations: []
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: .00999999978
     meshCompression: 0
     addColliders: 1
-    swapUVChannels: 1
-    generateSecondaryUV: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
     useFileUnits: 1
     optimizeMesh: 1
     secondaryUVAngleDistortion: 8
