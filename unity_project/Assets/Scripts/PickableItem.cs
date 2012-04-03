@@ -44,13 +44,24 @@ public abstract class PickableItem : MonoBehaviour {
     }
 
     public void OnTriggerEnter(Collider collider) {
-        if (collider.CompareTag("Player") && this.visible) {
-            this.Pickup(collider);
+        Collide(collider);
+    }
+
+    public void OnTriggerStay(Collider collider) {
+        Collide(collider);
+    }
+
+    private void Collide(Collider collider) {
+        if (collider.CompareTag("Player") && visible) {
+            Pickup(collider);
         }
     }
 
     private void Pickup(Collider collider) {
-        AudioSource.PlayClipAtPoint(this.pickupSound, this.transform.position);
+        if (this.pickupSound != null) {
+            AudioSource.PlayClipAtPoint(this.pickupSound, this.transform.position);
+        }
+
         this.Visible = false;
         this.secondsToNextRespawn = this.RespawnSeconds;
         var playerProperties = collider.gameObject;
