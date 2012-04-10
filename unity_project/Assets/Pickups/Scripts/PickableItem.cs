@@ -1,12 +1,6 @@
 using UnityEngine;
 
-public abstract class PickableItem : MonoBehaviour
-{
-    /// <summary>
-    /// Determines if items respawns or not.
-    /// </summary>
-    public bool Respawnable = true;
-    
+public abstract class PickableItem : MonoBehaviour {
     /// <summary>
     /// Number of seconds after which item respawns
     /// </summary>
@@ -37,7 +31,7 @@ public abstract class PickableItem : MonoBehaviour
 
     // Update is called once per frame
     private void Update() {
-        if (!this.visible && this.Respawnable) {
+        if (!this.visible) {
             this.secondsToNextRespawn -= Time.deltaTime;
             if (this.secondsToNextRespawn <= 0) {
                 this.Respawn();

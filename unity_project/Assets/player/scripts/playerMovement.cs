@@ -3,24 +3,64 @@ using System.Collections;
 
 public class playerMovement : MonoBehaviour {
 	public float rotationSpeed = 1f, movementSpeed = 1.0f;
-	public string inputPrefix = string.Empty;
-	private string horizontalAxis = string.Empty, verticalAxis = string.Empty;
+	public bool useKeyboard = false, invertXAxes = false;
+	private ClientWiiState state;
+	private Transform playerCam;
 	
-	// if we've supllied a prefix, get the movement axis'
 	void Start(){
-		if(inputPrefix == string.Empty)
-			Debug.Log("No player input prefix");
-		horizontalAxis = inputPrefix + "Hor";
-		verticalAxis = inputPrefix + "Vert";
+		state = new ClientWiiState();
+		playerCam = transform.FindChild("Main Camera");
 	}
 	
 	void Update(){
-		float rotation = Input.GetAxis(horizontalAxis) * Time.deltaTime * rotationSpeed;
-		float direction = Input.GetAxis(verticalAxis) *  movementSpeed;
+		float rotationX = 0.0f, rotationY = 0.0f;
+		float directionY = 0.0f, directionX = 0.0f;
 		
+		if(useKeyboard){
+			directionY = Input.GetAxis("moveY");
+			directionX = Input.GetAxis("moveX");
+			rotationY = Input.GetAxis("lookY");
+			rotationX = Input.GetAxis("lookX");
+			
+		}else{
+			directionY = state.ncJoyY;
+			directionX = state.ncJoyX;
+			
+			print("update to use IR sensor");
+			if(!state.B){
+				if(state.Left)
+					rotationX = -1.0f;
+				if(state.Right)
+					rotationX = 1.0f;
+				
+				if(state.Down)
+					rotationY = -1.0f;
+				if(state.Up)
+					rotationY = 1.0f;
+			}
+		}
+		
+		if(!invertXAxes){
+			rotationX *= -1.0f;
+		}
+		
+		if(playerCam.rotation.eulerAngles.x > 45 && playerCam.rotation.eulerAngles.x < 180){
+			if(rotationX > 0) rotationX = 0;
+		}else if(playerCam.rotation.eulerAngles.x < 315 && playerCam.rotation.eulerAngles.x >= 180){
+			print(rotationX);
+			if(rotationX < 0) rotationX = 0;
+		}
+				
 		//rotate player
-		transform.Rotate(new Vector3(0, rotation, 0));
+//		rotationX * rotationSpeed
+		transform.Rotate(new Vector3(0, rotationY * rotationSpeed, 0));
+		playerCam.Rotate(new Vector3(rotationX * rotationSpeed, 0, 0));
 		//set velocity in forward direction
-		rigidbody.velocity = transform.forward * direction;
+		rigidbody.AddForce(transform.forward * directionY  *  movementSpeed);
+		rigidbody.AddForce(transform.right * directionX  *  movementSpeed);
+	}
+	
+	void updateWiiState(ClientWiiState _state){
+		state = _state;
 	}
 }

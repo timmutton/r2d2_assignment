@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 
-
 public class gameManager : MonoBehaviour {
 	public float roundTime = 180.0f;
 	public int maxRounds = 3;
@@ -17,8 +16,8 @@ public class gameManager : MonoBehaviour {
 		GameObject Player1_inst = (GameObject)Instantiate(player, spawn1.transform.position, spawn1.transform.rotation);
 		
 		//Sets variables relevant to the individual characters. eg. camera position, player name
-		GameObject.Find("Main Camera").GetComponent<Camera>().rect = new Rect(0.5f, 0.0f, 0.5f, 1.0f);
-		Player2_inst.GetComponent<playerMovement>().inputPrefix = "player2";
+		Player2_inst.GetComponentInChildren<Camera>().rect = new Rect(0.5f, 0.0f, 0.5f, 1.0f);
+//		Player2_inst.GetComponent<playerMovement>().inputPrefix = "player2";
 		Player1_inst.name = "player1";		
 		Player2_inst.name = "player2";
 		
