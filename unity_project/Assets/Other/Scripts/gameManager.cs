@@ -20,8 +20,6 @@ public class gameManager : MonoBehaviour {
 //		Player2_inst.GetComponent<playerMovement>().inputPrefix = "player2";
 		Player1_inst.name = "player1";		
 		Player2_inst.name = "player2";
-
-		Player1_inst.GetComponentInChildren<playerMovement>().useKeyboard = true;
 		
 		currentTime = roundTime;
 	}

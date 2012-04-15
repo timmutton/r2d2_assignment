@@ -2,10 +2,6 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-struct movement{
-	public float x, y;
-}
-
 public class WiiReader : MonoBehaviour {
 	private WiiUnityClient client;
 	private bool connected;
@@ -14,6 +10,8 @@ public class WiiReader : MonoBehaviour {
 	void Awake () {
 		client = new WiiUnityClient();
 		connected = client.StartClient();
+		
+		print("arraylist of vec3's for acceleration");
 		
 		/*if(players.Length != client.numWiimotes){
 			print("Number of players and number of wiimotes do not match");
@@ -26,7 +24,7 @@ public class WiiReader : MonoBehaviour {
 		if (!connected)
 			return;
 		
-		movement mv;
+		Vector3 accel;
 		ClientWiiState state;
 		GameObject player;
 			
@@ -35,8 +33,9 @@ public class WiiReader : MonoBehaviour {
 			client.UpdateAccel(i + 1);
 			client.UpdateNunchuck(i + 1);
 			state = client.GetWiiState(i + 1);
-			mv.x = state.accelX;
-			mv.y = state.accelY;
+			accel.x = state.accelX;
+			accel.y = state.accelY;
+			accel.z = 0;
 			
 			player = GameObject.Find("player" + i.ToString());
 			
@@ -46,8 +45,8 @@ public class WiiReader : MonoBehaviour {
 			
 			print("update function name");
 			if(state.B){
-				player.SendMessage("functionName",
-				mv, 
+				player.SendMessage("getGesture",
+				accel, 
 				SendMessageOptions.DontRequireReceiver);
 			}
 		}
