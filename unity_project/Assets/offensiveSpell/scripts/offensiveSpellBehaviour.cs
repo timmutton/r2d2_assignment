@@ -15,16 +15,21 @@ public class offensiveSpellBehaviour : MonoBehaviour {
 	}
 	
 	//if it collides with player, apply damage and destroy it
-	void OnCollisionEnter(Collision col){
-		Destroy(gameObject);
+	void OnCollisionEnter(Collision collision) {
+		this.InteractWithCollider(collision.collider);
 	}
-	
-	void OnTriggerEnter(Collider col){
-		var properties = col.GetComponent<PlayerProperties>();
+
+	void OnTriggerEnter(Collider collider) {
+		this.InteractWithCollider(collider);
+	}
+
+	private void InteractWithCollider(Collider collider) {
+		var properties = collider.GetComponent<PlayerProperties>();
 		if(properties != null) {
 			properties.Damage(damageAmt);
-			Destroy(gameObject);
 		}
+
+		Destroy(gameObject);
 	}
 	
 	//if its gone too far without hitting the player, destroy it
