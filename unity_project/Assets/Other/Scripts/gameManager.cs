@@ -60,17 +60,29 @@ public class gameManager : MonoBehaviour {
 			currentTime = 0;
 			currentRound = maxRounds;
 			
-			if(Player1_inst.GetComponent<PlayerProperties>().Health <= 0){
+			if(Player1_properties.Health <= 0){
 				Debug.Log("Player 1 DEAD");
-			}else if(Player2_inst.GetComponent<PlayerProperties>().Health <= 0){
+				Debug.Log("Player 2 Wins");	
+			}else if(Player2_properties.Health <= 0){
 				Debug.Log ("Player 2 DEAD");
+				Debug.Log("Player 1 Wins");
 			}
 		}
 
 		//Condition if all the rounds are over and is finished
 		if(currentRound == maxRounds){
+			if(Player1_properties.Health > Player2_properties.Health){
+				Debug.Log("Player 1 Wins");
+			}else if(Player2_properties.Health > Player1_properties.Health){
+				Debug.Log("Player 2 Wins");	
+			}else{
+				Debug.Log("Draw");
+			}
 			Debug.Log("GAME OVER");
 		}
+		
+		
+		
 		
 		//Decrements the round timer and the remaining number of rounds
 		if(currentTime > 0 && currentRound <= maxRounds){
