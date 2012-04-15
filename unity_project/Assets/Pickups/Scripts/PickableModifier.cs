@@ -3,7 +3,7 @@ using UnityEngine;
 
 public enum ModifierType {
 	QuadDamage,
-	Heast,
+	Haste,
 }
 
 public class PickableModifier : PickableItem {
@@ -15,8 +15,8 @@ public class PickableModifier : PickableItem {
 			case ModifierType.QuadDamage:
 				player.AddComponent<QuadDamage>();
 				break;
-			case ModifierType.Heast:
-				player.AddComponent<Heast>();
+			case ModifierType.Haste:
+				player.AddComponent<Haste>();
 				break;
 		}
 	}

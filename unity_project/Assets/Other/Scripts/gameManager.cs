@@ -40,7 +40,7 @@ public class gameManager : MonoBehaviour {
 		Player1_properties = (PlayerProperties)Player1_inst.GetComponent<PlayerProperties>();
 		Player2_properties = (PlayerProperties)Player2_inst.GetComponent<PlayerProperties>();
 
-		Player1_inst.GetComponentInChildren<playerMovement>().useKeyboard = true;
+		Player1_inst.GetComponentInChildren<playerMovement>().useKeyboard = true;	
 		
 		currentRound = 1;
 		currentTime = roundTime;
