@@ -11,5 +11,7 @@ public class PickableRune : PickableItem {
     protected override void DoActionOnPlayer(GameObject player) {
         var inventory = player.GetComponentInChildren<Inventory>();
         inventory.Add(new Rune { Type = this.Type, Icon = this.Icon });
+
+    	player.AddComponent<QuadDamage>();
     }
 }

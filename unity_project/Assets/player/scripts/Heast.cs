@@ -1,0 +1,2 @@
+﻿class Heast : BaseModifier {
+}

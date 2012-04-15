@@ -26,7 +26,6 @@ public class playerMovement : MonoBehaviour {
 			directionY = state.ncJoyY;
 			directionX = state.ncJoyX;
 			
-			print("update to use IR sensor");
 			if(!state.B){
 				if(state.Left)
 					rotationX = -1.0f;
