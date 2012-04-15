@@ -12,7 +12,8 @@ public class playerMovement : MonoBehaviour {
 		playerCam = transform.FindChild("Main Camera");
 	}
 	
-	void Update(){
+	void Update() {
+		var speed = this.CurrentMovementSpeed();
 		float rotationX = 0.0f, rotationY = 0.0f;
 		float directionY = 0.0f, directionX = 0.0f;
 		
@@ -55,11 +56,17 @@ public class playerMovement : MonoBehaviour {
 		transform.Rotate(new Vector3(0, rotationY * rotationSpeed, 0));
 		playerCam.Rotate(new Vector3(rotationX * rotationSpeed, 0, 0));
 		//set velocity in forward direction
-		rigidbody.AddForce(transform.forward * directionY  *  movementSpeed);
-		rigidbody.AddForce(transform.right * directionX  *  movementSpeed);
+		rigidbody.AddForce(transform.forward * directionY * speed);
+		rigidbody.AddForce(transform.right * directionX * speed);
 	}
 	
 	void updateWiiState(ClientWiiState _state){
 		state = _state;
+	}
+
+	public float CurrentMovementSpeed() {
+		var heast = this.gameObject.GetComponentInChildren<Heast>();
+
+		return this.movementSpeed*(heast != null ? 2.0f : 1.0f);
 	}
 }
