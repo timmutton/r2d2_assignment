@@ -35,7 +35,7 @@ public class playerAttack : MonoBehaviour {
 
 	float GetDamageMultiplier() {
 		var quad = this.gameObject.GetComponentInChildren<QuadDamage>();
-		return quad != null ? 4.0f : 1.0f;
+		return quad != null ? quad.DamageMultipier : 1.0f;
 	}
 	
 	

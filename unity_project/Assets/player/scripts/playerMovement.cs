@@ -67,6 +67,6 @@ public class playerMovement : MonoBehaviour {
 	public float CurrentMovementSpeed() {
 		var haste = this.gameObject.GetComponentInChildren<Haste>();
 
-		return this.movementSpeed * (haste != null ? 2.0f : 1.0f);
+		return this.movementSpeed * (haste != null ? haste.MovementSpeedMultiplier : 1.0f);
 	}
 }
