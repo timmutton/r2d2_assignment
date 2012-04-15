@@ -15,6 +15,10 @@ public class playerAttack : MonoBehaviour {
 			//instantiate the spell at given position, facing the players forward direction
 			GameObject temp = (GameObject)GameObject.Instantiate(spell, 
 				spawnPos, transform.rotation);
+
+			var projectile = temp.GetComponentInChildren<offensiveSpellBehaviour>();
+			projectile.damageAmt *= this.GetDamageMultiplier();
+
 			//set the spell type
 			temp.SendMessage("setSpellType", 
 				offensiveSpellProperties.spellTypeEnum.water);
@@ -27,6 +31,11 @@ public class playerAttack : MonoBehaviour {
 		if(rightHand == null){
 			Debug.Log("Could not find right hand");
 		}
+	}
+
+	float GetDamageMultiplier() {
+		var quad = this.gameObject.GetComponentInChildren<QuadDamage>();
+		return quad != null ? 4.0f : 1.0f;
 	}
 	
 	
