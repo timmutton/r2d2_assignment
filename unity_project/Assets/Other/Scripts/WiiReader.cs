@@ -43,7 +43,6 @@ public class WiiReader : MonoBehaviour {
 				state, 
 				SendMessageOptions.DontRequireReceiver);
 			
-			print("update function name");
 			if(state.B){
 				player.SendMessage("getGesture",
 				accel, 

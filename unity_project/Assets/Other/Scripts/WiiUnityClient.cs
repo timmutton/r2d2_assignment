@@ -35,7 +35,7 @@ class WiiUnityClient
     {        
 		// start the server
 		System.Diagnostics.Process wiiServer = new System.Diagnostics.Process();
-		wiiServer.StartInfo.FileName = "Assets\\Wiimote\\WiimoteServer.exe";
+		wiiServer.StartInfo.FileName = "Assets\\WiimoteServer.exe";
 		wiiServer.Start();
 		
 		//yield WaitForSeconds(5);		
