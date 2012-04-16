@@ -8,6 +8,5 @@
 *.sln
 *.pidb
 *.userprefs
-*.mat
 *.suo
 *ReSharper*
