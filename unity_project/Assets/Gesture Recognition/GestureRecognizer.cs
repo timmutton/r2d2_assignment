@@ -30,32 +30,34 @@ public class GestureRecognizer : MonoBehaviour {
     }
 	
 	void Update() {
-		if (currentEvent.type == EventType.mouseDown) {
-			initialPosition = Input.mousePosition;
-			points.Clear();
-			points.Add(initialPosition);
-			//Debug.Log("Initial: x: " + initialPosition.x + " y: " + initialPosition.y + " z: " + initialPosition.z); 
-		} else if(currentEvent.type == EventType.mouseDrag) {
-			currentPosition = Input.mousePosition;
-			points.Add(currentPosition);
-			//Debug.Log("Dragging");
-		} else if(currentEvent.type == EventType.MouseUp) {
-			points.Add(currentPosition);
-			//Debug.Log("x: " + currentPosition.x + " y: " + currentPosition.y + " z: " + 
-			try {
-				int gesture = getGesture(points);
-				string gestureName = "";
-				switch (gesture) {
-					case 1: gestureName = "HORIZONTAL_LINE"; break;
-					case 2: gestureName = "VERTICAL_LINE"; break;
-					case 3: gestureName = "V_UP"; break;
-					case 4: gestureName = "V_DOWN"; break;
-					case 5: gestureName = "SQUARE"; break;
-					default: gestureName = "Unknown gesture..."; break;
+		if(currentEvent != null){
+			if (currentEvent.type == EventType.mouseDown) {
+				initialPosition = Input.mousePosition;
+				points.Clear();
+				points.Add(initialPosition);
+				//Debug.Log("Initial: x: " + initialPosition.x + " y: " + initialPosition.y + " z: " + initialPosition.z); 
+			} else if(currentEvent.type == EventType.mouseDrag) {
+				currentPosition = Input.mousePosition;
+				points.Add(currentPosition);
+				//Debug.Log("Dragging");
+			} else if(currentEvent.type == EventType.MouseUp) {
+				points.Add(currentPosition);
+				//Debug.Log("x: " + currentPosition.x + " y: " + currentPosition.y + " z: " + 
+				try {
+					int gesture = getGesture(points);
+					string gestureName = "";
+					switch (gesture) {
+						case 1: gestureName = "HORIZONTAL_LINE"; break;
+						case 2: gestureName = "VERTICAL_LINE"; break;
+						case 3: gestureName = "V_UP"; break;
+						case 4: gestureName = "V_DOWN"; break;
+						case 5: gestureName = "SQUARE"; break;
+						default: gestureName = "Unknown gesture..."; break;
+					}
+					Debug.Log("Gesture: " + gestureName);
+				} catch(GestureNotFoundException e) {
+					Debug.Log("" + e.Message);
 				}
-				Debug.Log("Gesture: " + gestureName);
-			} catch(GestureNotFoundException e) {
-				Debug.Log("" + e.Message);
 			}
 		}
 	}
