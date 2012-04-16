@@ -41,7 +41,7 @@ public class PlayerProperties : MonoBehaviour {
 	}
 	
 	public void Heal(float hp) {
-		this.Health += hp;
+		this.Health = Math.Min(this.Health + hp, this.maxHealth);
 	}
 	
 	//will need to be updated
