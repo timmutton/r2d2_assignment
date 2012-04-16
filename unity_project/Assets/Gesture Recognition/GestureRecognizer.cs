@@ -60,6 +60,24 @@ public class GestureRecognizer : MonoBehaviour {
 		}
 	}
 	
+	void printGesture(ArrayList points){
+		try {
+			int gesture = getGesture(points);
+			string gestureName = "";
+			switch (gesture) {
+				case 1: gestureName = "HORIZONTAL_LINE"; break;
+				case 2: gestureName = "VERTICAL_LINE"; break;
+				case 3: gestureName = "V_UP"; break;
+				case 4: gestureName = "V_DOWN"; break;
+				case 5: gestureName = "SQUARE"; break;
+				default: gestureName = "Unknown gesture..."; break;
+			}
+			Debug.Log("Gesture: " + gestureName);
+		} catch(GestureNotFoundException e) {
+			Debug.Log("" + e.Message);
+		}
+	}
+	
 	int getGesture(ArrayList points){
 		Vector2 avg;
 		avg.x = 0;

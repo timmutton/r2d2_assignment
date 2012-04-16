@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 public class WiiReader : MonoBehaviour {
 	private WiiUnityClient client;
-	private bool connected;
+	private bool connected, recording;
+	private ArrayList points = new ArrayList();	
 	
 	// Use this for initialization
 	void Awake () {
@@ -47,6 +48,36 @@ public class WiiReader : MonoBehaviour {
 				player.SendMessage("getGesture",
 				accel, 
 				SendMessageOptions.DontRequireReceiver);
+			}
+			
+			if(state.B){
+				if(!recording){
+					recording = true;
+					points.Clear();
+				}
+				points.Add(new Vector3(state.accelX, state.accelY, state.accelZ));
+			}else if(recording){
+				recording = false;
+				points.Add(new Vector3(state.accelX, state.accelY, state.accelZ));
+				player.SendMessage("printGesture", points, SendMessageOptions.DontRequireReceiver);
+				
+				/*
+				try {
+					int gesture = getGesture(points);
+					string gestureName = "";
+					switch (gesture) {
+						case 1: gestureName = "HORIZONTAL_LINE"; break;
+						case 2: gestureName = "VERTICAL_LINE"; break;
+						case 3: gestureName = "V_UP"; break;
+						case 4: gestureName = "V_DOWN"; break;
+						case 5: gestureName = "SQUARE"; break;
+						default: gestureName = "Unknown gesture..."; break;
+					}
+					Debug.Log("Gesture: " + gestureName);
+				} catch(GestureNotFoundException e) {
+					Debug.Log("" + e.Message);
+				}
+			*/
 			}
 		}
 	}
