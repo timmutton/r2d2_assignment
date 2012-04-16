@@ -16,6 +16,7 @@ public class playerMovement : MonoBehaviour {
 		controller = GetComponent<CharacterController>();
 	}
 	
+<<<<<<< HEAD
 	void FixedUpdate(){
 		if(useKeyboard){
 			moveDir = new Vector3(Input.GetAxis("moveX"), 0, Input.GetAxis("moveZ"));
@@ -53,6 +54,11 @@ public class playerMovement : MonoBehaviour {
 		playerCam.Rotate(new Vector3(rotDir.x * rotationSpeed, 0, 0));
 		
 		/*float rotationX = 0.0f, rotationY = 0.0f;
+=======
+	void Update() {
+		var speed = this.CurrentMovementSpeed();
+		float rotationX = 0.0f, rotationY = 0.0f;
+>>>>>>> 26d3d28950f8a0e0ca4f7eca95c00fcc929dea18
 		float directionY = 0.0f, directionX = 0.0f;
 		
 		if(useKeyboard){
@@ -65,7 +71,10 @@ public class playerMovement : MonoBehaviour {
 			directionY = state.ncJoyY;
 			directionX = state.ncJoyX;
 			
+<<<<<<< HEAD
 			//print("update to use IR sensor");
+=======
+>>>>>>> 26d3d28950f8a0e0ca4f7eca95c00fcc929dea18
 			if(!state.B){
 				if(state.Left)
 					rotationX = -1.0f;
@@ -95,11 +104,22 @@ public class playerMovement : MonoBehaviour {
 		transform.Rotate(new Vector3(0, rotationY * rotationSpeed, 0));
 		playerCam.Rotate(new Vector3(rotationX * rotationSpeed, 0, 0));
 		//set velocity in forward direction
+<<<<<<< HEAD
 		rigidbody.AddForce(transform.forward * directionY  *  movementSpeed);
 		rigidbody.AddForce(transform.right * directionX  *  movementSpeed);*/
+=======
+		rigidbody.AddForce(transform.forward * directionY * speed);
+		rigidbody.AddForce(transform.right * directionX * speed);
+>>>>>>> 26d3d28950f8a0e0ca4f7eca95c00fcc929dea18
 	}
 	
 	void updateWiiState(ClientWiiState _state){
 		state = _state;
+	}
+
+	public float CurrentMovementSpeed() {
+		var haste = this.gameObject.GetComponentInChildren<Haste>();
+
+		return this.movementSpeed * (haste != null ? haste.MovementSpeedMultiplier : 1.0f);
 	}
 }

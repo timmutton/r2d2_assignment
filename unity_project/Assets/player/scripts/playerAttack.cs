@@ -6,8 +6,31 @@ public class playerAttack : MonoBehaviour {
 	public GameObject spell;
 	private Transform playerCam;
 	private Transform rightHand;
+<<<<<<< HEAD
 	private Transform oSpell;
 	private Vector3 spawnPos;
+=======
+	
+	// Update is called once per frame
+	void Update () {
+		if(Input.GetKeyDown("space")){
+			//the spawn position will be the players right hand
+			//plus the radius of the hand and the diameter of the spell
+			Vector3 spawnPos = rightHand.transform.position + 
+				transform.forward * (rightHand.renderer.bounds.extents.z + spell.renderer.bounds.size.z);
+			//instantiate the spell at given position, facing the players forward direction
+			GameObject temp = (GameObject)GameObject.Instantiate(spell, 
+				spawnPos, transform.rotation);
+
+			var projectile = temp.GetComponentInChildren<offensiveSpellBehaviour>();
+			projectile.damageAmt *= this.GetDamageMultiplier();
+
+			//set the spell type
+			temp.SendMessage("setSpellType", 
+				offensiveSpellProperties.spellTypeEnum.water);
+		}
+	}
+>>>>>>> 26d3d28950f8a0e0ca4f7eca95c00fcc929dea18
 	
 	void Start(){
 		//link to the right hand
@@ -17,6 +40,11 @@ public class playerAttack : MonoBehaviour {
 		if(rightHand == null){
 			Debug.Log("Could not find right hand");
 		}
+	}
+
+	float GetDamageMultiplier() {
+		var quad = this.gameObject.GetComponentInChildren<QuadDamage>();
+		return quad != null ? quad.DamageMultipier : 1.0f;
 	}
 	
 	// Update is called once per frame
