@@ -6,6 +6,8 @@ public abstract class PickableItem : MonoBehaviour {
     /// </summary>
     public float RespawnSeconds = 10.0f;
 
+	public bool Respawnable { get { return this.RespawnSeconds > 0.0f; } }
+
     private bool visible = true;
 
     /// <summary>
@@ -31,7 +33,7 @@ public abstract class PickableItem : MonoBehaviour {
 
     // Update is called once per frame
     private void Update() {
-        if (!this.visible) {
+        if(!this.visible && this.Respawnable) {
             this.secondsToNextRespawn -= Time.deltaTime;
             if (this.secondsToNextRespawn <= 0) {
                 this.Respawn();
@@ -58,15 +60,26 @@ public abstract class PickableItem : MonoBehaviour {
     }
 
     private void Pickup(Collider collider) {
-        if (this.pickupSound != null) {
-            AudioSource.PlayClipAtPoint(this.pickupSound, this.transform.position);
-        }
+		var player = collider.gameObject;
 
-        this.Visible = false;
-        this.secondsToNextRespawn = this.RespawnSeconds;
-        var playerProperties = collider.gameObject;
-        this.DoActionOnPlayer(playerProperties);
+		if (this.CanBePickedByPlayer(player)) {
+			if (this.pickupSound != null) {
+				AudioSource.PlayClipAtPoint(this.pickupSound, this.transform.position);
+			}
+
+			this.Hide();
+			this.DoActionOnPlayer(player);
+		}
     }
+
+	private void Hide() {
+		this.Visible = false;
+		this.secondsToNextRespawn = this.RespawnSeconds;
+	}
+
+	protected virtual bool CanBePickedByPlayer(GameObject player) {
+		return true;
+	}
 
     protected abstract void DoActionOnPlayer(GameObject player);
 }
