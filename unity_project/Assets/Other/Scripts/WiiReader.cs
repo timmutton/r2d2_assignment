@@ -41,7 +41,7 @@ public class WiiReader : MonoBehaviour {
 			accel.y = state.accelY;
 			accel.z = 0;
 			
-			player = GameObject.Find("player" + i.ToString());
+			player = GameObject.Find("player" + (i+1).ToString());
 			
 			player.SendMessage("updateWiiState",
 				state, 
@@ -52,11 +52,15 @@ public class WiiReader : MonoBehaviour {
 					recording = true;
 					points.Clear();
 				}
+				print(state.accelX);
+				print(state.accelY);
+				
 				points.Add(new Vector3(state.accelX, state.accelY, 0));
 			}else if(recording){
 				recording = false;
 				points.Add(new Vector3(state.accelX, state.accelY, 0));
-				player.SendMessage("printGesture", points, SendMessageOptions.DontRequireReceiver);
+				int gesture = GestureRecognizer.getGesture(points);
+				print(gesture);
 				
 				/*
 				try {

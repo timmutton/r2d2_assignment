@@ -1,12 +1,18 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+//using GestureRecognizer;
 
 public class playerAttack : MonoBehaviour {
 	public GameObject spell;
 	private Transform playerCam;
 	private Transform rightHand;
 	private Vector3 spawnPos;
+	
+	ArrayList points = new ArrayList();
+	Vector3 currentPosition;
+	Vector3 initialPosition;
+	Event currentEvent;
 	
 	void Start(){
 		//link to the right hand
@@ -15,6 +21,7 @@ public class playerAttack : MonoBehaviour {
 		if(rightHand == null || playerCam == null){
 			Debug.Log("Could not find components");
 		}
+		currentEvent = null;
 	}
 
 	float GetDamageMultiplier() {
@@ -22,19 +29,35 @@ public class playerAttack : MonoBehaviour {
 		return quad != null ? quad.DamageMultipier : 1.0f;
 	}
 	
+	void OnGUI() {
+        currentEvent = Event.current;
+    }
+	
 	// Update is called once per frame
 	void Update () {
+		if(currentEvent == null){
+		}else if (currentEvent.type == EventType.MouseDown) {
+			initialPosition = Input.mousePosition;
+			points.Clear();
+			points.Add(initialPosition);
+		} else if(currentEvent.type == EventType.MouseDrag) {
+			currentPosition = Input.mousePosition;
+			points.Add(currentPosition);
+		} else if(currentEvent.type == EventType.MouseUp) {
+			points.Add(currentPosition);
+		}
+		
 		if(gameObject.name == "player1"){
-			if(Input.GetKeyDown("1")){
-				createSpell(1);
+			if(currentEvent != null && currentEvent.type == EventType.MouseUp){
+				try {
+					int gesture = GestureRecognizer.getGesture(points);
+					createSpell(gesture);
+					Debug.Log("Gesture: " + gesture);
+				} catch(UnityException e) {
+					Debug.Log("" + e.Message);
+				}
 			}
-			if(Input.GetKeyDown("2")){
-				createSpell(2);
-			}
-			if(Input.GetKeyDown("3")){
-				createSpell(3);
-			}
-		}else{
+			
 			if(Input.GetKeyDown("[1]")){
 				createSpell(1);
 			}
@@ -42,6 +65,16 @@ public class playerAttack : MonoBehaviour {
 				createSpell(2);
 			}
 			if(Input.GetKeyDown("[3]")){
+				createSpell(3);
+			}
+		}else{
+			if(Input.GetKeyDown("1")){
+				createSpell(1);
+			}
+			if(Input.GetKeyDown("2")){
+				createSpell(2);
+			}
+			if(Input.GetKeyDown("3")){
 				createSpell(3);
 			}
 		}
@@ -103,6 +136,10 @@ public class playerAttack : MonoBehaviour {
 			break;
 			
 		}
+		
+		spellParams[(int)SpellProperties.spellParamArgs.damageMultiplier] = GetDamageMultiplier();
+		
+		print(spellParams[(int)SpellProperties.spellParamArgs.damageMultiplier]);
 
 		spawnPos = rightHand.position + transform.forward * (rightHand.renderer.bounds.extents.z + spell.renderer.bounds.extents.z);
 		

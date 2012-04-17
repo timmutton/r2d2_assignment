@@ -3,12 +3,12 @@ using System.Collections;
 
 public class offensiveSpellBehaviour : MonoBehaviour {
 	public float movementSpeed = 10.0f, maxDistance = 100.0f;
-	private int damageAmt;
+	private float damageAmt;
 	private Vector3 startPos;
 	private SpellProperties properties;
 	
 	// Use this for initialization
-	void Start() {
+	void Awake() {
 		/*parent = transform.parent;
 		//tag = "spell";
 		//start position is used to destroy object after a certain distance
@@ -21,7 +21,6 @@ public class offensiveSpellBehaviour : MonoBehaviour {
 		//start position is used to destroy object after a certain distance
 		startPos = transform.position;
 		properties = GetComponent<SpellProperties>();
-		damageAmt = properties.spellDamage;
 		
 		rigidbody.velocity = transform.forward * movementSpeed;
 	}
@@ -31,6 +30,10 @@ public class offensiveSpellBehaviour : MonoBehaviour {
 	}
 
 	private void InteractWithCollider(Collider col) {
+//		damageAmt = properties.spellDamage;
+		print(col.name);
+		print(damageAmt);
+		damageAmt = 10.0f;
 		if(col.name.ToLower().Contains("player")){
 			col.SendMessage("Damage", damageAmt, SendMessageOptions.DontRequireReceiver);
 		}else if(col.name.ToLower().Contains("defensivespell")){
@@ -39,10 +42,10 @@ public class offensiveSpellBehaviour : MonoBehaviour {
 			return;
 		}
 		
-		/*var properties = collider.GetComponent<PlayerProperties>();
-		if(properties != null) {
-			properties.Damage(damageAmt);
-		}*/
+		var asd = collider.GetComponent<PlayerProperties>();
+		if(asd != null) {
+			asd.Damage(damageAmt);
+		}
 	
 		Destroy(gameObject);
 	}

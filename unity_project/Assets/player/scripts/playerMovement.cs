@@ -22,20 +22,21 @@ public class playerMovement : MonoBehaviour {
 			rotDir = new Vector3(Input.GetAxis("lookX"), Input.GetAxis("lookY"), 0);
 		}else{
 			moveDir = new Vector3(state.ncJoyX, 0, state.ncJoyY);
+			rotDir = new Vector3(0, 0, 0);
 			if(!state.B){
 				if(state.Left)
-					rotDir.x = -1.0f;
+					rotDir.y = -1.0f;
 				if(state.Right)
 					rotDir.y = 1.0f;
 				
 				if(state.Down)
-					rotDir.y = -1.0f;
+					rotDir.x = -1.0f;
 				if(state.Up)
-					rotDir.y = 1.0f;
+					rotDir.x = 1.0f;
 			}
 		}
 		
-		moveDir = transform.TransformDirection(moveDir) * movementSpeed;
+		moveDir = transform.TransformDirection(moveDir) * CurrentMovementSpeed();
 		moveDir.y = controller.velocity.y - gravityForce * Time.deltaTime;
 		controller.Move(moveDir * Time.deltaTime);
 		
