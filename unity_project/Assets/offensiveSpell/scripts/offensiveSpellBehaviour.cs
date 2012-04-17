@@ -31,13 +31,14 @@ public class offensiveSpellBehaviour : MonoBehaviour {
 	}
 
 	private void InteractWithCollider(Collider col) {
-		//print(col.name.ToLower());
 		if(col.name.ToLower().Contains("player")){
-			print("sending to player");
 			col.SendMessage("Damage", damageAmt, SendMessageOptions.DontRequireReceiver);
-		}else if(col.name.ToLower().Contains("spell")){
+		}else if(col.name.ToLower().Contains("defensivespell")){
 			col.BroadcastMessage("Damage", properties, SendMessageOptions.DontRequireReceiver);
+		}else{
+			return;
 		}
+		
 		/*var properties = collider.GetComponent<PlayerProperties>();
 		if(properties != null) {
 			properties.Damage(damageAmt);

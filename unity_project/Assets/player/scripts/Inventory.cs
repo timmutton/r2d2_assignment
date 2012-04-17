@@ -31,4 +31,12 @@ public class Inventory : MonoBehaviour {
     private Texture2D[] GetTextures() {
         return this.items.Select(rune => rune.Icon).ToArray();
     }
+	
+	public IInventoryItem HasItem(RuneType type){
+		foreach(Rune item in items){
+			if(item.Type == type)
+			return item;
+		}
+		return null;
+	}
 }
