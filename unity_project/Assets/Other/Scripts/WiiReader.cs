@@ -8,10 +8,13 @@ public class WiiReader : MonoBehaviour {
 	private ArrayList points = new ArrayList();	
 	
 	// Use this for initialization
-	void Awake () {
+	void Start(){
+		if(!(Application.platform == RuntimePlatform.WindowsEditor
+			|| Application.platform == RuntimePlatform.WindowsPlayer))
+			Destroy(this);
+		
 		client = new WiiUnityClient();
 		connected = client.StartClient();
-		
 		/*if(players.Length != client.numWiimotes){
 			print("Number of players and number of wiimotes do not match");
 			return;
@@ -47,10 +50,10 @@ public class WiiReader : MonoBehaviour {
 					recording = true;
 					points.Clear();
 				}
-				points.Add(new Vector3(state.accelX, state.accelY, state.accelZ));
+				points.Add(new Vector3(state.accelX, state.accelY, 0));
 			}else if(recording){
 				recording = false;
-				points.Add(new Vector3(state.accelX, state.accelY, state.accelZ));
+				points.Add(new Vector3(state.accelX, state.accelY, 0));
 				player.SendMessage("printGesture", points, SendMessageOptions.DontRequireReceiver);
 				
 				/*

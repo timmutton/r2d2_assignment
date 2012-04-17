@@ -6,6 +6,7 @@ public class offensiveSpellBehaviour : MonoBehaviour {
 	private int damageAmt;
 	private Vector3 startPos;
 	private SpellProperties properties;
+	private CharacterController controller;
 //	private Transform parent;
 	
 	// Use this for initialization
@@ -21,8 +22,7 @@ public class offensiveSpellBehaviour : MonoBehaviour {
 		
 		//start position is used to destroy object after a certain distance
 		startPos = transform.position;
-		//set velocity in forward direction
-		//rigidbody.velocity = transform.forward * movementSpeed;
+		controller = GetComponent<CharacterController>();
 		properties = GetComponent<SpellProperties>();
 		damageAmt = properties.spellDamage;
 	}
@@ -33,6 +33,11 @@ public class offensiveSpellBehaviour : MonoBehaviour {
 
 	void OnTriggerEnter(Collider col) {
 		this.InteractWithCollider(col);
+	}
+	
+	void OnControllerColliderHit(ControllerColliderHit hit){
+		print("hello");
+		this.InteractWithCollider(hit.collider);
 	}
 
 	private void InteractWithCollider(Collider col) {
@@ -54,7 +59,9 @@ public class offensiveSpellBehaviour : MonoBehaviour {
 	//if its gone too far without hitting the player, destroy it
 	void Update(){
 //		print(parent.transform.forward.ToString());
-		transform.Translate(transform.forward * movementSpeed * Time.deltaTime);
+//		transform.Translate(transform.forward * movementSpeed * Time.deltaTime);
+		Vector3 moveDir = transform.TransformDirection(transform.forward) * movementSpeed;
+		controller.Move(moveDir * Time.deltaTime);
 		
 		if(Vector3.Distance(startPos, transform.position) > maxDistance)
 			Destroy(gameObject);

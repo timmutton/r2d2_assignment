@@ -57,7 +57,7 @@ public class GestureRecognizer : MonoBehaviour {
 			} catch(GestureNotFoundException e) {
 				Debug.Log("" + e.Message);
 			}
-		}
+		}*/
 	}
 	
 	void printGesture(ArrayList points){
@@ -75,7 +75,7 @@ public class GestureRecognizer : MonoBehaviour {
 			Debug.Log("Gesture: " + gestureName);
 		} catch(GestureNotFoundException e) {
 			Debug.Log("" + e.Message);
-		}*/
+		}
 	}
 	
 	int getGesture(ArrayList points){
