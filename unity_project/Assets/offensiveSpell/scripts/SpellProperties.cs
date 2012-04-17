@@ -47,12 +47,4 @@ public class SpellProperties : MonoBehaviour {
 			Object.Destroy(GetComponent<offensiveSpellBehaviour>());
 		}
 	}
-	
-	void OnCollisionEnter(Collision col) {
-		print("collide");
-	}
-
-	void OnTriggerEnter(Collider col) {
-		print("trigger");
-	}
 }

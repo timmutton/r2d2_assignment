@@ -6,16 +6,14 @@ public class playerAttack : MonoBehaviour {
 	public GameObject spell;
 	private Transform playerCam;
 	private Transform rightHand;
-//	private Transform oSpell;
 	private Vector3 spawnPos;
 	
 	void Start(){
 		//link to the right hand
-		rightHand = transform.Find("model/rightHand");
-		//oSpell = spell.transform.Find("offensiveSpell");
+		rightHand = transform.FindChild("model/rightHand");
 		playerCam = transform.FindChild("Main Camera");
-		if(rightHand == null){
-			Debug.Log("Could not find right hand");
+		if(rightHand == null || playerCam == null){
+			Debug.Log("Could not find components");
 		}
 	}
 
@@ -56,46 +54,35 @@ public class playerAttack : MonoBehaviour {
 		case 1:
 			spellParams[(int)SpellProperties.spellParamArgs.element] = SpellProperties.spellElemEnum.fire;
 			spellParams[(int)SpellProperties.spellParamArgs.type] = SpellProperties.spellTypeEnum.offensive;
-			spawnPos = rightHand.transform.position + 
-			transform.forward * (rightHand.renderer.bounds.extents.z + spell.renderer.bounds.size.z);
 			break;
 		case 2:
 			spellParams[(int)SpellProperties.spellParamArgs.element] = SpellProperties.spellElemEnum.water;
 			spellParams[(int)SpellProperties.spellParamArgs.type] = SpellProperties.spellTypeEnum.offensive;
-			spawnPos = rightHand.transform.position + 
-			transform.forward * (rightHand.renderer.bounds.extents.z + spell.renderer.bounds.size.z);
 			break;
 		case 3:
 			spellParams[(int)SpellProperties.spellParamArgs.element] = SpellProperties.spellElemEnum.earth;
 			spellParams[(int)SpellProperties.spellParamArgs.type] = SpellProperties.spellTypeEnum.offensive;
-			spawnPos = rightHand.transform.position + 
-			transform.forward * (rightHand.renderer.bounds.extents.z + spell.renderer.bounds.size.z);
 			break;
 			
 		case 8:
 			spellParams[(int)SpellProperties.spellParamArgs.element] = SpellProperties.spellElemEnum.fire;
 			spellParams[(int)SpellProperties.spellParamArgs.type] = SpellProperties.spellTypeEnum.defensive;
-			spawnPos = transform.position;
 			break;
 		case 9:
 			spellParams[(int)SpellProperties.spellParamArgs.element] = SpellProperties.spellElemEnum.water;
 			spellParams[(int)SpellProperties.spellParamArgs.type] = SpellProperties.spellTypeEnum.defensive;
-			spawnPos = transform.position;
 			break;
 		case 0:
 			spellParams[(int)SpellProperties.spellParamArgs.element] = SpellProperties.spellElemEnum.earth;
 			spellParams[(int)SpellProperties.spellParamArgs.type] = SpellProperties.spellTypeEnum.defensive;
-			spawnPos = transform.position;
 			break;
 			
 		}
+
+		spawnPos = rightHand.position + transform.forward * (rightHand.renderer.bounds.extents.z + spell.renderer.bounds.extents.z);
 		
 		//instantiate the spell at given position, facing the players forward direction
-		GameObject tempSpell = (GameObject)GameObject.Instantiate(spell, 
-			spawnPos, 
-			//Quaternion.Euler(playerCam.rotation.x, transform.rotation.y, 0)
-			Quaternion.Euler(transform.forward)
-		);
+		GameObject tempSpell = Instantiate(spell, spawnPos, transform.rotation) as GameObject;
 		
 		tempSpell.SendMessage("setSpellProperties", 
 			spellParams);

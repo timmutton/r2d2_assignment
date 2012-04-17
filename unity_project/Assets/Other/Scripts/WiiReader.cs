@@ -9,12 +9,14 @@ public class WiiReader : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start(){
-		if(!(Application.platform == RuntimePlatform.WindowsEditor
-			|| Application.platform == RuntimePlatform.WindowsPlayer))
+		if(Application.platform == RuntimePlatform.WindowsEditor
+			|| Application.platform == RuntimePlatform.WindowsPlayer){
+			client = new WiiUnityClient();
+			connected = client.StartClient();
+		}else{
 			Destroy(this);
+		}
 		
-		client = new WiiUnityClient();
-		connected = client.StartClient();
 		/*if(players.Length != client.numWiimotes){
 			print("Number of players and number of wiimotes do not match");
 			return;

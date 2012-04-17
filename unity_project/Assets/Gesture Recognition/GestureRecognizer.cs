@@ -25,17 +25,20 @@ public class GestureRecognizer : MonoBehaviour {
 	private const int SQUARE = 5;
 
 	
-	void OnGUI() {
+	/*void OnGUI() {
         currentEvent = Event.current;
-    }
+    }*/
 	
 	void Update() {
-		/*if (currentEvent.type == EventType.mouseDown) {
+		return;
+		currentEvent = Event.current;
+		
+		if (currentEvent.type == EventType.MouseDown) {
 			initialPosition = Input.mousePosition;
 			points.Clear();
 			points.Add(initialPosition);
 			//Debug.Log("Initial: x: " + initialPosition.x + " y: " + initialPosition.y + " z: " + initialPosition.z); 
-		} else if(currentEvent.type == EventType.mouseDrag) {
+		} else if(currentEvent.type == EventType.MouseDrag) {
 			currentPosition = Input.mousePosition;
 			points.Add(currentPosition);
 			//Debug.Log("Dragging");
@@ -57,7 +60,7 @@ public class GestureRecognizer : MonoBehaviour {
 			} catch(GestureNotFoundException e) {
 				Debug.Log("" + e.Message);
 			}
-		}*/
+		}
 	}
 	
 	void printGesture(ArrayList points){
