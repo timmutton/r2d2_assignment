@@ -12,8 +12,6 @@ public class WiiReader : MonoBehaviour {
 		client = new WiiUnityClient();
 		connected = client.StartClient();
 		
-		print("arraylist of vec3's for acceleration");
-		
 		/*if(players.Length != client.numWiimotes){
 			print("Number of players and number of wiimotes do not match");
 			return;
@@ -43,12 +41,6 @@ public class WiiReader : MonoBehaviour {
 			player.SendMessage("updateWiiState",
 				state, 
 				SendMessageOptions.DontRequireReceiver);
-			
-			if(state.B){
-				player.SendMessage("getGesture",
-				accel, 
-				SendMessageOptions.DontRequireReceiver);
-			}
 			
 			if(state.B){
 				if(!recording){

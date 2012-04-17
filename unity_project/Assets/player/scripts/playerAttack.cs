@@ -6,13 +6,13 @@ public class playerAttack : MonoBehaviour {
 	public GameObject spell;
 	private Transform playerCam;
 	private Transform rightHand;
-	private Transform oSpell;
+//	private Transform oSpell;
 	private Vector3 spawnPos;
 	
 	void Start(){
 		//link to the right hand
 		rightHand = transform.Find("model/rightHand");
-		oSpell = spell.transform.Find("offensiveSpell");
+		//oSpell = spell.transform.Find("offensiveSpell");
 		playerCam = transform.FindChild("Main Camera");
 		if(rightHand == null){
 			Debug.Log("Could not find right hand");
@@ -57,19 +57,19 @@ public class playerAttack : MonoBehaviour {
 			spellParams[(int)SpellProperties.spellParamArgs.element] = SpellProperties.spellElemEnum.fire;
 			spellParams[(int)SpellProperties.spellParamArgs.type] = SpellProperties.spellTypeEnum.offensive;
 			spawnPos = rightHand.transform.position + 
-			transform.forward * (rightHand.renderer.bounds.extents.z + oSpell.renderer.bounds.size.z);
+			transform.forward * (rightHand.renderer.bounds.extents.z + spell.renderer.bounds.size.z);
 			break;
 		case 2:
 			spellParams[(int)SpellProperties.spellParamArgs.element] = SpellProperties.spellElemEnum.water;
 			spellParams[(int)SpellProperties.spellParamArgs.type] = SpellProperties.spellTypeEnum.offensive;
 			spawnPos = rightHand.transform.position + 
-			transform.forward * (rightHand.renderer.bounds.extents.z + oSpell.renderer.bounds.size.z);
+			transform.forward * (rightHand.renderer.bounds.extents.z + spell.renderer.bounds.size.z);
 			break;
 		case 3:
 			spellParams[(int)SpellProperties.spellParamArgs.element] = SpellProperties.spellElemEnum.earth;
 			spellParams[(int)SpellProperties.spellParamArgs.type] = SpellProperties.spellTypeEnum.offensive;
 			spawnPos = rightHand.transform.position + 
-			transform.forward * (rightHand.renderer.bounds.extents.z + oSpell.renderer.bounds.size.z);
+			transform.forward * (rightHand.renderer.bounds.extents.z + spell.renderer.bounds.size.z);
 			break;
 			
 		case 8:
@@ -93,7 +93,8 @@ public class playerAttack : MonoBehaviour {
 		//instantiate the spell at given position, facing the players forward direction
 		GameObject tempSpell = (GameObject)GameObject.Instantiate(spell, 
 			spawnPos, 
-			Quaternion.identity
+			//Quaternion.Euler(playerCam.rotation.x, transform.rotation.y, 0)
+			Quaternion.Euler(transform.forward)
 		);
 		
 		tempSpell.SendMessage("setSpellProperties", 

@@ -1,13 +1,22 @@
 using UnityEngine;
 using System.Collections;
 
+	
+enum Outcome{ 
+	draw,
+	player1, 
+	player2,
+};
+	
 
 public class gameManager : MonoBehaviour {
 	public float roundTime = 180.0f;
 	public int maxRounds = 3;
 	private int currentRound;
 	private float currentTime;
-	
+	private bool bGameOver;
+	private Outcome winner;
+
 	public GameObject player;
 	public GameObject spawn1;
 	public GameObject spawn2;
@@ -17,10 +26,12 @@ public class gameManager : MonoBehaviour {
 	private PlayerProperties Player2_properties;
 	
 
-	public bool displayRound = true;
+	public bool bDisplayRound = true;
 	public GUIStyle messageStyle;
 	public int messageWidth = 400;
 	public int messageHeight = 80;
+	public int messageTime = 3;
+	private string endMessage;
 	
 	public int round2Boost = 30;
 	public int round3Boost = 20;
@@ -39,11 +50,10 @@ public class gameManager : MonoBehaviour {
 		//Caches the players properties
 		Player1_properties = (PlayerProperties)Player1_inst.GetComponent<PlayerProperties>();
 		Player2_properties = (PlayerProperties)Player2_inst.GetComponent<PlayerProperties>();
-
-		Player1_inst.GetComponentInChildren<playerMovement>().useKeyboard = true;	
 		
 		currentRound = 1;
 		currentTime = roundTime;
+		bGameOver = false;
 	}
 	
 	// Update is called once per frame
@@ -51,68 +61,104 @@ public class gameManager : MonoBehaviour {
 		int minutes;
 		int seconds;
 		
-		//Pre round upkeeping
-		if(currentTime == roundTime){
-			PreRound();
-		}
-		
-		//Win condition if one of the players had 0 health
-		if(Player1_properties.Health <= 0 || Player2_properties.Health <= 0){
-			//Turns off the time and rounds
-			currentTime = 0;
-			currentRound = maxRounds;
-			
-			if(Player1_properties.Health <= 0){
-				Debug.Log("Player 1 DEAD");
-				Debug.Log("Player 2 Wins");	
-			}else if(Player2_properties.Health <= 0){
-				Debug.Log ("Player 2 DEAD");
-				Debug.Log("Player 1 Wins");
+		if(!bGameOver){
+			//Pre round upkeeping
+			if(currentTime == roundTime){
+				PreRound();
 			}
-		}
+		
+			//Win condition if one of the players has 0 health
+			if(Player1_properties.Health <= 0 || Player2_properties.Health <= 0){
+				//Turns off the time and rounds
+				currentTime = 0;
+				currentRound = maxRounds;
+			
+				//Player 1 dies, player 2 wins
+				if(Player1_properties.Health <= 0){
+					Debug.Log("Player 1 DEAD");
+					Debug.Log("Player 2 Wins");
+					bGameOver = true;
+					winner = Outcome.player2;
+				//Player 2 dies, player 1 wins
+				}else if(Player2_properties.Health <= 0){
+					Debug.Log ("Player 2 DEAD");
+					Debug.Log("Player 1 Wins");
+					bGameOver = true;
+					winner = Outcome.player1;
+				}
+			}
 
-		//Condition if all the rounds are over and is finished
-		if(currentRound == maxRounds){
-			if(Player1_properties.Health > Player2_properties.Health){
-				Debug.Log("Player 1 Wins");
-			}else if(Player2_properties.Health > Player1_properties.Health){
-				Debug.Log("Player 2 Wins");	
-			}else{
-				Debug.Log("Draw");
+			//Condition if all the rounds are over and is finished
+			if(currentRound == maxRounds + 1){
+				//Player 1 wins
+				if(Player1_properties.Health > Player2_properties.Health){
+					Debug.Log("Player 1 Wins");
+					winner = Outcome.player1;
+				//Player 2 wins
+				}else if(Player2_properties.Health > Player1_properties.Health){
+					Debug.Log("Player 2 Wins");	
+					winner = Outcome.player2;
+				//Draw
+				}else{
+					Debug.Log("Draw");
+					winner = Outcome.draw;
+				}
+				Debug.Log("GAME OVER");	
+				bGameOver = true;
 			}
-			Debug.Log("GAME OVER");
-		}
 		
-		
-		
-		
-		//Decrements the round timer and the remaining number of rounds
-		if(currentTime > 0 && currentRound <= maxRounds){
-    		currentTime -= Time.deltaTime;
-		}else if(currentTime <= 0 && maxRounds > 0){
-			currentRound++;
-			currentTime = roundTime;
+
+			//Decrements the round timer and the remaining number of rounds
+			if(currentTime > 0 && currentRound <= maxRounds){
+    			currentTime -= Time.deltaTime;
+			}else if(currentTime <= 0){
+				PostRound ();
+				if(!bGameOver){
+					currentRound++;
+					currentTime = roundTime;
 			
-			//Resets player positions to spawns
-			Player1_inst.transform.position = spawn1.transform.position;			
-			Player2_inst.transform.position = spawn2.transform.position;
-		}
+					//Resets player positions to spawns
+					Player1_inst.transform.position = spawn1.transform.position;			
+					Player2_inst.transform.position = spawn2.transform.position;
+				}
+			}
 		
 	
-  		//Calculates the minutes and seconds
- 		minutes = (int)currentTime / 60;
-		seconds = (int)currentTime % 60;
+  			//Calculates the minutes and seconds
+ 			minutes = (int)currentTime / 60;
+			seconds = (int)currentTime % 60;
   		
-		//Formats and prints the time to the GUI
-		var text = string.Format ("{0:0}:{1:00}", minutes, seconds);	
-		guiText.text = "Time: "+text;	
+			//Formats and prints the time to the GUI
+			var text = string.Format ("{0:0}:{1:00}", minutes, seconds);	
+			guiText.text = "Time: "+text;
+		}
+		
+		//Turn off the player movement when gameover
+		if(bGameOver){
+			Debug.Log("PLAYER OFF");
+			Player1_inst.GetComponent<playerMovement>().enabled = false;
+			Player2_inst.GetComponent<playerMovement>().enabled = false;
+			Player1_inst.GetComponent<playerAttack>().enabled = false;
+			Player2_inst.GetComponent<playerAttack>().enabled = false;
+		}
 	}
 	
 	void OnGUI () {
-		/*
-		if(displayRound){
-			GUI.Label(new Rect((Screen.width - messageWidth)/2.0F, (Screen.height - messageHeight)/2.0F, messageWidth, messageHeight), "ROUND 1", messageStyle);
-		}*/
+		
+		if(bDisplayRound){
+			if(currentTime >= roundTime - messageTime && currentRound <= maxRounds){
+				GUI.Label(new Rect((Screen.width - messageWidth)/2.0F, (Screen.height - messageHeight)/2.0F, messageWidth, messageHeight), "ROUND " + currentRound, messageStyle);
+			}
+		}
+		if(bGameOver){
+			if(winner == Outcome.player1)
+				endMessage = "GAMEOVER\nPLAYER 1 WINS";
+			else if(winner == Outcome.player2)
+				endMessage = "GAMEOVER\nPLAYER 2 WINS";
+			else
+				endMessage = "GAMEOVER\nDRAW";
+			GUI.Label(new Rect((Screen.width - messageWidth)/2.0F, (Screen.height - messageHeight)/2.0F, messageWidth, messageHeight), endMessage, messageStyle);			
+		}
 	}	
 	
 	void PreRound(){
@@ -127,7 +173,12 @@ public class gameManager : MonoBehaviour {
 	}
 	
 	private void PostRound(){
-		
+		Debug.Log("POST ROUND");
+		if(bGameOver){
+			Debug.Log("PLAYER OFF");
+			Player1_inst.GetComponent<playerMovement>().enabled = false;
+			Player2_inst.GetComponent<playerMovement>().enabled = false;
+		}
 	}
 	
 	

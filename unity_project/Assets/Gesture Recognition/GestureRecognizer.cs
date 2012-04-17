@@ -30,7 +30,7 @@ public class GestureRecognizer : MonoBehaviour {
     }
 	
 	void Update() {
-		if (currentEvent.type == EventType.mouseDown) {
+		/*if (currentEvent.type == EventType.mouseDown) {
 			initialPosition = Input.mousePosition;
 			points.Clear();
 			points.Add(initialPosition);
@@ -75,7 +75,7 @@ public class GestureRecognizer : MonoBehaviour {
 			Debug.Log("Gesture: " + gestureName);
 		} catch(GestureNotFoundException e) {
 			Debug.Log("" + e.Message);
-		}
+		}*/
 	}
 	
 	int getGesture(ArrayList points){
