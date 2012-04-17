@@ -4,6 +4,8 @@ using System.Collections;
 public class playerUI : MonoBehaviour {
 	public Transform target;
 	public Texture2D healthBar, emptyBar;
+	public Texture2D Crosshair;
+
 	public float pBarX, pBarY, pBarWidth, pBarHeight;
 	
 	private float barLeft, barTop, barWidth, barHeight;
@@ -23,7 +25,9 @@ public class playerUI : MonoBehaviour {
 		drawBar(barLeft, barTop, barWidth, barHeight,
 			emptyBar, healthBar, myPlayerProperties.maxHealth,
 			myPlayerProperties.Health);
-	}
+
+    	this.DrawCrosshair();
+    }
 	
 	void Start(){
 		//link to player properties
@@ -51,6 +55,12 @@ public class playerUI : MonoBehaviour {
 		GUI.EndGroup();
 	}
 	
+	private void DrawCrosshair() {
+		float size = 25f;
+		GUI.DrawTexture(new Rect(this.camRect.left + this.camRect.width /2f - size / 2f,
+			this.camRect.top + this.camRect.height / 2f - size/2f,
+			size, size), this.Crosshair);
+	}
 	//set bar dimentions and pos (by converting size percentage to pixels)
 	void updateDimensions(){
 		//normalized view port rect
