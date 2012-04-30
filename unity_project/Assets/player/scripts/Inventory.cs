@@ -29,7 +29,7 @@ public class Inventory : MonoBehaviour {
     }
 
     private Texture2D[] GetTextures() {
-        return this.items.Select(rune => rune.Icon).ToArray();
+        return this.items.Select(rune => rune.Icon).OrderBy(d => d.GetHashCode()).ToArray();
     }
 	
 	public IInventoryItem HasItem(RuneType type){
