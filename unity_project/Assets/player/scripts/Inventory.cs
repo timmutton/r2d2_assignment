@@ -23,8 +23,10 @@ public class Inventory : MonoBehaviour {
         var ui = this.gameObject.GetComponentInChildren<playerUI>();
         var cameraRect = ui.CameraRect;
         if(textures.Length > 0) {
-            GUI.SelectionGrid(new Rect(cameraRect.x + 10, cameraRect.yMax - 60, 200, 50),
-				0, textures, 4, GUIStyle.none);
+        	float width = cameraRect.width - 10;
+        	int xCount = (int) width/50;
+            GUI.SelectionGrid(new Rect(cameraRect.x + 10, cameraRect.yMax - 60, width, 50),
+				0, textures, xCount, GUIStyle.none);
         }
     }
 
