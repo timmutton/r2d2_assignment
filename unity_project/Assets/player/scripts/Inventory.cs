@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Assets.Code;
 using UnityEngine;
 using System.Linq;
 
 public class Inventory : MonoBehaviour {
+	public GUIStyle GuiStyle;
+
     private List<IInventoryItem> items;
 
     public void Start() {
@@ -19,19 +22,34 @@ public class Inventory : MonoBehaviour {
     }
 
     public void OnGUI() {
-        var textures = this.GetTextures();
-        var ui = this.gameObject.GetComponentInChildren<playerUI>();
-        var cameraRect = ui.CameraRect;
-        if(textures.Length > 0) {
-        	float width = cameraRect.width - 10;
-        	int xCount = (int) width/50;
-            GUI.SelectionGrid(new Rect(cameraRect.x + 10, cameraRect.yMax - 60, width, 50),
-				0, textures, xCount, GUIStyle.none);
-        }
+        var groupings = this.GetGroupings().ToArray();
+
+		for(int i = 0; i < groupings.Length; ++i) {
+			var grouping = groupings[i];
+			var rect = this.RectForItemIndex(i);
+			GUI.DrawTexture(rect, grouping.Key);
+			GUI.Label(rect, string.Format("{0}", grouping.Count()), this.GuiStyle);
+		}
     }
 
-    private Texture2D[] GetTextures() {
-        return this.items.Select(rune => rune.Icon).OrderBy(d => d.GetHashCode()).ToArray();
+	private Rect RectForItemIndex(int index) {
+		var ui = this.gameObject.GetComponentInChildren<playerUI>();
+		var cameraRect = ui.CameraRect;
+
+		float width = 50;
+		float height = 50;
+
+		float left = cameraRect.x + 10;
+		float top = cameraRect.yMax - (height + 10);
+
+		return new Rect(left + index*width, top, width, height);
+	}
+
+	
+	private IOrderedEnumerable<IGrouping<Texture2D, IInventoryItem>> GetGroupings() {
+    	return this.items
+    		.GroupBy(rune => rune.Icon)
+    		.OrderBy(grouping => grouping.Key.GetHashCode());
     }
 	
 	public IInventoryItem HasItem(RuneType type){
