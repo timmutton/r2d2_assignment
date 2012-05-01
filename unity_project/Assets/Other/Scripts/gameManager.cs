@@ -182,9 +182,10 @@ public class gameManager : MonoBehaviour {
 	private void EndGame(){
 //		Debug.Log("POST ROUND");
 		if(bGameOver){
-			Debug.Log("PLAYER OFF");
-			Player1_inst.GetComponent<playerMovement>().enabled = false;
-			Player2_inst.GetComponent<playerMovement>().enabled = false;
+			Time.timeScale = 0.0f;
+//			Debug.Log("PLAYER OFF");
+//			Player1_inst.GetComponent<playerMovement>().enabled = false;
+//			Player2_inst.GetComponent<playerMovement>().enabled = false;
 		}
 	}
 	
