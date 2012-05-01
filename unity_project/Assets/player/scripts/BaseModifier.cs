@@ -11,7 +11,7 @@ class BaseModifier : MonoBehaviour {
 
 	private void Activate() {
 		this.durationRemainingSeconds = this.DurationSeconds;
-		Debug.Log(string.Format("{0} activated", this));
+//		Debug.Log(string.Format("{0} activated", this));
 	}
 
 	public void Update() {
@@ -30,7 +30,7 @@ class BaseModifier : MonoBehaviour {
 	}
 
 	private void DeactivateAndDestroy() {
-		Debug.Log(string.Format("{0} deactivated", this));
+//		Debug.Log(string.Format("{0} deactivated", this));
 		MonoBehaviour.Destroy(this);
 	}
 

@@ -57,8 +57,8 @@ public class playerUI : MonoBehaviour {
 	
 	private void DrawCrosshair() {
 		float size = 25f;
-		GUI.DrawTexture(new Rect(this.camRect.left + this.camRect.width /2f - size / 2f,
-			this.camRect.top + this.camRect.height / 2f - size/2f,
+		GUI.DrawTexture(new Rect(this.camRect.xMin + this.camRect.width /2f - size / 2f,
+			this.camRect.yMin + this.camRect.height / 2f - size/2f,
 			size, size), this.Crosshair);
 	}
 	//set bar dimentions and pos (by converting size percentage to pixels)

@@ -11,9 +11,18 @@ class ClientWiiState
     // The accelerometer states
     public float accelX, accelY, accelZ;
 
+    // Infrared states. Floats between (0,1)
+    public bool irActive, irVisible;
+    public float irMidpointX, irMidpointY, ir1PosX, ir1PosY, ir2PosX, ir2PosY;    
+
+    public bool Rumble;
+
     // Numchuck data
     public bool ncC, ncZ;
     public float ncJoyX, ncJoyY;
+
+    // Nunchuck accelerometer states
+    public float ncAccelX, ncAccelY, ncAccelZ;
 
     public ClientWiiState()
     {
@@ -21,7 +30,13 @@ class ClientWiiState
         A = false; B = false; Up = false; Down = false; Left = false; Right = false;
         Plus = false; Minus = false; One = false; Two = false; Home = false;
 
+        Rumble = false;
+
         accelX = (float)0.0; accelY = (float)0.0; accelZ = (float)0.0;
+
+        irMidpointX = (float)0.0; irMidpointY = (float)0.0; ir1PosX = (float)0.0; ir1PosY = (float)0.0; ir2PosX = (float)0.0; ir2PosY = (float)0.0;
+        irActive = false; irVisible = false;
+        
 
         ncC = false; ncZ = false;
         ncJoyX = (float)0.0; ncJoyY = (float)0.0;
@@ -50,6 +65,20 @@ class ClientWiiState
         accelZ = float.Parse(values[2]);
     }
 
+    public void IRFromString(String sStates)
+    {
+        String[] values = sStates.Split(' ');
+
+        irActive = Convert.ToBoolean(values[0]); irVisible = Convert.ToBoolean(values[1]);
+        irMidpointX = float.Parse(values[2]);
+        irMidpointY = float.Parse(values[3]);
+        ir1PosX = float.Parse(values[4]);
+        ir1PosY = float.Parse(values[5]);
+        ir2PosX = float.Parse(values[6]);
+        ir2PosY = float.Parse(values[7]);  
+
+    }
+
     public void NunchuckFromString(String sStates)
     {
         String[] values = sStates.Split(' ');
@@ -57,6 +86,15 @@ class ClientWiiState
         ncC = Convert.ToBoolean(values[0]); ncZ = Convert.ToBoolean(values[1]);
         ncJoyX = float.Parse(values[2]);
         ncJoyY = float.Parse(values[3]);
+
+        ncAccelX = float.Parse(values[4]);
+        ncAccelY = float.Parse(values[5]);
+        ncAccelZ = float.Parse(values[6]);
+    }
+
+    public void RumbleFromString(String rState)
+    {
+        Rumble = Convert.ToBoolean(rState); 
     }
 }
 

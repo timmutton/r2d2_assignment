@@ -14,6 +14,7 @@ public enum SpellType{
 };
 
 public enum SpellParameter{
+	parent,
 	type, 
 	element, 
 	damageMultiplier
@@ -26,6 +27,7 @@ public class SpellProperties : MonoBehaviour {
 	
 	public SpellElement spellElem;
 	public SpellType spellType;
+	public Transform parent;
 	private OffensiveSpellBehaviour oSpellBehave;
 	private DefensiveSpellBehaviour dSpellBehave;
 	
@@ -42,6 +44,7 @@ public class SpellProperties : MonoBehaviour {
 	// set the element type of the spell
 	//and update the material used by the renderer
 	void setSpellProperties(Dictionary<int, object> spellParams) {
+		parent = (Transform)spellParams[(int)SpellParameter.parent];
 		spellType = (SpellType)spellParams[(int)SpellParameter.type];
 		spellElem = (SpellElement)spellParams[(int)SpellParameter.element];
 		

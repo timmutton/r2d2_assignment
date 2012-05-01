@@ -48,7 +48,8 @@ public class PlayerProperties : MonoBehaviour {
 	//will need to be updated
 	private void playerDeath(){
 		this.OnDeath();
-		Destroy(gameObject);
+		print("possible death animation here");
+//		Destroy(gameObject);
 	}
 
     public void Update() {

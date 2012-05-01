@@ -47,7 +47,7 @@ public class WiiReader : MonoBehaviour {
 				state, 
 				SendMessageOptions.DontRequireReceiver);
 			
-			if(state.B){
+			/*if(state.B){
 				if(!recording){
 					recording = true;
 					points.Clear();
@@ -62,7 +62,6 @@ public class WiiReader : MonoBehaviour {
 				int gesture = GestureRecognizer.getGesture(points);
 				print(gesture);
 				
-				/*
 				try {
 					int gesture = getGesture(points);
 					string gestureName = "";
@@ -78,8 +77,7 @@ public class WiiReader : MonoBehaviour {
 				} catch(GestureNotFoundException e) {
 					Debug.Log("" + e.Message);
 				}
-			*/
-			}
+			}*/
 		}
 	}
 	
