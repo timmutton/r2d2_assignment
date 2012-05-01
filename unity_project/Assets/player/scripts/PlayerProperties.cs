@@ -35,9 +35,10 @@ public class PlayerProperties : MonoBehaviour {
 		this.Health = startHealth;
 	}
 	
-	public void Damage(float hp){
+	public void Damage(SpellProperties properties){
 		//aplly damage to health
-		this.Health -= hp;
+		float resistanceMultiplier = DefensiveSpellBehaviour.spellResistanceMultiplier(gameObject, properties.spellElem);
+		this.Health -= resistanceMultiplier * properties.spellDamage;
 	}
 	
 	public void Heal(float hp) {

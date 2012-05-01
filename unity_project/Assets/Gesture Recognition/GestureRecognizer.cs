@@ -15,7 +15,7 @@ public class GestureRecognizer : MonoBehaviour {
 	Vector3 currentPosition;
 	Vector3 initialPosition;
 	Event currentEvent;
-	ArrayList points = new ArrayList();	
+	//ArrayList points = new ArrayList();	
 	private const double MIN_DISTANCE = 0.1;
 	
 	private const int HORIZONTAL_LINE = 1;
@@ -29,8 +29,8 @@ public class GestureRecognizer : MonoBehaviour {
         currentEvent = Event.current;
     }*/
 	
-	void Update() {
-		return;
+/*	void Update() {
+//		return;
 		currentEvent = Event.current;
 		
 		if (currentEvent.type == EventType.MouseDown) {
@@ -62,7 +62,7 @@ public class GestureRecognizer : MonoBehaviour {
 			}
 		}
 	}
-	
+*/
 	void printGesture(ArrayList points){
 		try {
 			int gesture = getGesture(points);
@@ -81,7 +81,7 @@ public class GestureRecognizer : MonoBehaviour {
 		}
 	}
 	
-	int getGesture(ArrayList points){
+	public static int getGesture(ArrayList points){
 		Vector2 avg;
 		avg.x = 0;
 		avg.y = 0;
