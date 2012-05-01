@@ -10,10 +10,12 @@ enum Outcome{
 	
 
 public class gameManager : MonoBehaviour {
+	public static gameManager instance;
+	
 	public float roundTime = 180.0f;
 	public int maxRounds = 3;
 	private int currentRound;
-	private float currentTime;
+	private float _currentTime;
 	private bool bGameOver;
 	private Outcome winner;
 
@@ -33,8 +35,17 @@ public class gameManager : MonoBehaviour {
 	public int messageTime = 3;
 	private string endMessage;
 	
+	public float CurrentTime{
+		get { return _currentTime;}
+		set { _currentTime = value;}
+	} 
+	
 	public int round2Boost = 30;
 	public int round3Boost = 20;
+	
+	void Awake(){
+		gameManager.instance = this;
+	}
 	
 	// Use this for initialization
 	void Start () {
@@ -55,7 +66,7 @@ public class gameManager : MonoBehaviour {
 		player2Movement.useKeyboard = true;
 		
 		currentRound = 1;
-		currentTime = roundTime;
+		_currentTime = roundTime;
 		bGameOver = false;
 	}
 	
@@ -66,14 +77,14 @@ public class gameManager : MonoBehaviour {
 		
 		if(!bGameOver){
 			//Pre round upkeeping
-			if(currentTime == roundTime){
+			if(_currentTime == roundTime){
 				PreRound();
 			}
 		
 			//Win condition if one of the players has 0 health
 			if(Player1_properties.Health <= 0 || Player2_properties.Health <= 0){
 				//Turns off the time and rounds
-				currentTime = 0;
+				_currentTime = 0;
 				currentRound = maxRounds;
 			
 				//Player 1 dies, player 2 wins
@@ -112,28 +123,19 @@ public class gameManager : MonoBehaviour {
 		
 
 			//Decrements the round timer and the remaining number of rounds
-			if(currentTime > 0 && currentRound <= maxRounds){
-    			currentTime -= Time.deltaTime;
-			}else if(currentTime <= 0){
+			if(_currentTime > 0 && currentRound <= maxRounds){
+    			_currentTime -= Time.deltaTime;
+			}else if(_currentTime <= 0){
 				PostRound ();
 				if(!bGameOver){
 					currentRound++;
-					currentTime = roundTime;
+					_currentTime = roundTime;
 			
 					//Resets player positions to spawns
 					Player1_inst.transform.position = spawn1.transform.position;			
 					Player2_inst.transform.position = spawn2.transform.position;
 				}
 			}
-		
-	
-  			//Calculates the minutes and seconds
- 			minutes = (int)currentTime / 60;
-			seconds = (int)currentTime % 60;
-  		
-			//Formats and prints the time to the GUI
-			var text = string.Format ("{0:0}:{1:00}", minutes, seconds);	
-			guiText.text = "Time: "+text;
 		}
 		
 		//Turn off the player movement when gameover
@@ -149,7 +151,7 @@ public class gameManager : MonoBehaviour {
 	void OnGUI () {
 		
 		if(bDisplayRound){
-			if(currentTime >= roundTime - messageTime && currentRound <= maxRounds){
+			if(_currentTime >= roundTime - messageTime && currentRound <= maxRounds){
 				GUI.Label(new Rect((Screen.width - messageWidth)/2.0F, (Screen.height - messageHeight)/2.0F, messageWidth, messageHeight), "ROUND " + currentRound, messageStyle);
 			}
 		}
