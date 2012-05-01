@@ -8,6 +8,7 @@ public class playerUI : MonoBehaviour {
 	
 	public Font font;
 
+	public Texture2D healthBackground;
 	public float pBarX, pBarY, pBarWidth, pBarHeight;
 	
 	public Texture2D timerBackground;
@@ -25,15 +26,14 @@ public class playerUI : MonoBehaviour {
     }
 
     void OnGUI(){
-		if(screenWidth != Screen.width && screenHeight != Screen.height)
+		//if(screenWidth != Screen.width && screenHeight != Screen.height)
 			updateDimensions();
 		
 		//draw the health bar
 		drawBar(barLeft, barTop, barWidth, barHeight,
 			emptyBar, healthBar, myPlayerProperties.maxHealth,
-			myPlayerProperties.Health);
+			myPlayerProperties.Health, healthBackground);
 		
-		//Debug.Log("timerHeight: " + timerHeight + "timerWidth: " + timerWidth);
 		DrawTimer (timerLeft, timerTop, timerWidth, timerHeight, gameManager.instance.CurrentTime, timerBackground);
 
     	this.DrawCrosshair();
@@ -49,19 +49,30 @@ public class playerUI : MonoBehaviour {
 	
 	//draws a bar of given dimensions and pos using a full and empty bar texture
 	private void drawBar(float barLeft, float barTop, float barWidth, float barHeight,
-		Texture2D emptyBarTex, Texture2D fullBarTex, float maxValue, float curValue){
+		Texture2D emptyBarTex, Texture2D fullBarTex, float maxValue, float curValue, Texture2D background){
 		Rect locationRect = new Rect(barLeft, barTop, barWidth, 
 			barHeight);
 		Rect drawRect = new Rect(0, 0, barWidth, barHeight);
 		
-		float drawWidth = barWidth * (curValue/maxValue);
+		GUIStyle style = new GUIStyle();
+		style.fontSize = 20;
+		style.normal.textColor = Color.white;
+		style.font = font;
+		
+		//float drawWidth = barWidth * (curValue/maxValue);
 		
 		GUI.BeginGroup(locationRect);
-			GUI.DrawTexture(drawRect, emptyBarTex);
-			GUI.BeginGroup(new Rect(0, 0, drawWidth, barHeight));
-				GUI.DrawTexture(drawRect, fullBarTex);
+			GUI.BeginGroup(new Rect(0, 0, barWidth, barHeight));
+				GUI.DrawTexture(drawRect, background);
 			GUI.EndGroup();
-		GUI.Label(new Rect(0, 0, barWidth, barHeight), new GUIContent(curValue/maxValue * 100 + "%"));
+			//GUI.DrawTexture(drawRect, emptyBarTex);
+			//GUI.BeginGroup(new Rect(0, 0, drawWidth, barHeight));
+				//GUI.DrawTexture(drawRect, fullBarTex);
+			//GUI.EndGroup();
+			GUI.Label(new Rect(100, 40, 200, 200), new GUIContent("Health"), style);
+		style.fontSize = 90;
+		style.alignment = TextAnchor.MiddleCenter;
+		GUI.Label(new Rect(-10, 35, barWidth, barHeight), new GUIContent((curValue/maxValue * 100).ToString()), style);
 		GUI.EndGroup();
 	}
 	
@@ -74,7 +85,6 @@ public class playerUI : MonoBehaviour {
 	
 	private void DrawTimer(float left, float top, float width, float height,
 		float time, Texture2D background){
-		Debug.Log("timerHeight: " + height + "timerWidth: " + width);
 		Rect locationRect = new Rect(left, top, width, height);
 		Rect drawRect = new Rect(0, 0, width, height);
 		
