@@ -3,72 +3,72 @@ using System.Collections;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using UnityEngine;
-    
+
 class WiiUnityClient
 {
-    private const String buttonsMsg = "updateB";
-    private const String accelMsg = "updateA";
-    private const String ncMsg = "updateNC";
-    private const String exitMsg = "exit";
-    private const String refuseConnMsg = "refuse";
-    private const String acceptConnMsg = "accept";
-    private const String blankMsg = "null";
+    const String buttonsMsg = "updateB";
+    const String accelMsg = "updateA";
+    const String ncMsg = "updateNC";
+    const String rumbleMsg = "toggleR";
+    const String irTogMsg = "toggleIR";
+    const String irUpdMsg = "updateIR";
+    const String exitMsg = "exit";
+    const String refuseConnMsg = "refuse";
+    const String acceptConnMsg = "accept";
+    const String blankMsg = "null";
 
 
     private IPEndPoint ipep;
-    private Socket server;
-    private EndPoint Remote;
+    private Socket serverSocket;
+    private EndPoint remote;
 
     private ClientWiiState[] wiiStates;
+	
 	public int numWiimotes{
 		get;
 		private set;
 	}
-	
+
     public WiiUnityClient()
     {
         wiiStates = new ClientWiiState[0];
     }
 
     public bool StartClient()
-    {        
-		// start the server
-		System.Diagnostics.Process wiiServer = new System.Diagnostics.Process();
-		wiiServer.StartInfo.FileName = "Assets\\WiimoteServer.exe";
-		wiiServer.Start();
-		
-		//yield WaitForSeconds(5);		
-		System.Threading.Thread.Sleep(1500);
-		
-        byte[] data = new byte[1024];
+    {		
+        // start the server
+        System.Diagnostics.Process wiiServer = new System.Diagnostics.Process();
+        wiiServer.StartInfo.FileName = "Assets\\WiimoteServer.exe";
+//		wiiServer.StartInfo.UseShellExecute = false;
+		wiiServer.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+
+        wiiServer.Start();
+
+        //yield WaitForSeconds(5);		
+        System.Threading.Thread.Sleep(4000);
 
         // Servers ip (localhost) and port
         ipep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 9050);
 
         // Create a new udp socket on client side
-        server = new Socket(AddressFamily.InterNetwork,
+        serverSocket = new Socket(AddressFamily.InterNetwork,
                                         SocketType.Dgram, ProtocolType.Udp);
 
-        // Establish connection. Sending first message in bytes to server
-        string confirmConn = "Hello, are you there?";
-        data = Encoding.ASCII.GetBytes(confirmConn);
-        server.SendTo(data, data.Length, SocketFlags.None, ipep);
+        // Setup local reference for Server
+        remote = (EndPoint)ipep;
 
-        // Setup reciever for messages from server
-        IPEndPoint sender = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 9050);
-        Remote = (EndPoint)sender;
+        // Establish connection. Sending first message in bytes to serverSocket
+        string msg = "Hello, are you there?";
+        serverSocket.SendTo(Encoding.ASCII.GetBytes(msg), remote);    
 
-        // Get response from server
-        data = new byte[1024];
-        int recv = server.ReceiveFrom(data, ref Remote);
+        // Get response from serverSocket
+        String response = WaitForMsg();
 
-        String connReply = Encoding.ASCII.GetString(data, 0, recv);
-        String[] msgParts = connReply.Split(' ');
+        String[] msgParts = response.Split(' ');
 
         if (msgParts[0].Equals(acceptConnMsg))
         {
-            Debug.Log("Connected to server at: " + Remote.ToString());
+            Console.WriteLine("Connected to serverSocket at: " + remote.ToString());
             numWiimotes = int.Parse(msgParts[1]);
             wiiStates = new ClientWiiState[numWiimotes];
             for (int i = 0; i < numWiimotes; i++)
@@ -76,7 +76,7 @@ class WiiUnityClient
         }
         else
         {
-            Debug.Log("Wiimote server refused connection. Most likely because no wiimotes were found");
+            Console.WriteLine("Server refused connection. Most likely because no wiimotes exist");
             return false;
         }
 
@@ -85,67 +85,81 @@ class WiiUnityClient
 
     public void EndClient()
     {
-        // Send server an exit message
-        Debug.Log("Sending Exit signal to Wiimote server");
-        String msg = exitMsg + " 1 ";
-        server.SendTo(Encoding.ASCII.GetBytes(msg), Remote);
+        // Send serverSocket an exit message
+        Console.WriteLine("Sending Exit signal to serverSocket");
+        SendMsg(exitMsg + " 1 ");
 
-        // Get server's exit reply
-        byte[] data = new byte[1024];
-        int recv = server.ReceiveFrom(data, ref Remote);
-        String stringData = Encoding.ASCII.GetString(data, 0, recv);
+        // Get serverSocket's exit reply
+        String response = WaitForMsg();
 
-        // Check server response
-        if (stringData.Equals(exitMsg))
-            Debug.Log("Wiimote Server responded correctly, exiting now...");
+        // Check serverSocket response
+        if (response.Equals(exitMsg))
+            Console.WriteLine("Server responded correctly, exiting now...");
         else
-            Debug.Log("Unexpected wiimote server response. Exiting anyway...");
+            Console.WriteLine("Unexpected serverSocket response. Exiting anyway...");
 
         // Close connection
-        server.Close();
+        serverSocket.Close();
     }
 
     public void UpdateButtons(int wiimoteID)
     {
-        String msg = buttonsMsg + " " + wiimoteID + " ";
-        server.SendTo(Encoding.ASCII.GetBytes(msg), Remote);
+        SendMsg(buttonsMsg + " " + wiimoteID + " ");
 
-        // Get server's exit reply
-        byte[] data = new byte[1024];
-        int recv = server.ReceiveFrom(data, ref Remote);
+        String response = WaitForMsg();
 
-        // The server will return a blank message if the wiimoteID doesnt exist
-        String response = Encoding.ASCII.GetString(data, 0, recv);
         if (!response.Equals(blankMsg))
             wiiStates[wiimoteID-1].ButtonsFromString(response);
     }
 
     public void UpdateAccel(int wiimoteID)
     {
-        String msg = accelMsg + " " + wiimoteID + " ";
-        server.SendTo(Encoding.ASCII.GetBytes(msg), Remote);
+        SendMsg(accelMsg + " " + wiimoteID + " ");
 
-        // Get server's exit reply
-        byte[] data = new byte[1024];
-        int recv = server.ReceiveFrom(data, ref Remote);
+        String response = WaitForMsg();
 
-        // The server will return a blank message if the wiimoteID doesnt exist
-        String response = Encoding.ASCII.GetString(data, 0, recv);
         if (!response.Equals(blankMsg))
             wiiStates[wiimoteID-1].AccelFromString(response);
     }
 
+    public void ToggleIR(int wiimoteID)
+    {
+        SendMsg(irTogMsg + " " + wiimoteID + " ");
+
+        String response = WaitForMsg();
+
+        if (!response.Equals(blankMsg))
+            wiiStates[wiimoteID - 1].IRFromString(response);
+    }
+
+    public void UpdateIR(int wiimoteID)
+    {
+        SendMsg(irUpdMsg + " " + wiimoteID + " ");
+
+        String response = WaitForMsg();
+
+        if (!response.Equals(blankMsg))
+            wiiStates[wiimoteID - 1].IRFromString(response);
+    }
+
     public void UpdateNunchuck(int wiimoteID)
     {
-        String msg = ncMsg + " " + wiimoteID + " ";
-        server.SendTo(Encoding.ASCII.GetBytes(msg), Remote);
+        SendMsg(ncMsg + " " + wiimoteID + " ");
 
-        byte[] data = new byte[1024];
-        int recv = server.ReceiveFrom(data, ref Remote);
+        String response = WaitForMsg();
 
-        String response = Encoding.ASCII.GetString(data, 0, recv);
         if (!response.Equals(blankMsg))
             wiiStates[wiimoteID-1].NunchuckFromString(response);
+    }
+
+    public void ToggleRumble(int wiimoteID)
+    {
+        SendMsg(rumbleMsg + " " + wiimoteID + " ");
+
+        String response = WaitForMsg();
+
+        if (!response.Equals(blankMsg))
+            wiiStates[wiimoteID - 1].RumbleFromString(response);
     }
 
     public ClientWiiState GetWiiState(int wiimoteID)
@@ -155,9 +169,22 @@ class WiiUnityClient
             return wiiStates[arrayID];
         else
         {
-            Debug.Log("Wiimote with ID <" + wiimoteID + "> could not be found");
+            Console.WriteLine("Wiimote with ID <" + wiimoteID + "> could not be found");
             return null;
         }
+    }
+
+    public void SendMsg(String msg)
+    {
+        serverSocket.SendTo(Encoding.ASCII.GetBytes(msg), remote);
+    }
+
+    public String WaitForMsg()
+    {
+        byte[] data = new byte[1024];
+        int recv = serverSocket.ReceiveFrom(data, ref remote);
+
+        return Encoding.ASCII.GetString(data, 0, recv);
     }
 }
 

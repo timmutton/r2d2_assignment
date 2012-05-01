@@ -66,6 +66,15 @@ public class playerAttack : MonoBehaviour {
 			if(Input.GetKeyDown("[3]")){
 				createSpell(3);
 			}
+			if(Input.GetKeyDown("[7]")){
+				createSpell(8);
+			}
+			if(Input.GetKeyDown("[8]")){
+				createSpell(9);
+			}
+			if(Input.GetKeyDown("[9]")){
+				createSpell(0);
+			}
 		}else{
 			if(Input.GetKeyDown("1")){
 				createSpell(1);
@@ -185,10 +194,12 @@ public class playerAttack : MonoBehaviour {
 			
 		}
 		
+		spellParams[(int)SpellParameter.parent] = transform;
+		
 		//instantiate the spell at given position, facing the players forward direction
 		//GameObject tempSpell = Instantiate(spell, spawnPos, transform.rotation) as GameObject;
 		GameObject tempSpell = Instantiate(spell, spawnPos, Quaternion.Euler(playerCam.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0)) as GameObject;
-		tempSpell.transform.parent = transform;
+//		tempSpell.transform.parent = transform;
 		tempSpell.SendMessage("setSpellProperties", spellParams);
 	}	
 }

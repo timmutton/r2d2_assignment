@@ -68,6 +68,8 @@ public class gameManager : MonoBehaviour {
 		currentRound = 1;
 		_currentTime = roundTime;
 		bGameOver = false;
+		
+//		Application.runInBackground = true;
 	}
 	
 	// Update is called once per frame
@@ -93,12 +95,16 @@ public class gameManager : MonoBehaviour {
 					Debug.Log("Player 2 Wins");
 					bGameOver = true;
 					winner = Outcome.player2;
+					EndGame();
+					return;
 				//Player 2 dies, player 1 wins
 				}else if(Player2_properties.Health <= 0){
 					Debug.Log ("Player 2 DEAD");
 					Debug.Log("Player 1 Wins");
 					bGameOver = true;
 					winner = Outcome.player1;
+					EndGame();
+					return;
 				}
 			}
 
@@ -119,6 +125,8 @@ public class gameManager : MonoBehaviour {
 				}
 				Debug.Log("GAME OVER");	
 				bGameOver = true;
+				EndGame();
+				return;
 			}
 		
 
@@ -126,30 +134,26 @@ public class gameManager : MonoBehaviour {
 			if(_currentTime > 0 && currentRound <= maxRounds){
     			_currentTime -= Time.deltaTime;
 			}else if(_currentTime <= 0){
-				PostRound ();
-				if(!bGameOver){
-					currentRound++;
-					_currentTime = roundTime;
+				currentRound++;
+				_currentTime = roundTime;
 			
-					//Resets player positions to spawns
-					Player1_inst.transform.position = spawn1.transform.position;			
-					Player2_inst.transform.position = spawn2.transform.position;
-				}
+				//Resets player positions to spawns
+				Player1_inst.transform.position = spawn1.transform.position;			
+				Player2_inst.transform.position = spawn2.transform.position;
 			}
 		}
 		
 		//Turn off the player movement when gameover
-		if(bGameOver){
-			Debug.Log("PLAYER OFF");
+		/*if(bGameOver){
+//			Debug.Log("PLAYER OFF");
 			Player1_inst.GetComponent<playerMovement>().enabled = false;
 			Player2_inst.GetComponent<playerMovement>().enabled = false;
 			Player1_inst.GetComponent<playerAttack>().enabled = false;
 			Player2_inst.GetComponent<playerAttack>().enabled = false;
-		}
+		}*/
 	}
 	
 	void OnGUI () {
-		
 		if(bDisplayRound){
 			if(_currentTime >= roundTime - messageTime && currentRound <= maxRounds){
 				GUI.Label(new Rect((Screen.width - messageWidth)/2.0F, (Screen.height - messageHeight)/2.0F, messageWidth, messageHeight), "ROUND " + currentRound, messageStyle);
@@ -177,12 +181,13 @@ public class gameManager : MonoBehaviour {
 		}
 	}
 	
-	private void PostRound(){
-		Debug.Log("POST ROUND");
+	private void EndGame(){
+//		Debug.Log("POST ROUND");
 		if(bGameOver){
-			Debug.Log("PLAYER OFF");
-			Player1_inst.GetComponent<playerMovement>().enabled = false;
-			Player2_inst.GetComponent<playerMovement>().enabled = false;
+			Time.timeScale = 0.0f;
+//			Debug.Log("PLAYER OFF");
+//			Player1_inst.GetComponent<playerMovement>().enabled = false;
+//			Player2_inst.GetComponent<playerMovement>().enabled = false;
 		}
 	}
 	

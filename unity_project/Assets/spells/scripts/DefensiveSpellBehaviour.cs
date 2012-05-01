@@ -18,7 +18,7 @@ public class DefensiveSpellBehaviour : MonoBehaviour {
 	}
 	
 	IEnumerator applyTexture(){
-		parent = transform.parent;
+		parent = properties.parent;
 	
 		playerRenderers.Add(parent.Find("model/hatBase").renderer);
 		playerRenderers.Add(parent.Find("model/hatTop").renderer);

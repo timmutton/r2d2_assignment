@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class OffensiveSpellBehaviour : MonoBehaviour {
-	public float movementSpeed = 10.0f, maxDistance = 100.0f, maxAngle = 10.0f;
+	public float movementSpeed = 10.0f, maxDistance = 100.0f, maxAngle = 10.0f, rotateSpeed = 10.0f;
 	
 	float damageAmt;
 	Vector3 startPos;
@@ -17,7 +17,7 @@ public class OffensiveSpellBehaviour : MonoBehaviour {
 		
 		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
 		foreach(GameObject gameObj in players){
-			if(gameObj.name != transform.parent.name 
+			if(gameObj.name != properties.parent.name 
 				&& Vector3.Angle(transform.forward, (gameObj.transform.position - transform.position)) < maxAngle)
 					target = gameObj.transform;
 		}
@@ -32,7 +32,7 @@ public class OffensiveSpellBehaviour : MonoBehaviour {
 	private void InteractWithCollider(Collider col) {
 		/*damageAmt = properties.spellDamage;
 		print(damageAmt);*/		
-		if(transform.IsChildOf(col.transform))
+		if(col.name == properties.parent.name)
 			return;
 		
 		if(col.name.ToLower().Contains("player")){
@@ -54,9 +54,17 @@ public class OffensiveSpellBehaviour : MonoBehaviour {
 	//if its gone too far without hitting the player, destroy it
 	void Update(){		
 		if(target){
-			transform.LookAt(target);
-			rigidbody.velocity = transform.forward * movementSpeed;
+			if(Vector3.Distance(startPos, transform.position) > Vector3.Distance(startPos, target.position)){
+				target = null;
+				return;
+			}
+			
+			Quaternion rotation = Quaternion.LookRotation(target.position - transform.position);
+    		transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * rotateSpeed);
 		}
+		
+//		transform.Translate(transform.forward * movementSpeed * Time.deltaTime);
+		rigidbody.velocity = transform.forward * movementSpeed;
 		
 		if(Vector3.Distance(startPos, transform.position) > maxDistance)
 			Destroy(gameObject);
