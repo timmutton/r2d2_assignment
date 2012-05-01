@@ -1,6 +1,12 @@
+using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+
+public class PlayerNotFoundException : Exception {
+	public PlayerNotFoundException(string message) : base(message) {
+	}
+}
 
 public class WiiReader : MonoBehaviour {
 	private WiiUnityClient client;
@@ -31,6 +37,8 @@ public class WiiReader : MonoBehaviour {
 		Vector3 accel;
 		ClientWiiState state;
 		GameObject player;
+
+		this.UpdatePlayers();
 			
 		for(int i = 0; i < client.numWiimotes; ++i){
 			client.UpdateButtons(i + 1);
@@ -79,6 +87,31 @@ public class WiiReader : MonoBehaviour {
 				}
 			}*/
 		}
+	}
+
+	private void UpdatePlayers() {
+		for(int i = 0; i < this.client.numWiimotes; ++i) {
+			this.UpdatePlayer(i + 1);
+		}
+	}
+
+	private void UpdatePlayer(int oneBasedPlayerNumber) {
+		try {
+			var player = this.GetPlayer(oneBasedPlayerNumber);
+			var movement = player.GetComponentInChildren<playerMovement>();
+			movement.useKeyboard = false;
+		}
+		catch(PlayerNotFoundException e) {
+			Debug.Log(e);
+		}
+	}
+
+	private GameObject GetPlayer(int oneBasedPlayerNumber) {
+		var player = GameObject.Find(string.Format("player{0}", oneBasedPlayerNumber));
+		if(player == null) {
+			throw new PlayerNotFoundException(string.Format("Player {0} not found", oneBasedPlayerNumber));
+		}
+		return player;
 	}
 	
 	void OnApplicationQuit() {
