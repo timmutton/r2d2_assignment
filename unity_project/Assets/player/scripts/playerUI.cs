@@ -5,6 +5,8 @@ public class playerUI : MonoBehaviour {
 	public Transform target;
 	public Texture2D healthBar, emptyBar;
 	public Texture2D Crosshair;
+	
+	public Font font;
 
 	public float pBarX, pBarY, pBarWidth, pBarHeight;
 	
@@ -23,7 +25,7 @@ public class playerUI : MonoBehaviour {
     }
 
     void OnGUI(){
-		//if(screenWidth != Screen.width && screenHeight != Screen.height)
+		if(screenWidth != Screen.width && screenHeight != Screen.height)
 			updateDimensions();
 		
 		//draw the health bar
@@ -77,10 +79,9 @@ public class playerUI : MonoBehaviour {
 		Rect drawRect = new Rect(0, 0, width, height);
 		
 		GUIStyle style = new GUIStyle();
-		style.fontSize = 50;
+		style.fontSize = 60;
 		style.normal.textColor = Color.white;
-		
-		Debug.Log("timerHeight: " + height + "timerWidth: " + width);
+		style.font = font;
 		
 	
   		//Calculates the minutes and seconds
@@ -95,7 +96,7 @@ public class playerUI : MonoBehaviour {
 			GUI.BeginGroup(new Rect(0, 0, width, height));
 				GUI.DrawTexture(drawRect, background);
 			GUI.EndGroup();
-			GUI.Label(new Rect(80, 65, width, height), new GUIContent(text), style);
+			GUI.Label(new Rect(85, 70, width, height), new GUIContent(text), style);
 		GUI.EndGroup();
 			
 	}
