@@ -7,6 +7,7 @@ public class playerUI : MonoBehaviour {
 	public Texture2D Crosshair;
 	
 	public Font font;
+	public float x,y,z;
 
 	public Texture2D healthBackground;
 	public float pBarX, pBarY, pBarWidth, pBarHeight;
@@ -55,7 +56,7 @@ public class playerUI : MonoBehaviour {
 		Rect drawRect = new Rect(0, 0, barWidth, barHeight);
 		
 		GUIStyle style = new GUIStyle();
-		style.fontSize = 20;
+		style.fontSize = Screen.width/84;
 		style.normal.textColor = Color.white;
 		style.font = font;
 		
@@ -69,10 +70,10 @@ public class playerUI : MonoBehaviour {
 			//GUI.BeginGroup(new Rect(0, 0, drawWidth, barHeight));
 				//GUI.DrawTexture(drawRect, fullBarTex);
 			//GUI.EndGroup();
-			GUI.Label(new Rect(100, 40, 200, 200), new GUIContent("Health"), style);
-		style.fontSize = 90;
+			GUI.Label(new Rect(Screen.width/16, Screen.height/27, barWidth, barHeight), new GUIContent("Health"), style);
+		style.fontSize = Screen.width/18;
 		style.alignment = TextAnchor.MiddleCenter;
-		GUI.Label(new Rect(-10, 35, barWidth, barHeight), new GUIContent((curValue/maxValue * 100).ToString()), style);
+		GUI.Label(new Rect(-Screen.width/168, Screen.height/30, barWidth, barHeight), new GUIContent((curValue/maxValue * 100).ToString()), style);
 		GUI.EndGroup();
 	}
 	
@@ -89,9 +90,11 @@ public class playerUI : MonoBehaviour {
 		Rect drawRect = new Rect(0, 0, width, height);
 		
 		GUIStyle style = new GUIStyle();
-		style.fontSize = 60;
+		style.fontSize = Screen.width/28;
+		//Debug.Log("FONT SIZE: " + style.fontSize);
 		style.normal.textColor = Color.white;
 		style.font = font;
+		
 		
 	
   		//Calculates the minutes and seconds
@@ -106,7 +109,7 @@ public class playerUI : MonoBehaviour {
 			GUI.BeginGroup(new Rect(0, 0, width, height));
 				GUI.DrawTexture(drawRect, background);
 			GUI.EndGroup();
-			GUI.Label(new Rect(85, 70, width, height), new GUIContent(text), style);
+			GUI.Label(new Rect(Screen.width/20, Screen.height/15, width, height), new GUIContent(text), style);
 		GUI.EndGroup();
 			
 	}

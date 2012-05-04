@@ -27,6 +27,12 @@ public class gameManager : MonoBehaviour {
 	private PlayerProperties Player1_properties;
 	private PlayerProperties Player2_properties;
 	
+	
+	public Font font;
+	public Texture2D timerBackground;
+	public float timerX = 58, timerY = -5, timerWidth = 40, timerHeight = 20;
+	//private float timerLeft, timerTop, timerWidth, timerHeight;
+	
 
 	public bool bDisplayRound = true;
 	public GUIStyle messageStyle;
@@ -190,6 +196,4 @@ public class gameManager : MonoBehaviour {
 //			Player2_inst.GetComponent<playerMovement>().enabled = false;
 		}
 	}
-	
-	
 }
