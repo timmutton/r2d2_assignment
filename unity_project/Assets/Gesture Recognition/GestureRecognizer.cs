@@ -5,15 +5,6 @@ using UnityEngine;
 using System.Collections;
 using WiimoteLib;
 
-public enum Gestures : int
-{
-	HORIZONTAL_LINE = 1,
-	VERTICAL_LINE = 2,
-	V_UP = 3,
-	V_DOWN = 4,
-	SQUARE = 5
-}
-
 public struct GestureMatch {
 	public float distance;
 	public string name;

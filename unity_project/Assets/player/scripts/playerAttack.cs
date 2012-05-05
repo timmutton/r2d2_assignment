@@ -101,10 +101,35 @@ public class playerAttack : MonoBehaviour {
 	}
 	
 	void createSpell(int spell) {
-		throw new NotImplementedException("use createSpell(string) version");
+		Debug.Log("Deprecated, remove this function");
+		if (spell == 1)
+			createSpell("hline");
+		else if (spell == 2)
+			createSpell("vline");
+		else if(spell == 3)
+			createSpell("vup");
+		else if(spell == 4)
+			createSpell("vdown");
+		else if(spell == 5)
+			createSpell("square");
 	}
+
+
 	void createSpell(string name) {
-		throw new Exception(string.Format("createSpell(): {0}", name));
+		int keyNum = 0;
+		if (name.Equals("hline"))
+			keyNum = 1;
+		else if (name.Equals("vline"))
+			keyNum = 2;
+		else if (name.Equals("vup"))
+			keyNum = 3;
+		else if (name.Equals("vdown"))
+			keyNum = 4;
+		else if (name.Equals("square"))
+			keyNum = 5;
+		else {
+			throw new NotImplementedException(string.Format("No such spell: {0}", name));
+		}
 
 		//the spawn position will be the players right hand
 		//plus the radius of the hand and the diameter of the spell
@@ -112,7 +137,7 @@ public class playerAttack : MonoBehaviour {
 		Rune selectedSpell;
 		Inventory playerInv = gameObject.GetComponent<Inventory>();
 
-		int keyNum = 0;
+		
 		switch(keyNum){
 		case 1:
 			if((selectedSpell = (Rune)playerInv.HasItem(RuneType.Fire)) == null)
