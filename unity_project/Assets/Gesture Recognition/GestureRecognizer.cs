@@ -24,6 +24,8 @@ public class GestureRecognizer  {
 	private const int V_DOWN = 4;
 	private const int SQUARE = 5;
 
+
+	//TODO: vectors here should be NORMALIZED
 	private static Dictionary<Vector2[], string> data = new Dictionary<Vector2[], string> {
 		{ new[] { new Vector2(-1, 0) }, "hline"},
         { new[] { new Vector2(1, 0) }, "hline"},
