@@ -94,7 +94,7 @@ public class WiiReader : MonoBehaviour {
 	            // close the stream
 	            
 				
-				/*int gesture = GestureRecognizer.getGesture(points);
+				/*int gesture = GestureRecognizer.getGestureFromPoints(points);
 				print(gesture);*/
 			}
 		}

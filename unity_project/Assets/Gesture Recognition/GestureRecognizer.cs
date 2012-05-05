@@ -46,7 +46,7 @@ public class GestureRecognizer : MonoBehaviour {
 			points.Add(currentPosition);
 			//Debug.Log("x: " + currentPosition.x + " y: " + currentPosition.y + " z: " + 
 			try {
-				int gesture = getGesture(points);
+				int gesture = getGestureFromPoints(points);
 				string gestureName = "";
 				switch (gesture) {
 					case 1: gestureName = "HORIZONTAL_LINE"; break;
@@ -65,7 +65,7 @@ public class GestureRecognizer : MonoBehaviour {
 */
 	void printGesture(ArrayList points){
 		try {
-			int gesture = getGesture(points);
+			int gesture = getGestureFromPoints(points);
 			string gestureName = "";
 			switch (gesture) {
 				case 1: gestureName = "HORIZONTAL_LINE"; break;
@@ -81,7 +81,7 @@ public class GestureRecognizer : MonoBehaviour {
 		}
 	}
 	
-	public static int getGesture(ArrayList points){
+	public static int getGestureFromPoints(ArrayList points){
 		Vector2 avg;
 		avg.x = 0;
 		avg.y = 0;

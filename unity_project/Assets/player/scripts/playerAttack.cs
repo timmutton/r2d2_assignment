@@ -8,10 +8,10 @@ public class playerAttack : MonoBehaviour {
 	private Transform rightHand;
 	private Vector3 spawnPos;
 	
-	//ArrayList points = new ArrayList();
+	ArrayList points = new ArrayList();
 	Vector3 currentPosition;
 	Vector3 initialPosition;
-	//Event currentEvent;
+	Event currentEvent;
 	
 	void Start(){
 		//link to the right hand
@@ -20,7 +20,7 @@ public class playerAttack : MonoBehaviour {
 		if(rightHand == null || playerCam == null){
 			Debug.Log("Could not find components");
 		}
-		//currentEvent = null;
+		currentEvent = null;
 	}
 
 	float GetQuadDamageMultiplier() {
@@ -29,12 +29,12 @@ public class playerAttack : MonoBehaviour {
 	}
 	
 	void OnGUI() {
-        //currentEvent = Event.current;
+        currentEvent = Event.current;
     }
 	
 	// Update is called once per frame
 	void Update () {
-		/*if(currentEvent == null){
+		if(currentEvent == null){
 		}else if (currentEvent.type == EventType.MouseDown) {
 			initialPosition = Input.mousePosition;
 			points.Clear();
@@ -44,18 +44,18 @@ public class playerAttack : MonoBehaviour {
 			points.Add(currentPosition);
 		} else if(currentEvent.type == EventType.MouseUp) {
 			points.Add(currentPosition);
-		}*/
+		}
 		
-		if(gameObject.name == "player1"){
-			/*if(currentEvent != null && currentEvent.type == EventType.MouseUp){
+		if(gameObject.name == "player2"){
+			if(currentEvent != null && currentEvent.type == EventType.MouseUp){
 				try {
-					int gesture = GestureRecognizer.getGesture(points);
+					int gesture = GestureRecognizer.getGestureFromPoints(points);
 					createSpell(gesture);
 					Debug.Log("Gesture: " + gesture);
 				} catch(UnityException e) {
 					Debug.Log("" + e.Message);
 				}
-			}*/
+			}
 			
 			if(Input.GetKeyDown("[1]")){
 				createSpell(1);
