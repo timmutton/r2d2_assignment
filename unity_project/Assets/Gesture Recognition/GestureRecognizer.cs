@@ -1,5 +1,8 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using System.Collections;
+using WiimoteLib;
 
 public enum Gestures : int
 {
@@ -8,6 +11,11 @@ public enum Gestures : int
 	V_UP = 3,
 	V_DOWN = 4,
 	SQUARE = 5
+}
+
+public struct GestureMatch {
+	public float matchValue;
+	public string name;
 }
 
 public class GestureRecognizer : MonoBehaviour {
@@ -24,78 +32,74 @@ public class GestureRecognizer : MonoBehaviour {
 	private const int V_DOWN = 4;
 	private const int SQUARE = 5;
 
-	void printGesture(ArrayList points){
-		try {
-			int gesture = getGestureFromPoints(points);
-			string gestureName = "";
-			switch (gesture) {
-				case 1: gestureName = "HORIZONTAL_LINE"; break;
-				case 2: gestureName = "VERTICAL_LINE"; break;
-				case 3: gestureName = "V_UP"; break;
-				case 4: gestureName = "V_DOWN"; break;
-				case 5: gestureName = "SQUARE"; break;
-				default: gestureName = "Unknown gesture..."; break;
-			}
-			Debug.Log("Gesture: " + gestureName);
-		} catch(GestureNotFoundException e) {
-			Debug.Log("" + e.Message);
-		}
+	private static Dictionary<Vector2[], string> data = new Dictionary<Vector2[], string> {
+		{ new[] { new Vector2(-1, 0) }, "hline"},
+        { new[] { new Vector2(1, 0) }, "hline"},
+		{ new[] { new Vector2(0, -1) }, "vline"},
+		{ new[] { new Vector2(0, 1) }, "vline"},                                                                             	
+	};
+
+	public static string recognizeGesture(List<Vector2> normalizedAccelerations) {
+		throw new GestureNotFoundException();
+	}
+
+	public static void saveGesture(string name, List<Vector2> normalizedAccelerations) {
+		data.Add(normalizedAccelerations.ToArray(), name);
 	}
 	
-	public static int getGestureFromPoints(ArrayList points){
-		Vector2 avg;
-		avg.x = 0;
-		avg.y = 0;
-		for (int i=0; i<points.Count; i++){
-			Vector3 point = (Vector3)points[i];
-			avg.x += point.x;
-			avg.y += point.y;
+	public static List<Vector2> getAccelerationsFromPoints(ArrayList points) {
+		var list = new List<Vector2>();
+
+		for(int i = 1; i < points.Count; ++i) {
+			var start = (Vector3) points[i - 1];
+			var end = (Vector3) points[i];
+
+			var distance = end - start;
+
+			list.Add(new Vector2(distance.x, distance.y));
 		}
-		avg.x = avg.x/points.Count;
-		avg.y = avg.y/points.Count;
-		
-		Vector2 sd;
-		sd.x = 0;
-		sd.y = 0;
-		for(int i=0; i<points.Count; i++){
-			Vector3 point = (Vector3)points[i];
-			sd.x += Mathf.Pow((point.x - avg.x), 2);
-			sd.y += Mathf.Pow((point.y - avg.y), 2);
+
+		list = filterAccelerations(list);
+		list = normalizeAccelerations(list);
+		return list;
+	}
+
+	private static List<Vector2> filterAccelerations(List<Vector2> accelerations) {
+		return filterAccelerationsByDirection(
+			filterAccelerationsByMagnitude(accelerations));
+	}
+
+	private static List<Vector2> filterAccelerationsByMagnitude(List<Vector2> accelerations) {
+		return accelerations.Where(v => Vector3.Magnitude(v) > 1).ToList();
+	}
+
+	private static List<Vector2> filterAccelerationsByDirection(List<Vector2> accelerations) {
+		List<Vector2> list;
+		if(accelerations.Count < 2) {
+			list = accelerations;
 		}
-		
-		sd.x = Mathf.Sqrt(sd.x);
-		sd.y = Mathf.Sqrt(sd.y);
-		
-		float avg2 = (sd.x + sd.y)/2;
-		float sd2 = Mathf.Sqrt(Mathf.Pow((sd.x - avg2),2) + Mathf.Pow((sd.y - avg2),2));
-		
-		//Debug.Log ("AVG: (" + avg.x + "," + avg.y + ") SD: (" + sd.x + "," + sd.y + ")");
-		if(sd.x < avg.x*MIN_DISTANCE){
-			return 2;
-		}else if(sd.y < avg.y*MIN_DISTANCE){
-			return 1;
-		}else if(sd2 <= avg2*0.4){
-			Vector3 firstPoint = (Vector3)points[0];
-			Vector3 lastPoint = (Vector3)points[points.Count - 1];
-			Vector3 midPoint = (Vector3)points[points.Count/2];
-			
-			Vector3 avg3 = (firstPoint + lastPoint)/2;
-			Vector3 sd3;
-			sd3.x = Mathf.Sqrt(Mathf.Pow(firstPoint.x - avg3.x,2) + Mathf.Pow(lastPoint.x - avg3.x,2));
-			sd3.y = Mathf.Sqrt(Mathf.Pow(firstPoint.y - avg3.y,2) + Mathf.Pow(lastPoint.y - avg3.y,2));
-			if(sd3.y <= avg3.y*0.8){
-				if(sd3.x > avg3.x*0.5){
-					if(firstPoint.y < midPoint.y){
-						return 3;
-					}else{
-						return 4;
-					}
+		else {
+			list = new List<Vector2>();
+			list.Add(accelerations[0]);
+
+			for(int i = 1; i < accelerations.Count; ++i) {
+				var a = list[list.Count - 1];
+				var b = accelerations[i];
+
+				var angle = Vector2.Angle(a, b);
+				if(Mathf.Abs(angle) > 20) {
+					list.Add(b);
 				}
 			}
 		}
-		throw new GestureNotFoundException("Invalid Gesture");
+
+		return list;
 	}
-	
+
+	private static List<Vector2> normalizeAccelerations(List<Vector2> accelerations) {
+		return accelerations.Select(v => v.normalized).ToList();
+	} 
+
 	string printVectors(ArrayList points){
 		string result = "";
 		for(int i=0; i<points.Count; i++){

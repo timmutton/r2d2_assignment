@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -48,12 +49,14 @@ public class playerAttack : MonoBehaviour {
 		
 		if(gameObject.name == "player2"){
 			if(currentEvent != null && currentEvent.type == EventType.MouseUp){
+				var acc = GestureRecognizer.getAccelerationsFromPoints(points);
 				try {
-					int gesture = GestureRecognizer.getGestureFromPoints(points);
+					var gesture = GestureRecognizer.recognizeGesture(acc);
 					createSpell(gesture);
 					Debug.Log("Gesture: " + gesture);
-				} catch(UnityException e) {
-					Debug.Log("" + e.Message);
+				}
+				catch (UnityException e) {
+					Debug.Log(e);
 				}
 			}
 			
@@ -97,13 +100,19 @@ public class playerAttack : MonoBehaviour {
 		}
 	}
 	
-	void createSpell(int keyNum){
+	void createSpell(int spell) {
+		throw new NotImplementedException("use createSpell(string) version");
+	}
+	void createSpell(string name) {
+		throw new Exception(string.Format("createSpell(): {0}", name));
+
 		//the spawn position will be the players right hand
 		//plus the radius of the hand and the diameter of the spell
 		Dictionary<int, object> spellParams = new Dictionary<int, object>();
 		Rune selectedSpell;
 		Inventory playerInv = gameObject.GetComponent<Inventory>();
-		
+
+		int keyNum = 0;
 		switch(keyNum){
 		case 1:
 			if((selectedSpell = (Rune)playerInv.HasItem(RuneType.Fire)) == null)
