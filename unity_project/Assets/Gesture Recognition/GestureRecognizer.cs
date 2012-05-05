@@ -59,7 +59,9 @@ public class GestureRecognizer  {
 		var arr = normalizedAccelerations.ToArray();
 		var matches = getMatches(arr);
 
-		var threshold = 6f;
+		// if two sequences have distance greater than threshold, we say "no match"
+		var threshold = 3f;
+
 		Debug.Log("matches (with distance < threshold):");
 		foreach (var m in matches.Where(e => e.distance < threshold)) {
 			Debug.Log(string.Format("{0} (distance: {1})", m.name, m.distance));
@@ -85,7 +87,7 @@ public class GestureRecognizer  {
 		{
 			float xmatch = SimpleDTW.get(accelerations.Select(e => e.x).ToArray(), kv.Key.Select(e => e.x).ToArray());
 			float ymatch = SimpleDTW.get(accelerations.Select(e => e.y).ToArray(), kv.Key.Select(e => e.y).ToArray());
-			list.Add(new GestureMatch { name = kv.Value, distance = new Vector2(xmatch, ymatch).SqrMagnitude() });
+			list.Add(new GestureMatch { name = kv.Value, distance = Mathf.Sqrt(xmatch * xmatch + ymatch * ymatch) });
 		}
 
 		var sorted = list.OrderBy(el => el.distance);
@@ -115,10 +117,13 @@ public class GestureRecognizer  {
 	}
 
 	private static List<Vector2> filterAccelerationsByMagnitude(List<Vector2> accelerations) {
-		return accelerations.Where(v => Vector3.Magnitude(v) > 5).ToList();
+		var idleAccelerationThreshold = 5f;
+		return accelerations.Where(v => Vector3.Magnitude(v) > idleAccelerationThreshold).ToList();
 	}
 
 	private static List<Vector2> filterAccelerationsByDirection(List<Vector2> accelerations) {
+		var angleThresholdDegrees = 20.0f;
+
 		List<Vector2> list;
 		if(accelerations.Count < 2) {
 			list = accelerations;
@@ -132,7 +137,7 @@ public class GestureRecognizer  {
 				var b = accelerations[i];
 
 				var angle = Vector2.Angle(a, b);
-				if(Mathf.Abs(angle) > 20) {
+				if(Mathf.Abs(angle) > angleThresholdDegrees) {
 					list.Add(b);
 				}
 			}
