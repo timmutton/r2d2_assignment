@@ -15,7 +15,7 @@ public class GestureRecognizer : MonoBehaviour {
 	Vector3 currentPosition;
 	Vector3 initialPosition;
 	Event currentEvent;
-	//ArrayList points = new ArrayList();	
+	
 	private const double MIN_DISTANCE = 0.1;
 	
 	private const int HORIZONTAL_LINE = 1;
@@ -24,45 +24,6 @@ public class GestureRecognizer : MonoBehaviour {
 	private const int V_DOWN = 4;
 	private const int SQUARE = 5;
 
-	
-	/*void OnGUI() {
-        currentEvent = Event.current;
-    }*/
-	
-/*	void Update() {
-//		return;
-		currentEvent = Event.current;
-		
-		if (currentEvent.type == EventType.MouseDown) {
-			initialPosition = Input.mousePosition;
-			points.Clear();
-			points.Add(initialPosition);
-			//Debug.Log("Initial: x: " + initialPosition.x + " y: " + initialPosition.y + " z: " + initialPosition.z); 
-		} else if(currentEvent.type == EventType.MouseDrag) {
-			currentPosition = Input.mousePosition;
-			points.Add(currentPosition);
-			//Debug.Log("Dragging");
-		} else if(currentEvent.type == EventType.MouseUp) {
-			points.Add(currentPosition);
-			//Debug.Log("x: " + currentPosition.x + " y: " + currentPosition.y + " z: " + 
-			try {
-				int gesture = getGestureFromPoints(points);
-				string gestureName = "";
-				switch (gesture) {
-					case 1: gestureName = "HORIZONTAL_LINE"; break;
-					case 2: gestureName = "VERTICAL_LINE"; break;
-					case 3: gestureName = "V_UP"; break;
-					case 4: gestureName = "V_DOWN"; break;
-					case 5: gestureName = "SQUARE"; break;
-					default: gestureName = "Unknown gesture..."; break;
-				}
-				Debug.Log("Gesture: " + gestureName);
-			} catch(GestureNotFoundException e) {
-				Debug.Log("" + e.Message);
-			}
-		}
-	}
-*/
 	void printGesture(ArrayList points){
 		try {
 			int gesture = getGestureFromPoints(points);
