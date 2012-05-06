@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,6 +50,7 @@ public class GestureRecognizer {
 
 	public GestureRecognizer() {
 		this.InitializeGesturesDatabase();
+		this.EliminateDuplicates();
 	}
 
 	private void InitializeGesturesDatabase() {
@@ -65,6 +67,21 @@ public class GestureRecognizer {
 				this.AddGesture(new[] {new Vector2(x, y), new Vector2(x, -y)}, "vup");
 				this.AddGesture(new[] {new Vector2(x, -y), new Vector2(x, y)}, "vdown");
 			}
+		}
+	}
+
+	private void EliminateDuplicates() {
+		var toDelete = new List<NamedGesture>();
+
+		for (int i = 0; i < this.data.Count; ++i) {
+			for (int j = i + 1; j < this.data.Count; ++j) {
+				if (Math.Abs(this.data[i].DistanceToGesture(this.data[j]) - 0.0f) < 0.001f) {
+					toDelete.Add(this.data[j]);
+				}
+			}
+		}
+		foreach(var duplicate in toDelete) {
+			this.data.Remove(duplicate);
 		}
 	}
 
