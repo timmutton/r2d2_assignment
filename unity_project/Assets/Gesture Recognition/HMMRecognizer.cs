@@ -2,24 +2,42 @@ using System;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
-using System.Linq;
-using DTW;
+using Accord.Statistics.Models.Markov;
 
 public class HMMRecognizer : MonoBehaviour
 {
-	private int[][] sequences = new int[][] 
+	public const int NORTH = 0;
+	public const int SOUTH = 1;
+	public const int EAST = 2;
+	public const int WEST = 3;
+	public const int NORTH_EAST = 4;
+	public const int NORTH_WEST = 5;
+	public const int SOUTH_EAST = 6;
+	public const int SOUTH_WEST = 7;
+	
+	private int[][] square_sequences = new int[][] 
 	{
-	    new int[] { 0,1,1,1,1,1,1 },
-	    new int[] { 0,1,1,1 },
-	    new int[] { 0,1,1,1,1 },
-	    new int[] { 0,1, },
-	    new int[] { 0,1,1 },
+	    new int[] { NORTH, EAST, SOUTH, WEST},
+		new int[] { EAST, SOUTH, WEST, NORTH},
+		new int[] { SOUTH, WEST, NORTH, EAST},
+	    new int[] { WEST, NORTH, EAST, SOUTH}
 	};	
 	
 	Vector3 currentPosition;
 	Vector3 initialPosition;
 	Event currentEvent;
 	ArrayList points = new ArrayList();
+	
+	void testHmm(){
+		HiddenMarkovModel model = new HiddenMarkovModel(4,4);
+		model.Learn(square_sequences, 0.0001);
+		
+		Debug.Log("\nEvaluation:" + model.Evaluate(new int[] {NORTH, EAST, SOUTH, WEST}));
+	}
+	
+	void Start(){
+		testHmm();
+	}
 	
 	void OnGUI() {
         currentEvent = Event.current;
