@@ -50,11 +50,13 @@ public class playerAttack : MonoBehaviour {
 		if(gameObject.name == "player2"){
 			if(currentEvent != null && currentEvent.type == EventType.MouseUp) {
 				var recognizer = GestureRecognizer.GetSharedInstance();
-				var acc = recognizer.getAccelerationsFromPoints(points);
+				var mouseGestures = new MouseGestures();
+				var geture = mouseGestures.getGestureFromPoints(points);
 				try {
-					var gesture = recognizer.recognizeGesture(acc);
-					createSpell(gesture);
-					Debug.Log("Gesture: " + gesture);
+					var gesture = recognizer.RecognizeGesture(geture);
+					Debug.Log(string.Format("Recognized gesture: {0}", gesture));
+					createSpell(gesture.Name);
+					
 				}
 				catch (UnityException e) {
 					Debug.Log(e);
