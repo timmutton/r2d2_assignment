@@ -17,22 +17,46 @@ public class HMMRecognizer : MonoBehaviour
 	
 	private int[][] square_sequences = new int[][] 
 	{
-	    new int[] { NORTH, EAST, SOUTH, WEST},
+	    new int[]{ NORTH, EAST, SOUTH, WEST},
 		new int[] { EAST, SOUTH, WEST, NORTH},
 		new int[] { SOUTH, WEST, NORTH, EAST},
 	    new int[] { WEST, NORTH, EAST, SOUTH}
-	};	
+	};
+	
+	double [,] A = new double[4,4] 
+	{
+		{0.5,0.5,0,0},
+		{0,0.5,0,0},
+		{0,0,0.5,0},
+		{0,0,0.5,0.5}
+	};
+	
+	double [,] B = new double[4,4]
+	{
+		{0.5,0.5,0,0},
+		{0,0.5,0,0},
+		{0,0,0.5,0},
+		{0,0,0.5,0.5}
+	};
+	
+	double [] pi = new double [] {0.5, 0.5, 0.0, 0.0};
 	
 	Vector3 currentPosition;
 	Vector3 initialPosition;
 	Event currentEvent;
 	ArrayList points = new ArrayList();
-	
+
 	void testHmm(){
-		HiddenMarkovModel model = new HiddenMarkovModel(4,4);
-		model.Learn(square_sequences, 0.0001);
+		HiddenMarkovModel model = new HiddenMarkovModel(A, B, pi);
+		model.Learn(square_sequences, 4, 0.0001);
 		
-		Debug.Log("\nEvaluation:" + model.Evaluate(new int[] {NORTH, EAST, SOUTH, WEST}));
+		Debug.Log("\nEvaluation 1: " + model.Evaluate(new int[] {NORTH, EAST, SOUTH, WEST}));
+		
+		Debug.Log("\nEvaluation 2: " + model.Evaluate(new int[] { NORTH, EAST, WEST, SOUTH}));
+		
+		Debug.Log("\nEvaluation 3: " + model.Evaluate(new int[] { NORTH, SOUTH, EAST, WEST}));
+		
+		Debug.Log("\nEvaluation 4: " + model.Evaluate(new int[] { EAST, SOUTH, WEST, NORTH}));
 	}
 	
 	void Start(){
