@@ -11,19 +11,7 @@ public struct GestureMatch {
 }
 
 public class GestureRecognizer  {
-	public Shader shader;
-	Vector3 currentPosition;
-	Vector3 initialPosition;
-	Event currentEvent;
-	
 	private const double MIN_DISTANCE = 0.1;
-	
-	private const int HORIZONTAL_LINE = 1;
-	private const int VERTICAL_LINE = 2;
-	private const int V_UP = 3;
-	private const int V_DOWN = 4;
-	private const int SQUARE = 5;
-
 
 	//TODO: vectors here should be NORMALIZED
 	private static Dictionary<Vector2[], string> data = new Dictionary<Vector2[], string> {
@@ -150,30 +138,5 @@ public class GestureRecognizer  {
 
 	private static List<Vector2> normalizeAccelerations(List<Vector2> accelerations) {
 		return accelerations.Select(v => v.normalized).ToList();
-	} 
-
-	string printVectors(ArrayList points){
-		string result = "";
-		for(int i=0; i<points.Count; i++){
-			Vector3 point = (Vector3) points[i];
-			if(i==0){
-				result = "(" + point.x + "," + point.y + ")";
-			}else{
-				result += " - (" + point.x + "," + point.y + ")";
-			}
-		}
-		return result;
-	}                                        
-	
-	double calculateAngle(Vector3 intersection, Vector3 point1, Vector3 point2){
-		Vector3 vector1 = point1 - intersection;
-		Vector3 vector2 = point2 - intersection;
-						
-		float scalarProduct = (vector1.x*vector2.x) + (vector1.y*vector2.y);
-		
-		float m1 = Mathf.Sqrt(Mathf.Pow(vector1.x,2) + Mathf.Pow(vector1.y,2));
-		float m2 = Mathf.Sqrt(Mathf.Pow(vector2.x,2) + Mathf.Pow(vector2.y,2));
-		
-		return Mathf.Acos(scalarProduct/(m1*m2))*180/Mathf.PI;
-	}
+	}                                 
 }
