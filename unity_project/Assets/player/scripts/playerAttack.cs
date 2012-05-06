@@ -51,7 +51,7 @@ public class playerAttack : MonoBehaviour {
 			if(currentEvent != null && currentEvent.type == EventType.MouseUp) {
 				var recognizer = GestureRecognizer.GetSharedInstance();
 				var mouseGestures = new MouseGestures();
-				var geture = mouseGestures.getGestureFromPoints(points);
+				var geture = mouseGestures.GetGestureFromPoints(points);
 				try {
 					var gesture = recognizer.RecognizeGesture(geture);
 					Debug.Log(string.Format("Recognized gesture: {0}", gesture));

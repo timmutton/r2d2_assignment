@@ -108,7 +108,7 @@ public class GestureRecognizer {
 }
 
 public class MouseGestures {
-	public Gesture getGestureFromPoints(ArrayList points) {
+	public Gesture GetGestureFromPoints(ArrayList points) {
 		var list = new List<Vector2>();
 
 		for (int i = 1; i < points.Count; ++i) {
@@ -120,21 +120,21 @@ public class MouseGestures {
 			list.Add(new Vector2(distance.x, distance.y));
 		}
 
-		list = this.filterAccelerations(list);
+		list = this.FilterAccelerations(list);
 		return new Gesture(list.ToArray());
 	}
 
-	private List<Vector2> filterAccelerations(List<Vector2> accelerations) {
-		return this.filterAccelerationsByDirection(
-			this.filterAccelerationsByMagnitude(accelerations));
+	private List<Vector2> FilterAccelerations(List<Vector2> accelerations) {
+		return this.FilterAccelerationsByDirection(
+			this.FilterAccelerationsByMagnitude(accelerations));
 	}
 
-	private List<Vector2> filterAccelerationsByMagnitude(List<Vector2> accelerations) {
+	private List<Vector2> FilterAccelerationsByMagnitude(List<Vector2> accelerations) {
 		float idleAccelerationThreshold = 5f;
 		return accelerations.Where(v => Vector3.Magnitude(v) > idleAccelerationThreshold).ToList();
 	}
 
-	private List<Vector2> filterAccelerationsByDirection(List<Vector2> accelerations) {
+	private List<Vector2> FilterAccelerationsByDirection(List<Vector2> accelerations) {
 		float angleThresholdDegrees = 20.0f;
 
 		List<Vector2> list;
