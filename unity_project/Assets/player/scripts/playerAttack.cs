@@ -48,10 +48,11 @@ public class playerAttack : MonoBehaviour {
 		}
 		
 		if(gameObject.name == "player2"){
-			if(currentEvent != null && currentEvent.type == EventType.MouseUp){
-				var acc = GestureRecognizer.getAccelerationsFromPoints(points);
+			if(currentEvent != null && currentEvent.type == EventType.MouseUp) {
+				var recognizer = GestureRecognizer.GetSharedInstance();
+				var acc = recognizer.getAccelerationsFromPoints(points);
 				try {
-					var gesture = GestureRecognizer.recognizeGesture(acc);
+					var gesture = recognizer.recognizeGesture(acc);
 					createSpell(gesture);
 					Debug.Log("Gesture: " + gesture);
 				}

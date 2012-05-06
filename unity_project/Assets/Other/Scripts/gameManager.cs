@@ -59,7 +59,7 @@ public class gameManager : MonoBehaviour {
 		Player2_inst = (GameObject)Instantiate(player, spawn2.transform.position, spawn2.transform.rotation);
 		Player1_inst = (GameObject)Instantiate(player, spawn1.transform.position, spawn1.transform.rotation);
 		
-		//Sets variables relevant to the individual characters. eg. camera position, player name
+		//Sets variables relevant to the individual characters. eg. camera position, player Name
 		GameObject.Find("Main Camera").GetComponent<Camera>().rect = new Rect(0.5f, 0.0f, 0.5f, 1.0f);
 		Player1_inst.name = "player1";		
 		Player2_inst.name = "player2";

@@ -5,42 +5,67 @@ using UnityEngine;
 using System.Collections;
 using WiimoteLib;
 
+public class Gesture {
+	public Vector2[] Moves { get; private set; }
+
+	public Gesture(Vector2[] moves) {
+		this.Moves = moves;
+		this.Normalize();
+	}
+
+	private void Normalize() {
+		for(int i = 0; i < this.Moves.Length; ++i) {
+			this.Moves[i] = this.Moves[i].normalized;
+		}
+	}
+}
+
+public class NamedGesture : Gesture {
+	public readonly string Name;
+
+	public NamedGesture(Vector2[] moves, string name) : base(moves) {
+		this.Name = name;
+	}
+}
+
 public struct GestureMatch {
-	public float distance;
-	public string name;
+	public float Distance;
+	public NamedGesture Gesture;
 }
 
 public class GestureRecognizer  {
-	private const double MIN_DISTANCE = 0.1;
+	private List<NamedGesture> data = new List<NamedGesture>();
 
-	//TODO: vectors here should be NORMALIZED
-	private static Dictionary<Vector2[], string> data = new Dictionary<Vector2[], string> {
-		{ new[] { new Vector2(-1, 0) }, "hline"},
-        { new[] { new Vector2(1, 0) }, "hline"},
+	public GestureRecognizer() {
+		this.InitializeGesturesDatabase();
+	}
 
-		{ new[] { new Vector2(0, -1) }, "vline"},
-		{ new[] { new Vector2(0, 1) }, "vline"},   
+	private void InitializeGesturesDatabase() {
+		this.AddGesture(new[] {new Vector2(-1, 0)}, "hline");
+		this.AddGesture(new[] {new Vector2(1, 0)}, "hline");
+
+		this.AddGesture(new[] { new Vector2(0, -1) }, "vline");
+		this.AddGesture(new[] { new Vector2(0, 1) }, "vline");   
         
-        { new[] { new Vector2(1, 0), new Vector2(-1, -1), new Vector2(1, 0) }, "zet"},
+        this.AddGesture(new[] { new Vector2(1, 0), new Vector2(-1, -1), new Vector2(1, 0) }, "zet");
 
-		{ new[] { new Vector2(1, -1), new Vector2(1, 1) }, "vdown" }, 
-		{ new[] { new Vector2(1, -1.5f), new Vector2(1, 1.5f) }, "vdown" }, 
-		{ new[] { new Vector2(1, -2f), new Vector2(1, 2.0f) }, "vdown" }, 
+		for(float x = 0.5f; x <= 2.0f; x += 0.25f) {
+			for(float y = 0.5f; y <= 2.0f; y += 0.25f) {
+				this.AddGesture(new[] { new Vector2(x, y), new Vector2(x, -y)}, "vup");
+				this.AddGesture(new[] { new Vector2(x, -y), new Vector2(x, y) }, "vdown");
+			}
+		}
+	}
 
-		{ new[] { new Vector2(1.5f, -1), new Vector2(1.5f, 1) }, "vdown" }, 
-		{ new[] { new Vector2(2.0f, -1), new Vector2(2.0f, 1) }, "vdown" }, 
+	public void AddGesture(Vector2[] moves, string name) {
+		this.AddGesture(new NamedGesture(moves, name));
+	}
 
+	public void AddGesture(NamedGesture gesture) {
+		this.data.Add(gesture);
+	}
 
-		{ new[] { new Vector2(1, 1), new Vector2(1, -1) }, "vup" }, 
-		{ new[] { new Vector2(1, 1.5f), new Vector2(1, -1.5f) }, "vup" }, 
-		{ new[] { new Vector2(1, 2f), new Vector2(1, -2.0f) }, "vup" }, 
-
-		{ new[] { new Vector2(1.5f, 1), new Vector2(1.5f, -1) }, "vup" }, 
-		{ new[] { new Vector2(2.0f, 1), new Vector2(2.0f, -1) }, "vup" }, 
-	};
-
-
-	public static string recognizeGesture(List<Vector2> normalizedAccelerations) {
+	public string recognizeGesture(List<Vector2> normalizedAccelerations) {
 		Debug.Log("accelerations:");
 		for(int i = 0; i < normalizedAccelerations.Count; ++i) {
 			Debug.Log(string.Format("{0}: {1}", i, normalizedAccelerations[i]));
@@ -49,42 +74,41 @@ public class GestureRecognizer  {
 		var arr = normalizedAccelerations.ToArray();
 		var matches = getMatches(arr);
 
-		// if two sequences have distance greater than threshold, we say "no match"
+		// if two sequences have Distance greater than threshold, we say "no match"
 		var threshold = 3f;
 
-		Debug.Log("matches (with distance < threshold):");
-		foreach (var m in matches.Where(e => e.distance < threshold)) {
-			Debug.Log(string.Format("{0} (distance: {1})", m.name, m.distance));
+		Debug.Log("5 top matches (with Distance < threshold):");
+		foreach (var m in matches.Where(e => e.Distance < threshold).Take(5)) {
+			Debug.Log(string.Format("{0} (Distance: {1})", m.Gesture.Name, m.Distance));
 		}
 
 		string gesture;
-		if (matches.Count() == 0 || matches.First().distance > threshold) {
+		if (matches.Count() == 0 || matches.First().Distance > threshold) {
 			throw new GestureNotFoundException();
 		}
 		else {
 			var fm = matches.First();
-			Debug.Log(string.Format("Successfully matched gesture: {0} (distance: {1})", fm.name, fm.distance));
-			gesture = fm.name;
+			Debug.Log(string.Format("Successfully matched gesture: {0} (Distance: {1})", fm.Gesture.Name, fm.Distance));
+			gesture = fm.Gesture.Name;
 		}
 
 		return gesture;
 	}
 
-	private static IOrderedEnumerable<GestureMatch> getMatches(Vector2[] accelerations)
+	private IOrderedEnumerable<GestureMatch> getMatches(Vector2[] accelerations)
 	{
 		var list = new List<GestureMatch>();
-		foreach (var kv in data)
-		{
-			float xmatch = SimpleDTW.get(accelerations.Select(e => e.x).ToArray(), kv.Key.Select(e => e.x).ToArray());
-			float ymatch = SimpleDTW.get(accelerations.Select(e => e.y).ToArray(), kv.Key.Select(e => e.y).ToArray());
-			list.Add(new GestureMatch { name = kv.Value, distance = Mathf.Sqrt(xmatch * xmatch + ymatch * ymatch) });
+		foreach (var gesture in data) {
+			float xmatch = SimpleDTW.get(accelerations.Select(e => e.x).ToArray(), gesture.Moves.Select(e => e.x).ToArray());
+			float ymatch = SimpleDTW.get(accelerations.Select(e => e.y).ToArray(), gesture.Moves.Select(e => e.y).ToArray());
+			list.Add(new GestureMatch { Gesture = gesture, Distance = Mathf.Sqrt(xmatch * xmatch + ymatch * ymatch) });
 		}
 
-		var sorted = list.OrderBy(el => el.distance);
+		var sorted = list.OrderBy(el => el.Distance);
 		return sorted;
 	}
 	
-	public static List<Vector2> getAccelerationsFromPoints(ArrayList points) {
+	public List<Vector2> getAccelerationsFromPoints(ArrayList points) {
 		var list = new List<Vector2>();
 
 		for(int i = 1; i < points.Count; ++i) {
@@ -101,17 +125,17 @@ public class GestureRecognizer  {
 		return list;
 	}
 
-	private static List<Vector2> filterAccelerations(List<Vector2> accelerations) {
+	private List<Vector2> filterAccelerations(List<Vector2> accelerations) {
 		return filterAccelerationsByDirection(
 			filterAccelerationsByMagnitude(accelerations));
 	}
 
-	private static List<Vector2> filterAccelerationsByMagnitude(List<Vector2> accelerations) {
+	private List<Vector2> filterAccelerationsByMagnitude(List<Vector2> accelerations) {
 		var idleAccelerationThreshold = 5f;
 		return accelerations.Where(v => Vector3.Magnitude(v) > idleAccelerationThreshold).ToList();
 	}
 
-	private static List<Vector2> filterAccelerationsByDirection(List<Vector2> accelerations) {
+	private List<Vector2> filterAccelerationsByDirection(List<Vector2> accelerations) {
 		var angleThresholdDegrees = 20.0f;
 
 		List<Vector2> list;
@@ -136,7 +160,16 @@ public class GestureRecognizer  {
 		return list;
 	}
 
-	private static List<Vector2> normalizeAccelerations(List<Vector2> accelerations) {
+	private List<Vector2> normalizeAccelerations(List<Vector2> accelerations) {
 		return accelerations.Select(v => v.normalized).ToList();
-	}                                 
+	}
+
+	private static GestureRecognizer sharedInstance;
+	public static GestureRecognizer GetSharedInstance() {
+		if(GestureRecognizer.sharedInstance == null) {
+			GestureRecognizer.sharedInstance = new GestureRecognizer();
+		}
+
+		return GestureRecognizer.sharedInstance;
+	}
 }
