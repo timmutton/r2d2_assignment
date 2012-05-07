@@ -4,6 +4,7 @@ using System;
 public class PlayerProperties : MonoBehaviour {
     [SerializeField]
 	private float health;
+	private playerUI myPlayerUI;
 	
 	public float Health {
 		get { return this.health; }
@@ -33,12 +34,14 @@ public class PlayerProperties : MonoBehaviour {
 	void Start () {
 		//init health
 		this.Health = startHealth;
+		myPlayerUI = gameObject.transform.Find("Main Camera").GetComponent<playerUI>();
 	}
 	
 	public void Damage(SpellProperties properties){
 		//aplly damage to health
 		float resistanceMultiplier = DefensiveSpellBehaviour.spellResistanceMultiplier(gameObject, properties.spellElem);
 		this.Health -= resistanceMultiplier * properties.spellDamage;
+		myPlayerUI.bDrawDamage = true;
 	}
 	
 	public void Heal(float hp) {
