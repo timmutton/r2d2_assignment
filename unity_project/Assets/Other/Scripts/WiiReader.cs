@@ -69,8 +69,6 @@ public class WiiReader : MonoBehaviour {
 				print(new Vector3(state.ncAccelX, state.ncAccelY, 0).ToString());
 			}else if(recording[i]){
 				recording[i] = false;			
-				/*int gesture = GestureRecognizer.getGesture(points);
-				print(gesture);*/
 			}
 		}
 	}

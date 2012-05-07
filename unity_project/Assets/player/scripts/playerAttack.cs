@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,10 +9,10 @@ public class playerAttack : MonoBehaviour {
 	private Transform rightHand;
 	private Vector3 spawnPos;
 	
-	//ArrayList points = new ArrayList();
+	ArrayList points = new ArrayList();
 	Vector3 currentPosition;
 	Vector3 initialPosition;
-	//Event currentEvent;
+	Event currentEvent;
 	
 	void Start(){
 		//link to the right hand
@@ -20,7 +21,7 @@ public class playerAttack : MonoBehaviour {
 		if(rightHand == null || playerCam == null){
 			Debug.Log("Could not find components");
 		}
-		//currentEvent = null;
+		currentEvent = null;
 	}
 
 	float GetQuadDamageMultiplier() {
@@ -29,12 +30,12 @@ public class playerAttack : MonoBehaviour {
 	}
 	
 	void OnGUI() {
-        //currentEvent = Event.current;
+        currentEvent = Event.current;
     }
 	
 	// Update is called once per frame
 	void Update () {
-		/*if(currentEvent == null){
+		if(currentEvent == null){
 		}else if (currentEvent.type == EventType.MouseDown) {
 			initialPosition = Input.mousePosition;
 			points.Clear();
@@ -44,18 +45,23 @@ public class playerAttack : MonoBehaviour {
 			points.Add(currentPosition);
 		} else if(currentEvent.type == EventType.MouseUp) {
 			points.Add(currentPosition);
-		}*/
+		}
 		
-		if(gameObject.name == "player1"){
-			/*if(currentEvent != null && currentEvent.type == EventType.MouseUp){
+		if(gameObject.name == "player2"){
+			if(currentEvent != null && currentEvent.type == EventType.MouseUp) {
+				var recognizer = GestureRecognizer.GetSharedInstance();
+				var mouseGestures = new MouseGestures();
+				var geture = mouseGestures.GetGestureFromPoints(points);
 				try {
-					int gesture = GestureRecognizer.getGesture(points);
-					createSpell(gesture);
-					Debug.Log("Gesture: " + gesture);
-				} catch(UnityException e) {
-					Debug.Log("" + e.Message);
+					var gesture = recognizer.RecognizeGesture(geture);
+					Debug.Log(string.Format("Recognized gesture: {0}", gesture));
+					createSpell(gesture.Name);
+					
 				}
-			}*/
+				catch (UnityException e) {
+					Debug.Log(e);
+				}
+			}
 			
 			if(Input.GetKeyDown("[1]")){
 				createSpell(1);
@@ -97,12 +103,43 @@ public class playerAttack : MonoBehaviour {
 		}
 	}
 	
-	void createSpell(int keyNum){
+	void createSpell(int spell) {
+		Debug.Log("Deprecated, remove this function");
+		if (spell == 1)
+			createSpell("hline");
+		else if (spell == 2)
+			createSpell("vline");
+		else if(spell == 3)
+			createSpell("vup");
+		else if(spell == 4)
+			createSpell("vdown");
+		else if(spell == 5)
+			createSpell("square");
+	}
+
+
+	void createSpell(string name) {
+		int keyNum = 0;
+		if (name.Equals("hline"))
+			keyNum = 1;
+		else if (name.Equals("vline"))
+			keyNum = 2;
+		else if (name.Equals("vup"))
+			keyNum = 3;
+		else if (name.Equals("vdown"))
+			keyNum = 4;
+		else if (name.Equals("square"))
+			keyNum = 5;
+		else {
+			throw new NotImplementedException(string.Format("No such spell: {0}", name));
+		}
+
 		//the spawn position will be the players right hand
 		//plus the radius of the hand and the diameter of the spell
 		Dictionary<int, object> spellParams = new Dictionary<int, object>();
 		Rune selectedSpell;
 		Inventory playerInv = gameObject.GetComponent<Inventory>();
+
 		
 		switch(keyNum){
 		case 1:
