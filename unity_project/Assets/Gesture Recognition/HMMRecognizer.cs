@@ -4,6 +4,13 @@ using System.Collections.Generic;
 using System.Collections;
 using Accord.Statistics.Models.Markov;
 
+public enum Gesture{
+	SQUARE = 8,
+	V_DOWN = 9,
+	V_UP = 10,
+	HORIZONTAL_LINE = 11,
+	VERTICAL_LINE = 12
+}
 public class HMMRecognizer : MonoBehaviour
 {
 	public const int NORTH = 0;
@@ -14,14 +21,43 @@ public class HMMRecognizer : MonoBehaviour
 	public const int NORTH_WEST = 5;
 	public const int SOUTH_EAST = 6;
 	public const int SOUTH_WEST = 7;
+		
+	/*public int [] states = {SQUARE, V_DOWN, V_UP, H_LINE, V_LINE};
+	public double [,] A = new double[8,8] 
+		{
+			{0, 0, 1, 0, 0, 0, 0, 0},
+			{0, 0, 0, 1, 0, 0, 0, 0},
+			{0, 1, 0, 0, 0, 0, 0, 0},
+			{1, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 1, 0},
+			{0, 0, 0, 0, 0, 0, 0, 1},
+			{0, 0, 0, 0, 1, 0, 0, 0},
+			{0, 0, 0, 0, 0, 1, 0, 0}
+		};
 	
-	public const int SQUARE = 8;
-	public const int V_DOWN = 9;
-	public const int V_UP = 10;
-	public const int H_LINE = 11;
-	public const int V_LINE = 12;
+	public double [,] B = new double[8,5] 
+		{
+			{0.5, 0, 0, 0, 0.5},
+			{0.5, 0, 0, 0, 0.5},
+			{1, 0, 0, 0, 0},
+			{1, 0, 0, 0, 0},
+			{0, 0.5, 0.5, 0, 0},
+			{0, 0.5, 0.5, 0, 0},
+			{0, 0.5, 0.5, 0, 0},
+			{0, 0.5, 0.5, 0, 0}
+		};
 	
-	double squareEvalution(int [] input){
+	public double [] pi = new double [] {1/8,1/8,1/8,1/8, 1/8, 1/8, 1/8, 1/8};*/
+	
+	void Start(){
+		Debug.Log("Final Result: " + hmmEvalute(new int[]{EAST, WEST}) + "\n");
+	} 
+	
+	bool squareEvalution(int [] input){
+		if(input.Length != 4){
+			return false;
+		}
+		
 		int[][] sequences = new int[][] 
 		{
 		    new int[]{ NORTH, EAST, SOUTH, WEST},
@@ -44,25 +80,32 @@ public class HMMRecognizer : MonoBehaviour
 		
 		double [,] B = new double[8,8]
 		{
-			{0.25, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0.25, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0.25, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0.25, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0, 0}
+			{1, 0, 0, 0, 0, 0, 0, 0},
+			{0, 1, 0, 0, 0, 0, 0, 0},
+			{0, 0, 1, 0, 0, 0, 0, 0},
+			{0, 0, 0, 1, 0, 0, 0, 0},
+			{0, 0, 0, 0, 1, 0, 0, 0},
+			{0, 0, 0, 0, 0, 1, 0, 0},
+			{0, 0, 0, 0, 0, 0, 1, 0},
+			{0, 0, 0, 0, 0, 0, 0, 1}
 		};
 		
 		double [] pi = new double [] {0.25,0.25,0.25,0.25, 0, 0, 0, 0};
 		
 		HiddenMarkovModel model = new HiddenMarkovModel(A, B, pi);
-		model.Learn(sequences, 4, 0.0001);
+		model.Learn(sequences, 0.0001);
 		
-		return model.Evaluate(input);
+		if(model.Evaluate(input) >= 0.25){
+			return true;
+		}else{
+			return false;
+		}		
 	}
 	
-	double vDownEvalution(int [] input){
+	bool vDownEvalution(int [] input){
+		if(input.Length != 2){
+			return false;
+		}
 		
 		int[][] sequences = new int[][] 
 		{
@@ -99,10 +142,18 @@ public class HMMRecognizer : MonoBehaviour
 		HiddenMarkovModel model = new HiddenMarkovModel(A, B, pi);
 		model.Learn(sequences, 0.0001);
 		
-		return model.Evaluate(input);
+		if(model.Evaluate(input) >= 0.5){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
-	double vUpEvalution(int [] input){
+	bool vUpEvalution(int [] input){
+		
+		if(input.Length != 2){
+			return false;
+		}
 		
 		int[][] sequences = new int[][] 
 		{
@@ -139,10 +190,17 @@ public class HMMRecognizer : MonoBehaviour
 		HiddenMarkovModel model = new HiddenMarkovModel(A, B, pi);
 		model.Learn(sequences, 0.0001);
 		
-		return model.Evaluate(input);
+		if(model.Evaluate(input) >= 0.5){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
-	double verticalEvalution(int [] input){
+	bool verticalEvalution(int [] input){
+		if(input.Length != 1){
+			return false;
+		}
 		
 		int[][] sequences = new int[][] 
 		{
@@ -179,10 +237,18 @@ public class HMMRecognizer : MonoBehaviour
 		HiddenMarkovModel model = new HiddenMarkovModel(A, B, pi);
 		model.Learn(sequences, 0.0001);
 		
-		return model.Evaluate(input);
+		if(model.Evaluate(input) >= 0.5){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
-	double horizontalEvalution(int [] input){
+	bool horizontalEvalution(int [] input){
+		
+		if(input.Length != 1){
+			return false;
+		}
 		
 		int[][] sequences = new int[][] 
 		{
@@ -219,39 +285,34 @@ public class HMMRecognizer : MonoBehaviour
 		HiddenMarkovModel model = new HiddenMarkovModel(A, B, pi);
 		model.Learn(sequences, 0.0001);
 		
-		return model.Evaluate(input);
-	}
-	
-	public int hmmEvalute(int [] input){
-		double square = squareEvalution(input);
-		double v_down = vDownEvalution(input);
-		double v_up = vUpEvalution(input);
-		double horizontal = horizontalEvalution(input);
-		double vertical = verticalEvalution(input);
-		
-		Debug.Log("SQUARE: " + square + "\n");
-		Debug.Log("V_DOWN: " + v_down + "\n");
-		Debug.Log("V_UP: " + v_up + "\n");
-		Debug.Log("Horizontal Line: " + horizontal + "\n");
-		Debug.Log("Vertical Line: " + vertical + "\n");
-		
-		if(vertical >= 0.5){
-			return V_LINE;
-		}else if(horizontal >= 0.5){
-			return H_LINE;
-		}else if(v_up >= 0.5){
-			return V_UP;
-		}else if(v_down >= 0.5){
-			return V_DOWN;
-		}else if(square >= 0.25){
-			return SQUARE;
+		if(model.Evaluate(input) >= 0.5){
+			return true;
 		}else{
-			throw new GestureNotFoundException("Gesture not found!");
+			return false;
 		}
 	}
 	
-	void Start(){
-		Debug.Log("Final Result: " + hmmEvalute(new int[]{ NORTH }) + "\n");
-	}       
+	public int hmmEvalute(int [] input){
+		
+		bool square = squareEvalution(input);
+		bool v_down = vDownEvalution(input);
+		bool v_up = vUpEvalution(input);
+		bool horizontal = horizontalEvalution(input);
+		bool vertical = verticalEvalution(input);
+		
+		if(vertical){
+			return Gesture.VERTICAL_LINE;
+		}else if(horizontal){
+			return Gesture.HORIZONTAL_LINE;
+		}else if(v_up){
+			return Gesture.V_UP;
+		}else if(v_down){
+			return Gesture.V_DOWN;
+		}else if(square){
+			return Gesture.SQUARE;
+		}else{
+			throw new GestureNotFoundException("Gesture not found!");
+		}
+	}      
 }
 
