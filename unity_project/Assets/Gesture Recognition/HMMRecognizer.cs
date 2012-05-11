@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
-using Accord.Statistics.Models.Markov;
+using MyHMM;
 
 public enum Gesture{
 	SQUARE = 8,
@@ -50,7 +50,7 @@ public class HMMRecognizer : MonoBehaviour
 	public double [] pi = new double [] {1/8,1/8,1/8,1/8, 1/8, 1/8, 1/8, 1/8};*/
 	
 	void Start(){
-		Debug.Log("Final Result: " + hmmEvalute(new int[]{EAST, WEST}) + "\n");
+		Debug.Log("Final Result: " + hmmEvalute(new int[]{NORTH, EAST, SOUTH, WEST}) + "\n");
 	} 
 	
 	bool squareEvalution(int [] input){
@@ -301,15 +301,15 @@ public class HMMRecognizer : MonoBehaviour
 		bool vertical = verticalEvalution(input);
 		
 		if(vertical){
-			return Gesture.VERTICAL_LINE;
+			return (int)Gesture.VERTICAL_LINE;
 		}else if(horizontal){
-			return Gesture.HORIZONTAL_LINE;
+			return (int)Gesture.HORIZONTAL_LINE;
 		}else if(v_up){
-			return Gesture.V_UP;
+			return (int)Gesture.V_UP;
 		}else if(v_down){
-			return Gesture.V_DOWN;
+			return (int)Gesture.V_DOWN;
 		}else if(square){
-			return Gesture.SQUARE;
+			return (int)Gesture.SQUARE;
 		}else{
 			throw new GestureNotFoundException("Gesture not found!");
 		}
