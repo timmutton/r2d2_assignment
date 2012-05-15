@@ -38,9 +38,18 @@ public class Gesture {
 
 	public int[] HmmDirections {
 		get {
-			return this.Moves
-			.Select(k => this.hmmDirectionForVector(k))
-			.ToArray();
+			var result = new List<int>();
+			if(this.Moves.Length > 0) {
+				result.Add(this.hmmDirectionForVector(this.Moves[0]));
+
+				for(int i = 1; i < this.Moves.Length; ++i) {
+					var d = this.hmmDirectionForVector(this.Moves[i]);
+					if(result.Last() != d) {
+						result.Add(d);
+					}
+				}
+			}
+			return result.ToArray();
 		}
 	}
 
