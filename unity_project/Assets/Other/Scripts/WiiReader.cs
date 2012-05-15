@@ -13,8 +13,10 @@ public class WiiReader : MonoBehaviour {
 	private WiiUnityClient client;
 	private bool connected;
 	private bool[] recording = {false, false};
-	private List<Vector3>[] points = {new List<Vector3>(), new List<Vector3>()};	
-	TextWriter tw;
+	private List<Vector2>[] points = {new List<Vector2>(), new List<Vector2>()};	
+	
+	private List<GameObject> players = new List<GameObject>();
+
 	
 	// Use this for initialization
 	void Start(){
@@ -39,52 +41,54 @@ public class WiiReader : MonoBehaviour {
 		
 		Vector3 accel;
 		ClientWiiState state;
-		GameObject player;
 
-		this.UpdatePlayers();
+		if(players.Count == 0){
+			for(int i = 0; i < client.numWiimotes; ++i){
+				players.Add(GameObject.Find("player" + (i+1).ToString()));
+				client.ToggleIR(i + 1);	
+			}
+		}
+		
+//		 this.UpdatePlayers();
 			
 		for(int i = 0; i < client.numWiimotes; ++i){
 			client.UpdateButtons(i + 1);
 			client.UpdateAccel(i + 1);
 			client.UpdateNunchuck(i + 1);
+			client.UpdateIR(i + 1);
 			state = client.GetWiiState(i + 1);
-			accel.x = state.accelX;
-			accel.y = state.accelY;
-			accel.z = 0;
 			
-			player = GameObject.Find("player" + (i+1).ToString());
+			var player = players[i];
 			
 			player.SendMessage("updateWiiState",
 				state, 
 				SendMessageOptions.DontRequireReceiver);
+			var cam = player.transform.FindChild("Main Camera");
+			cam.SendMessage("updateWiiState",
+				state, 
+				SendMessageOptions.DontRequireReceiver);
 			
-			if(state.ncZ){
+			if(state.B){
 				if(!recording[i]){
 					recording[i] = true;
-					points[i].Clear();
-					
+					points[i].Clear();	
 				}
 				
-				points[i].Add(new Vector3(state.ncAccelX, state.ncAccelY, 0));
-				print(new Vector3(state.ncAccelX, state.ncAccelY, 0).ToString());
+				points[i].Add(new Vector2( (1 - state.ir1PosX), (1 - state.ir1PosY)));
+//				print(state.ir1PosX + " " + state.ir1PosY);
 			}else if(recording[i]){
 				recording[i] = false;
 				
-//				var recognizer = gameObject.AddComponent<HMMRecognizer>();
-//				
+//				var recognizer = GestureRecognizer.GetSharedInstance();
 //				var wiiGestures = new WiiGestures();
-//				var gesturePoints = wiiGestures.GetGestureFromPoints(points[i].ToArray());
+//				var geture = wiiGestures.GetGestureFromPoints(points[i].ToArray());
 //				try {
-//					var gesture = recognizer.hmmEvalute(gesturePoints);
-//					if(gesture == 0 || gesture == 1 || gesture == 2)
-//						player.SendMessage("setElement", gesture, SendMessageOptions.DontRequireReceiver);
-//					else
-//						player.SendMessage("setType", gesture, SendMessageOptions.DontRequireReceiver);
+//					var gesture = recognizer.RecognizeGesture(geture);
+//					Debug.Log(string.Format("Recognized gesture: {0}", gesture));
 //				}
 //				catch (UnityException e) {
 //					Debug.Log(e);
 //				}
-				recording[i] = false;			
 			}
 		}
 	}

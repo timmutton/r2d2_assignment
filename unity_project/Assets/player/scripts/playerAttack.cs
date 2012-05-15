@@ -69,20 +69,6 @@ public class playerAttack : MonoBehaviour {
 		}
 	}
 	
-//	void createSpell(int spell) {
-//		Debug.Log("Deprecated, remove this function");
-//		if (spell == 1)
-//			createSpell("hline");
-//		else if (spell == 2)
-//			createSpell("vline");
-//		else if(spell == 3)
-//			createSpell("vup");
-//		else if(spell == 4)
-//			createSpell("vdown");
-//		else if(spell == 5)
-//			createSpell("square");
-//	}
-	
 	void setElement(GestureEnum gest){
 		if(gest == GestureEnum.V_DOWN)
 			elem = SpellElement.earth;
