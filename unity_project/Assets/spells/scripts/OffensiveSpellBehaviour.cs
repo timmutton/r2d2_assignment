@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class OffensiveSpellBehaviour : MonoBehaviour {
-	public float movementSpeed = 10.0f, maxDistance = 100.0f, maxAngle = 10.0f, rotateSpeed = 10.0f;
+	public float movementSpeed = 10.0f, maxDistance = 10000.0f, maxAngle = 10.0f, rotateSpeed = 10.0f;
 	
 	float damageAmt;
 	Vector3 startPos;
@@ -40,6 +40,7 @@ public class OffensiveSpellBehaviour : MonoBehaviour {
 		//}else if(col.Name.ToLower().Contains("defensivespell")){
 		//	col.BroadcastMessage("Damage", properties, SendMessageOptions.DontRequireReceiver);
 		}else{
+			Destroy(gameObject);
 			return;
 		}
 		
@@ -66,7 +67,12 @@ public class OffensiveSpellBehaviour : MonoBehaviour {
 //		transform.Translate(transform.forward * movementSpeed * Time.deltaTime);
 		rigidbody.velocity = transform.forward * movementSpeed;
 		
-		if(Vector3.Distance(startPos, transform.position) > maxDistance)
+		if(Vector3.Distance(startPos, transform.position) > maxDistance){
+			Debug.Log("TOO FAR: " + maxDistance);
 			Destroy(gameObject);
+		}
+		
+		
+		Debug.Log("MAX DISTANCE: " + maxDistance);
 	}
 }

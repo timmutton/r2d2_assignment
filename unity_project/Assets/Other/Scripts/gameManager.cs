@@ -179,11 +179,11 @@ public class gameManager : MonoBehaviour {
 	void PreRound(){
 		//Gives health boosts at the start of the round
 		if(currentRound == 2){
-			Player1_properties.Heal(Player1_properties.Health * (round2Boost/100.0F));
-			Player2_properties.Heal(Player2_properties.Health * (round2Boost/100.0F));
+			Player1_properties.Heal(round2Boost);
+			Player2_properties.Heal(round2Boost);
 		}else if(currentRound == 3){
-			Player1_properties.Heal(Player1_properties.Health * (round3Boost/100.0F));
-			Player2_properties.Heal(Player2_properties.Health * (round3Boost/100.0F));			
+			Player1_properties.Heal(round3Boost);
+			Player2_properties.Heal(round3Boost);			
 		}
 	}
 	

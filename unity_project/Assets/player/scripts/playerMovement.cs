@@ -10,22 +10,27 @@ public class playerMovement : MonoBehaviour {
 	private CharacterController controller;
 	private Vector3 moveDir = Vector3.zero, rotDir = Vector3.zero;
 	
+	private bool bJump;
+	
 	void Start(){
 		state = new ClientWiiState();
 		playerCam = transform.FindChild("Main Camera");
 		controller = GetComponent<CharacterController>();
+		bJump = true;
 	}
 
 	void Update(){
 		if(controller.isGrounded){
 			if(useKeyboard){				
 				rotDir = new Vector3(Input.GetAxis("lookX"), Input.GetAxis("lookY"), 0);
-				moveDir = new Vector3(Input.GetAxis("moveX"), 0, Input.GetAxis("moveZ"));
+				moveDir = new Vector3(Input.GetAxis("moveX")* 0.7F, 0, Input.GetAxis("moveZ"));
 				moveDir = transform.TransformDirection(moveDir) * CurrentMovementSpeed();
 				
 				if(Input.GetButton("jump")){
-					print("jump");
-					moveDir.y = jumpSpeed;
+					if(bJump){
+						print("jump");
+						moveDir.y = jumpSpeed;
+					}
 				}
 			}else{
 				rotDir = new Vector3(state.ncJoyY, state.ncJoyX, 0);
@@ -42,7 +47,7 @@ public class playerMovement : MonoBehaviour {
 				
 				moveDir = transform.TransformDirection(moveDir) * CurrentMovementSpeed();
 				
-				if(state.ncZ){
+				if(state.B){
 					print("jump");
 					moveDir.y = jumpSpeed;
 				}
@@ -76,10 +81,20 @@ public class playerMovement : MonoBehaviour {
 	void updateWiiState(ClientWiiState _state){
 		state = _state;
 	}
-
+	
 	public float CurrentMovementSpeed() {
 		var haste = this.gameObject.GetComponentInChildren<Haste>();
 
 		return this.movementSpeed * (haste != null ? haste.MovementSpeedMultiplier : 1.0f);
+	}
+	
+	void OnControllerColliderHit(ControllerColliderHit hit){
+		//Debug.Log("Hit: " + hit);
+		
+		if(hit.normal.y <= 0.6){
+			bJump = false;
+		}else{
+			bJump = true;
+		}
 	}
 }
