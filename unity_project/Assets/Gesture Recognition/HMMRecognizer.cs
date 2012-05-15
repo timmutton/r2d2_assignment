@@ -23,9 +23,7 @@ public class HMMRecognizer : MonoBehaviour
 	public const int SOUTH_EAST = 6;
 	public const int SOUTH_WEST = 7;
 		
-	void Start(){
-		Debug.Log("Final Result: " + hmmEvalute(new int[]{NORTH, EAST, SOUTH, WEST}) + "\n");
-	} 
+
 	
 	bool squareEvalution(int [] input){
 		if(input.Length != 4){
@@ -209,7 +207,7 @@ public class HMMRecognizer : MonoBehaviour
 		double [] pi = new double [] {0.5, 0.5, 0, 0, 0, 0, 0, 0};
 		
 		HiddenMarkovModel model = new HiddenMarkovModel(A, B, pi);
-		model.Learn(sequences, 0.0001);
+	model.Learn(sequences, 0.0001);
 		
 		if(model.Evaluate(input) >= 0.5){
 			return true;

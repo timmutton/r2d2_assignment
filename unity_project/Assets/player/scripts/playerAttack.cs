@@ -51,16 +51,16 @@ public class playerAttack : MonoBehaviour {
 		}
 		
 		if(gameObject.name == "player2"){
-			if(currentEvent != null && currentEvent.type == EventType.MouseUp) {
-				var recognizer = GestureRecognizer.GetSharedInstance();
+			if(currentEvent != null && currentEvent.type == EventType.MouseUp) {				
+				var recognizer = gameObject.AddComponent<HMMRecognizer>();
 				var mouseGestures = new MouseGestures();
-				var geture = mouseGestures.GetGestureFromPoints(points);
+				var gesture = mouseGestures.GetGestureFromPoints(points);
+				
+				foreach(int g in gesture.HmmDirections)
+					Debug.Log(g);
 				try {
-					var gesture = recognizer.RecognizeGesture(geture);
-					Debug.Log(string.Format("Recognized gesture: {0}", gesture));
-					
-//					createSpell(gesture.Name);
-					
+					var hmm = recognizer.hmmEvalute(gesture.HmmDirections);
+					Debug.Log(string.Format("Recognized gesture: {0}", hmm));
 				}
 				catch (UnityException e) {
 					Debug.Log(e);

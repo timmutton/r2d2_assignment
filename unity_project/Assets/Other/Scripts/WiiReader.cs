@@ -79,16 +79,19 @@ public class WiiReader : MonoBehaviour {
 			}else if(recording[i]){
 				recording[i] = false;
 				
-//				var recognizer = GestureRecognizer.GetSharedInstance();
-//				var wiiGestures = new WiiGestures();
-//				var geture = wiiGestures.GetGestureFromPoints(points[i].ToArray());
-//				try {
-//					var gesture = recognizer.RecognizeGesture(geture);
-//					Debug.Log(string.Format("Recognized gesture: {0}", gesture));
-//				}
-//				catch (UnityException e) {
-//					Debug.Log(e);
-//				}
+				var recognizer = gameObject.AddComponent<HMMRecognizer>();
+				var wiiGestures = new WiiGestures();
+				var gesture = wiiGestures.GetGestureFromPoints(points[i].ToArray());
+				
+				foreach(int g in gesture.HmmDirections)
+					Debug.Log(g);
+				try {
+					var hmm = recognizer.hmmEvalute(gesture.HmmDirections);
+					Debug.Log(string.Format("Recognized gesture: {0}", hmm));
+				}
+				catch (UnityException e) {
+					Debug.Log(e);
+				}
 			}
 		}
 	}
