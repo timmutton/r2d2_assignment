@@ -312,7 +312,7 @@ public class HMMRecognizer : MonoBehaviour
 		}else if(square){
 			return (int)GestureEnum.SQUARE;
 		}else{
-			throw new GestureEnumNotFoundException("GestureEnum not found!");
+			throw new GestureNotFoundException("GestureEnum not found!");
 		}
 	}      
 }
