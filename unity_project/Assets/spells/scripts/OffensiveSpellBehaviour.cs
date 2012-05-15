@@ -11,7 +11,7 @@ public class OffensiveSpellBehaviour : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start() {		
-		//start position is used to destroy object after a certain distance
+		//start position is used to destroy object after a certain Distance
 		startPos = transform.position;
 		properties = GetComponent<SpellProperties>();
 		
@@ -37,7 +37,7 @@ public class OffensiveSpellBehaviour : MonoBehaviour {
 		
 		if(col.name.ToLower().Contains("player")){
 			col.SendMessage("Damage", properties, SendMessageOptions.DontRequireReceiver);
-		//}else if(col.name.ToLower().Contains("defensivespell")){
+		//}else if(col.Name.ToLower().Contains("defensivespell")){
 		//	col.BroadcastMessage("Damage", properties, SendMessageOptions.DontRequireReceiver);
 		}else{
 			return;

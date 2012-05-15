@@ -11,8 +11,9 @@ public class PlayerNotFoundException : Exception {
 
 public class WiiReader : MonoBehaviour {
 	private WiiUnityClient client;
-	private bool connected, recording;
-	private ArrayList points = new ArrayList();	
+	private bool connected;
+	private bool[] recording = {false, false};
+	private List<Vector3>[] points = {new List<Vector3>(), new List<Vector3>()};	
 	TextWriter tw;
 	
 	// Use this for initialization
@@ -57,45 +58,17 @@ public class WiiReader : MonoBehaviour {
 				state, 
 				SendMessageOptions.DontRequireReceiver);
 			
-			if(state.B){
-				if(!recording){
-					recording = true;
-					points.Clear();
+			if(state.ncZ){
+				if(!recording[i]){
+					recording[i] = true;
+					points[i].Clear();
 					
 				}
-//				print(state.accelX);
-//				print(state.accelY);	
 				
-				points.Add(new Vector3(state.accelX, state.accelY, 0));
-				print(new Vector3(state.accelX, state.accelY, 0).ToString());
-				
-			}else if(recording){
-				recording = false;
-				points.Add(new Vector3(state.accelX, state.accelY, 0));
-				//print(new Vector3(state.accelX, state.accelY, 0).ToString());
-				tw = new StreamWriter("square.txt", true);
-				tw.WriteLine(new Vector3(state.accelX, state.accelY, 0).ToString());
-				//print("123");
-				//tw = new StreamWriter("square.txt", true);
-				/*
-				string [] str = new string [points.Count];
-				int counter = 0;
-				foreach(Vector3 point in points){
-					str[counter] = ("(" + point.x + "," + point.y + ")");
-					counter++;
-				}
-				File.WriteAllLines("square.txt", str);
-				*/
-				
-				//print(str);
-				
-				tw.Close();
-	
-	            // close the stream
-	            
-				
-				/*int gesture = GestureRecognizer.getGestureFromPoints(points);
-				print(gesture);*/
+				points[i].Add(new Vector3(state.ncAccelX, state.ncAccelY, 0));
+				print(new Vector3(state.ncAccelX, state.ncAccelY, 0).ToString());
+			}else if(recording[i]){
+				recording[i] = false;			
 			}
 		}
 	}

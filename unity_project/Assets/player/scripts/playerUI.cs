@@ -16,6 +16,10 @@ public class playerUI : MonoBehaviour {
 	public float pTimerX = 58, pTimerY = -5, pTimerWidth = 40, pTimerHeight = 20;
 	private float timerLeft, timerTop, timerWidth, timerHeight;
 	
+	public Texture2D damageTex;
+	public float damageDuration;
+	private bool _bDrawDamage;
+	
 	
 	private float barLeft, barTop, barWidth, barHeight;
 	private Rect camRect;
@@ -25,6 +29,10 @@ public class playerUI : MonoBehaviour {
     public Rect CameraRect {
         get { return this.camRect; }
     }
+	
+	public bool bDrawDamage{
+		set {_bDrawDamage = value;}
+	}
 
     void OnGUI(){
 		//if(screenWidth != Screen.width && screenHeight != Screen.height)
@@ -36,13 +44,16 @@ public class playerUI : MonoBehaviour {
 			myPlayerProperties.Health, healthBackground);
 		
 		DrawTimer (timerLeft, timerTop, timerWidth, timerHeight, gameManager.instance.CurrentTime, timerBackground);
-
+		
+		StartCoroutine(DrawDamage ());
+		
     	this.DrawCrosshair();
     }
 	
 	void Start(){
 		//link to player properties
 		myPlayerProperties = target.GetComponent<PlayerProperties>();
+		_bDrawDamage = false;
 		
 		updateDimensions();
 
@@ -112,6 +123,15 @@ public class playerUI : MonoBehaviour {
 			GUI.Label(new Rect(Screen.width/20, Screen.height/15, width, height), new GUIContent(text), style);
 		GUI.EndGroup();
 			
+	}
+	
+	IEnumerator DrawDamage(){
+		if(_bDrawDamage){
+			Debug.Log ("DAMAGE TAKEN");
+			GUI.DrawTexture(new Rect(camRect.x, camRect.y, camRect.width, camRect.height), damageTex);
+			yield return new WaitForSeconds(damageDuration);
+			_bDrawDamage = false;
+		}
 	}
 	
 	//set bar dimentions and pos (by converting size percentage to pixels)
