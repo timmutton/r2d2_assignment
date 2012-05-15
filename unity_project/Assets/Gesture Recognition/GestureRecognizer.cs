@@ -125,7 +125,7 @@ public class GestureRecognizer {
 }
 
 public class WiiGestures {
-	public Gesture GetGestureFromPoints(Vector2[] points) {		
+	public Vector2[] GetGestureFromPoints(Vector2[] points) {		
 		var list = new List<Vector2>();
 
 		for (int i = 1; i < points.Length; ++i) {
@@ -145,7 +145,7 @@ public class WiiGestures {
 //		foreach(Vector2 v in list)
 //			Debug.Log(v.ToString());
 		
-		return new Gesture(list.ToArray());
+		return list.ToArray();
 	}
 
 	private List<Vector2> FilterAccelerations(List<Vector2> accelerations) {
@@ -159,7 +159,7 @@ public class WiiGestures {
 	}
 
 	private List<Vector2> FilterAccelerationsByDirection(List<Vector2> accelerations) {
-		float angleThresholdDegrees = 20.0f;
+		float angleThresholdDegrees = 15.0f;
 
 		List<Vector2> list;
 		if (accelerations.Count < 2) {
@@ -174,7 +174,7 @@ public class WiiGestures {
 				Vector2 b = accelerations[i];
 
 				float angle = Vector2.Angle(a, b);
-//				Debug.Log(Mathf.Abs(angle).ToString());
+				Debug.Log(Mathf.Abs(angle).ToString());
 				if (Mathf.Abs(angle) > angleThresholdDegrees) {
 					list.Add(b);
 				}

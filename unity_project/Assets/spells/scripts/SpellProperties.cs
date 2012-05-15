@@ -3,12 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 
 public enum SpellElement{
+	invalid,
 	fire, 
 	water, 
 	earth
 };
 
 public enum SpellType{
+	invalid,
 	offensive, 
 	defensive
 };
