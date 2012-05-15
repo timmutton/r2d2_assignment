@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Collections;
 using MyHMM;
 
-public enum Gesture{
+public enum GestureEnum{
 	SQUARE = 8,
 	V_DOWN = 9,
 	V_UP = 10,
 	HORIZONTAL_LINE = 11,
 	VERTICAL_LINE = 12
 }
+
 public class HMMRecognizer : MonoBehaviour
 {
 	public const int NORTH = 0;
@@ -301,17 +302,17 @@ public class HMMRecognizer : MonoBehaviour
 		bool vertical = verticalEvalution(input);
 		
 		if(vertical){
-			return (int)Gesture.VERTICAL_LINE;
+			return (int)GestureEnum.VERTICAL_LINE;
 		}else if(horizontal){
-			return (int)Gesture.HORIZONTAL_LINE;
+			return (int)GestureEnum.HORIZONTAL_LINE;
 		}else if(v_up){
-			return (int)Gesture.V_UP;
+			return (int)GestureEnum.V_UP;
 		}else if(v_down){
-			return (int)Gesture.V_DOWN;
+			return (int)GestureEnum.V_DOWN;
 		}else if(square){
-			return (int)Gesture.SQUARE;
+			return (int)GestureEnum.SQUARE;
 		}else{
-			throw new GestureNotFoundException("Gesture not found!");
+			throw new GestureEnumNotFoundException("GestureEnum not found!");
 		}
 	}      
 }
