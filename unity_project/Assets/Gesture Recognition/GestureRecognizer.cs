@@ -13,6 +13,43 @@ public class Gesture {
 
 	public Vector2[] Moves { get; private set; }
 
+	/*
+	 * 	public const int NORTH = 0;
+	public const int SOUTH = 1;
+	public const int EAST = 2;
+	public const int WEST = 3;
+	public const int NORTH_EAST = 4;
+	public const int NORTH_WEST = 5;
+	public const int SOUTH_EAST = 6;
+	public const int SOUTH_WEST = 7;
+	 * */
+
+	private readonly Dictionary<Vector2, int> directionMap = new Dictionary<Vector2, int> {
+		{new Vector2(0, 1), HMMRecognizer.NORTH},
+		{new Vector2(0, -1), HMMRecognizer.SOUTH},
+		{new Vector2(1, 0), HMMRecognizer.EAST},
+		{new Vector2(-1, 0), HMMRecognizer.WEST},
+		{new Vector2(1, 1), HMMRecognizer.NORTH_EAST},
+		{new Vector2(-1, 1), HMMRecognizer.NORTH_WEST},
+		{new Vector2(1, -1), HMMRecognizer.SOUTH_EAST},
+		{new Vector2(-1, -1), HMMRecognizer.SOUTH_WEST},
+	};
+
+
+	public int[] HmmDirections {
+		get {
+			return this.Moves
+			.Select(k => this.hmmDirectionForVector(k))
+			.ToArray();
+		}
+	}
+
+	private int hmmDirectionForVector(Vector2 vector) {
+		return this.directionMap
+			.Select((kv) => new KeyValuePair<int, float>(kv.Value, Vector2.Angle(vector, kv.Key)))
+			.OrderByDescending(kv=> kv.Value).First().Key;
+	}
+
 	private void Normalize() {
 		for (int i = 0; i < this.Moves.Length; ++i) {
 			this.Moves[i] = this.Moves[i].normalized;

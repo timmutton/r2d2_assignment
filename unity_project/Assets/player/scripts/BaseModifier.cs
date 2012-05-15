@@ -4,7 +4,7 @@ class BaseModifier : MonoBehaviour {
 	public Texture2D White;
 	public Color OverlayColor;
 
-	public float DurationSeconds = 10.0f;
+	public float DurationSeconds = 25.0f;
 
 	private float durationRemainingSeconds;
 

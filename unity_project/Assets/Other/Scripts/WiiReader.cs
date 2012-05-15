@@ -13,10 +13,8 @@ public class WiiReader : MonoBehaviour {
 	private WiiUnityClient client;
 	private bool connected;
 	private bool[] recording = {false, false};
-	private List<Vector2>[] points = {new List<Vector2>(), new List<Vector2>()};	
-	
-	private List<GameObject> players = new List<GameObject>();
-
+	private List<Vector3>[] points = {new List<Vector3>(), new List<Vector3>()};	
+	TextWriter tw;
 	
 	// Use this for initialization
 	void Start(){
@@ -41,42 +39,36 @@ public class WiiReader : MonoBehaviour {
 		
 		Vector3 accel;
 		ClientWiiState state;
+		GameObject player;
 
-		if(players.Count == 0){
-			for(int i = 0; i < client.numWiimotes; ++i){
-				players.Add(GameObject.Find("player" + (i+1).ToString()));
-				client.ToggleIR(i + 1);	
-			}
-		}
-		
-//		 this.UpdatePlayers();
+		this.UpdatePlayers();
 			
 		for(int i = 0; i < client.numWiimotes; ++i){
 			client.UpdateButtons(i + 1);
 			client.UpdateAccel(i + 1);
 			client.UpdateNunchuck(i + 1);
-			client.UpdateIR(i + 1);
 			state = client.GetWiiState(i + 1);
+			accel.x = state.accelX;
+			accel.y = state.accelY;
+			accel.z = 0;
 			
-			var player = players[i];
+			player = GameObject.Find("player" + (i+1).ToString());
 			
 			player.SendMessage("updateWiiState",
 				state, 
 				SendMessageOptions.DontRequireReceiver);
-			var cam = player.transform.FindChild("Main Camera");
-			cam.SendMessage("updateWiiState",
-				state, 
-				SendMessageOptions.DontRequireReceiver);
 			
-			if(state.B){
+			if(state.ncZ){
 				if(!recording[i]){
 					recording[i] = true;
-					points[i].Clear();	
+					points[i].Clear();
+					
 				}
 				
-				points[i].Add(new Vector2( (1 - state.ir1PosX), (1 - state.ir1PosY)));
-//				print(state.ir1PosX + " " + state.ir1PosY);
+				points[i].Add(new Vector3(state.ncAccelX, state.ncAccelY, 0));
+				print(new Vector3(state.ncAccelX, state.ncAccelY, 0).ToString());
 			}else if(recording[i]){
+<<<<<<< HEAD
 				recording[i] = false;
 				
 //				var recognizer = gameObject.AddComponent<HMMRecognizer>();
@@ -93,6 +85,9 @@ public class WiiReader : MonoBehaviour {
 //				catch (UnityException e) {
 //					Debug.Log(e);
 //				}
+=======
+				recording[i] = false;			
+>>>>>>> 58fdb572bb06b0f12679ef7ff2676e8b776d3df8
 			}
 		}
 	}
