@@ -42,7 +42,7 @@ public class playerMovement : MonoBehaviour {
 				
 				moveDir = transform.TransformDirection(moveDir) * CurrentMovementSpeed();
 				
-				if(state.B){
+				if(state.ncZ){
 					print("jump");
 					moveDir.y = jumpSpeed;
 				}
