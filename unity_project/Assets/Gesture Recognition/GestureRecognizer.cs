@@ -39,7 +39,7 @@ public class Gesture {
 	public int[] HmmDirections {
 		get {
 			return this.Moves
-			.Select(this.hmmDirectionForVector)
+			.Select(k => this.hmmDirectionForVector(k))
 			.ToArray();
 		}
 	}
