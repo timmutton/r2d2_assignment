@@ -1,8 +1,7 @@
 fileFormatVersion: 2
-guid: 75b66f058b703fa4dbe705bf21f51535
+guid: a66f28f8798d6400c83b77f6ed0178ea
 MonoImporter:
   serializedVersion: 2
-  defaultReferences:
-  - ScreenOverlay: {instanceID: 0}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}

@@ -1,12 +1,16 @@
 ﻿using UnityEngine;
 
 class BaseModifier : MonoBehaviour {
+	public Texture2D White;
+	public Color OverlayColor;
+
 	public float DurationSeconds = 10.0f;
 
 	private float durationRemainingSeconds;
 
-	public void Start() {
+	public virtual void Start() {
 		this.Activate();
+		this.White = Resources.Load("white") as Texture2D;
 	}
 
 	private void Activate() {
@@ -34,5 +38,13 @@ class BaseModifier : MonoBehaviour {
 		MonoBehaviour.Destroy(this);
 	}
 
+	public void OnGUI() {
+		var ui = this.gameObject.GetComponentInChildren<playerUI>();
+		var rect = ui.CameraRect;
 
+		var previousColor = GUI.color;
+		GUI.color = new Color(previousColor.r, previousColor.g, previousColor.b, 0.3f);
+		GUI.DrawTexture(rect, this.White);
+		GUI.color = previousColor;
+	}
 }
