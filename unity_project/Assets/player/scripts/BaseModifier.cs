@@ -43,7 +43,8 @@ class BaseModifier : MonoBehaviour {
 		var rect = ui.CameraRect;
 
 		var previousColor = GUI.color;
-		GUI.color = new Color(previousColor.r, previousColor.g, previousColor.b, 0.3f);
+		var oc = this.OverlayColor;
+		GUI.color = new Color(oc.r, oc.g, oc.b, 0.25f);
 		GUI.DrawTexture(rect, this.White);
 		GUI.color = previousColor;
 	}
