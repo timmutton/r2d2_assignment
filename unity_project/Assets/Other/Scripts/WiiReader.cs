@@ -68,7 +68,6 @@ public class WiiReader : MonoBehaviour {
 				points[i].Add(new Vector3(state.ncAccelX, state.ncAccelY, 0));
 				print(new Vector3(state.ncAccelX, state.ncAccelY, 0).ToString());
 			}else if(recording[i]){
-<<<<<<< HEAD
 				recording[i] = false;
 				
 //				var recognizer = gameObject.AddComponent<HMMRecognizer>();
@@ -85,9 +84,7 @@ public class WiiReader : MonoBehaviour {
 //				catch (UnityException e) {
 //					Debug.Log(e);
 //				}
-=======
 				recording[i] = false;			
->>>>>>> 58fdb572bb06b0f12679ef7ff2676e8b776d3df8
 			}
 		}
 	}
