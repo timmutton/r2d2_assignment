@@ -23,33 +23,6 @@ public class HMMRecognizer : MonoBehaviour
 	public const int SOUTH_EAST = 6;
 	public const int SOUTH_WEST = 7;
 		
-	/*public int [] states = {SQUARE, V_DOWN, V_UP, H_LINE, V_LINE};
-	public double [,] A = new double[8,8] 
-		{
-			{0, 0, 1, 0, 0, 0, 0, 0},
-			{0, 0, 0, 1, 0, 0, 0, 0},
-			{0, 1, 0, 0, 0, 0, 0, 0},
-			{1, 0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0, 1, 0},
-			{0, 0, 0, 0, 0, 0, 0, 1},
-			{0, 0, 0, 0, 1, 0, 0, 0},
-			{0, 0, 0, 0, 0, 1, 0, 0}
-		};
-	
-	public double [,] B = new double[8,5] 
-		{
-			{0.5, 0, 0, 0, 0.5},
-			{0.5, 0, 0, 0, 0.5},
-			{1, 0, 0, 0, 0},
-			{1, 0, 0, 0, 0},
-			{0, 0.5, 0.5, 0, 0},
-			{0, 0.5, 0.5, 0, 0},
-			{0, 0.5, 0.5, 0, 0},
-			{0, 0.5, 0.5, 0, 0}
-		};
-	
-	public double [] pi = new double [] {1/8,1/8,1/8,1/8, 1/8, 1/8, 1/8, 1/8};*/
-	
 	void Start(){
 		Debug.Log("Final Result: " + hmmEvalute(new int[]{NORTH, EAST, SOUTH, WEST}) + "\n");
 	} 
