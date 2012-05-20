@@ -61,6 +61,8 @@ public class playerAttack : MonoBehaviour {
 				try {
 					var hmm = recognizer.hmmEvalute(gesture.HmmDirections);
 					Debug.Log(string.Format("Recognized gesture: {0}", hmm));
+					
+					player.SendMessage("handleGesture", hmm, SendMessageOptions.DontRequireReceiver);
 				}
 				catch (UnityException e) {
 					Debug.Log(e);
@@ -69,22 +71,20 @@ public class playerAttack : MonoBehaviour {
 		}
 	}
 	
-	void setElement(GestureEnum gest){
+	void handleGesture(GestureEnum gest){
 		if(gest == GestureEnum.V_DOWN)
 			elem = SpellElement.earth;
 		else if(gest == GestureEnum.V_UP)
 			elem = SpellElement.fire;
-		else
+		else if(gest == GestureEnum.SQUARE)
 			elem = SpellElement.water;
-	}
-	
-	void setType(GestureEnum gest){
-		if(gest == GestureEnum.V_UP)
+		else if(gest == GestureEnum.V_UP)
 			type = SpellType.offensive;
 		else
 			type = SpellType.defensive;
 		
-		castSpell();
+		if(elem != 0 && type != 0)
+			castSpell();
 	}
 
 
@@ -131,6 +131,8 @@ public class playerAttack : MonoBehaviour {
 		GameObject tempSpell = Instantiate(spell, spawnPos, Quaternion.Euler(playerCam.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0)) as GameObject;
 //		tempSpell.transform.parent = transform;
 		tempSpell.SendMessage("setSpellProperties", spellParams);
+		
+		clearSpellData();
 	}
 	
 	void clearSpellData(){
