@@ -68,8 +68,8 @@ public class gameManager : MonoBehaviour {
 		Player1_properties = (PlayerProperties)Player1_inst.GetComponent<PlayerProperties>();
 		Player2_properties = (PlayerProperties)Player2_inst.GetComponent<PlayerProperties>();
 
-		var player2Movement = Player2_inst.GetComponentInChildren<playerMovement>();
-		player2Movement.useKeyboard = true;
+		//var player2Movement = Player2_inst.GetComponentInChildren<playerMovement>();
+		//player2Movement.useKeyboard = true;
 		
 		currentRound = 1;
 		_currentTime = roundTime;

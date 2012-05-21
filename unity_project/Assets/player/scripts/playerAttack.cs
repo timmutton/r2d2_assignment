@@ -9,8 +9,8 @@ public class playerAttack : MonoBehaviour {
 	private Transform rightHand;
 	private Vector3 spawnPos;
 	
-	private SpellElement elem = 0;
-	private SpellType type = 0;
+	private SpellElement elem = SpellElement.invalid;
+	private SpellType type = SpellType.invalid;
 	
 	ArrayList points = new ArrayList();
 	Vector3 currentPosition;
@@ -56,13 +56,13 @@ public class playerAttack : MonoBehaviour {
 				var mouseGestures = new MouseGestures();
 				var gesture = mouseGestures.GetGestureFromPoints(points);
 				
-				foreach(int g in gesture.HmmDirections)
-					Debug.Log(g);
+//				foreach(int g in gesture.HmmDirections)
+//					Debug.Log(g);
 				try {
 					var hmm = recognizer.hmmEvalute(gesture.HmmDirections);
 					Debug.Log(string.Format("Recognized gesture: {0}", hmm));
 					
-					player.SendMessage("handleGesture", hmm, SendMessageOptions.DontRequireReceiver);
+					gameObject.SendMessage("handleGesture", hmm, SendMessageOptions.DontRequireReceiver);
 				}
 				catch (UnityException e) {
 					Debug.Log(e);
@@ -78,12 +78,12 @@ public class playerAttack : MonoBehaviour {
 			elem = SpellElement.fire;
 		else if(gest == GestureEnum.SQUARE)
 			elem = SpellElement.water;
-		else if(gest == GestureEnum.V_UP)
+		else if(gest == GestureEnum.HORIZONTAL_LINE)
 			type = SpellType.offensive;
-		else
+		else if(gest == GestureEnum.VERTICAL_LINE)
 			type = SpellType.defensive;
 		
-		if(elem != 0 && type != 0)
+		if(elem != SpellElement.invalid && type != SpellType.invalid)
 			castSpell();
 	}
 
@@ -93,7 +93,9 @@ public class playerAttack : MonoBehaviour {
 		Rune selectedSpell;
 		Inventory playerInv = gameObject.GetComponent<Inventory>();
 		
-		if(elem == 0 || type == 0){
+		print(elem + " " + type);
+		
+		if(elem == SpellElement.invalid || type == SpellType.invalid){
 			clearSpellData();
 			return;
 		}
@@ -136,7 +138,7 @@ public class playerAttack : MonoBehaviour {
 	}
 	
 	void clearSpellData(){
-		elem = 0;
-		type = 0;
+		elem = SpellElement.invalid;
+		type = SpellType.invalid;
 	}
 }

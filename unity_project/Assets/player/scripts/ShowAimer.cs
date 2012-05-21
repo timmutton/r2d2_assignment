@@ -11,7 +11,7 @@ public class ShowAimer : MonoBehaviour {
 	
 	void OnGUI(){
 		if(state == null)
-			print("Bollocks");
+			return;
 		GUI.DrawTexture(new Rect(Screen.width * (1 - state.ir1PosX), Screen.height * state.ir1PosY,
 				renderTex.width, renderTex.height), renderTex);
 	}
