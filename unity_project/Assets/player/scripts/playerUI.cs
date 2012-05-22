@@ -43,8 +43,10 @@ public class playerUI : MonoBehaviour {
 			emptyBar, healthBar, myPlayerProperties.maxHealth,
 			myPlayerProperties.Health, healthBackground);
 		
+		//Draws the timer
 		DrawTimer (timerLeft, timerTop, timerWidth, timerHeight, gameManager.instance.CurrentTime, timerBackground);
 		
+		//Draw damage indicator
 		StartCoroutine(DrawDamage ());
 		
     	this.DrawCrosshair();
@@ -59,28 +61,25 @@ public class playerUI : MonoBehaviour {
 
 	}
 	
-	//draws a bar of given dimensions and pos using a full and empty bar texture
+	//Draws the health HUD
 	private void drawBar(float barLeft, float barTop, float barWidth, float barHeight,
 		Texture2D emptyBarTex, Texture2D fullBarTex, float maxValue, float curValue, Texture2D background){
 		Rect locationRect = new Rect(barLeft, barTop, barWidth, 
 			barHeight);
 		Rect drawRect = new Rect(0, 0, barWidth, barHeight);
 		
+		//Creating a new style
 		GUIStyle style = new GUIStyle();
 		style.fontSize = Screen.width/84;
 		style.normal.textColor = Color.white;
 		style.font = font;
 		
-		//float drawWidth = barWidth * (curValue/maxValue);
 		
+		//Grouping the texture and text elements of the health HUD and displays
 		GUI.BeginGroup(locationRect);
 			GUI.BeginGroup(new Rect(0, 0, barWidth, barHeight));
 				GUI.DrawTexture(drawRect, background);
 			GUI.EndGroup();
-			//GUI.DrawTexture(drawRect, emptyBarTex);
-			//GUI.BeginGroup(new Rect(0, 0, drawWidth, barHeight));
-				//GUI.DrawTexture(drawRect, fullBarTex);
-			//GUI.EndGroup();
 			GUI.Label(new Rect(Screen.width/16, Screen.height/27, barWidth, barHeight), new GUIContent("Health"), style);
 		style.fontSize = Screen.width/18;
 		style.alignment = TextAnchor.MiddleCenter;
@@ -100,9 +99,10 @@ public class playerUI : MonoBehaviour {
 		Rect locationRect = new Rect(left, top, width, height);
 		Rect drawRect = new Rect(0, 0, width, height);
 		
+		
+		//Creating a style
 		GUIStyle style = new GUIStyle();
 		style.fontSize = Screen.width/28;
-		//Debug.Log("FONT SIZE: " + style.fontSize);
 		style.normal.textColor = Color.white;
 		style.font = font;
 		
@@ -115,7 +115,7 @@ public class playerUI : MonoBehaviour {
 		//Formats and prints the time to the GUI
 		var text = string.Format ("{0:0}:{1:00}", minutes, seconds);	
 
-		
+		//Groups the timer elements and display them
 		GUI.BeginGroup (locationRect);
 			GUI.BeginGroup(new Rect(0, 0, width, height));
 				GUI.DrawTexture(drawRect, background);
@@ -125,9 +125,11 @@ public class playerUI : MonoBehaviour {
 			
 	}
 	
+	//Draws the red damage indicator around the player window upon taking damage
 	IEnumerator DrawDamage(){
+		
+		//Checks if the player has been damaged and draws indicator
 		if(_bDrawDamage){
-			Debug.Log ("DAMAGE TAKEN");
 			GUI.DrawTexture(new Rect(camRect.x, camRect.y, camRect.width, camRect.height), damageTex);
 			yield return new WaitForSeconds(damageDuration);
 			_bDrawDamage = false;

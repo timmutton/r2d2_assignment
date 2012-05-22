@@ -41,6 +41,7 @@ public class PlayerProperties : MonoBehaviour {
 		//aplly damage to health
 		float resistanceMultiplier = DefensiveSpellBehaviour.spellResistanceMultiplier(gameObject, properties.spellElem);
 		this.Health -= resistanceMultiplier * properties.spellDamage;
+		//Sets a bool in the players UI to draw the damage indicator
 		myPlayerUI.bDrawDamage = true;
 	}
 	

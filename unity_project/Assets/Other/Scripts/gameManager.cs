@@ -10,6 +10,7 @@ enum Outcome{
 	
 
 public class gameManager : MonoBehaviour {
+	//Using a singleton pattern
 	public static gameManager instance;
 	
 	public float roundTime = 180.0f;
@@ -29,10 +30,6 @@ public class gameManager : MonoBehaviour {
 	
 	
 	public Font font;
-	public Texture2D timerBackground;
-	public float timerX = 58, timerY = -5, timerWidth = 40, timerHeight = 20;
-	//private float timerLeft, timerTop, timerWidth, timerHeight;
-	
 
 	public bool bDisplayRound = true;
 	public GUIStyle messageStyle;
@@ -50,6 +47,7 @@ public class gameManager : MonoBehaviour {
 	public int round3Boost = 20;
 	
 	void Awake(){
+		//Creating a singleton of the gamemanager
 		gameManager.instance = this;
 	}
 	
@@ -67,9 +65,6 @@ public class gameManager : MonoBehaviour {
 		//Caches the players properties
 		Player1_properties = (PlayerProperties)Player1_inst.GetComponent<PlayerProperties>();
 		Player2_properties = (PlayerProperties)Player2_inst.GetComponent<PlayerProperties>();
-
-		//var player2Movement = Player2_inst.GetComponentInChildren<playerMovement>();
-		//player2Movement.useKeyboard = true;
 		
 		currentRound = 1;
 		_currentTime = roundTime;
@@ -148,23 +143,17 @@ public class gameManager : MonoBehaviour {
 				Player2_inst.transform.position = spawn2.transform.position;
 			}
 		}
-		
-		//Turn off the player movement when gameover
-		/*if(bGameOver){
-//			Debug.Log("PLAYER OFF");
-			Player1_inst.GetComponent<playerMovement>().enabled = false;
-			Player2_inst.GetComponent<playerMovement>().enabled = false;
-			Player1_inst.GetComponent<playerAttack>().enabled = false;
-			Player2_inst.GetComponent<playerAttack>().enabled = false;
-		}*/
 	}
 	
 	void OnGUI () {
+		//Display the round number at the beginning of the round
 		if(bDisplayRound){
 			if(_currentTime >= roundTime - messageTime && currentRound <= maxRounds){
 				GUI.Label(new Rect((Screen.width - messageWidth)/2.0F, (Screen.height - messageHeight)/2.0F, messageWidth, messageHeight), "ROUND " + currentRound, messageStyle);
 			}
 		}
+		
+		//Display of the outcome of the end game. ie game, draw
 		if(bGameOver){
 			if(winner == Outcome.player1)
 				endMessage = "GAMEOVER\nPLAYER 1 WINS";
@@ -188,12 +177,8 @@ public class gameManager : MonoBehaviour {
 	}
 	
 	private void EndGame(){
-//		Debug.Log("POST ROUND");
 		if(bGameOver){
 			Time.timeScale = 0.0f;
-//			Debug.Log("PLAYER OFF");
-//			Player1_inst.GetComponent<playerMovement>().enabled = false;
-//			Player2_inst.GetComponent<playerMovement>().enabled = false;
 		}
 	}
 }
