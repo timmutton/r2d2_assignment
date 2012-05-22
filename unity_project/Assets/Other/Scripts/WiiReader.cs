@@ -39,7 +39,6 @@ public class WiiReader : MonoBehaviour {
 		if (!connected)
 			return;
 		
-		Vector3 accel;
 		ClientWiiState state;
 
 		if(players.Count == 0){

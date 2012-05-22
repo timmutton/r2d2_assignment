@@ -33,7 +33,10 @@ public class playerMovement : MonoBehaviour {
 					}
 				}
 			}else{
-				rotDir = new Vector3(state.ncJoyY, state.ncJoyX, 0);
+				rotDir = new Vector3(
+					(Mathf.Abs(state.ncJoyY) > 0.1)?(state.ncJoyY):0,
+					(Mathf.Abs(state.ncJoyX) > 0.1)?(state.ncJoyX):0, 
+					0);
 				moveDir = new Vector3(0, 0, 0);
 				if(state.Left)
 					moveDir.x = -1.0f;
