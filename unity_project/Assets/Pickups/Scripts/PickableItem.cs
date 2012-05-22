@@ -29,13 +29,6 @@ public abstract class PickableItem : MonoBehaviour {
 
     public Texture2D Icon;
     public AudioClip pickupSound;
-	
-	private GameObject listener;
-
-    // Use this for initialization
-    private void Start() {
-		listener = GameObject.Find("Listener");
-	}
 
     // Update is called once per frame
     private void Update() {
@@ -70,11 +63,7 @@ public abstract class PickableItem : MonoBehaviour {
 
 		if (this.CanBePickedByPlayer(player)) {
 			if (this.pickupSound != null) {
-				Dictionary<int, object> args = new Dictionary<int, object>();
-				args[(int)MultiplayerAudioArgs.position] = this.transform.position;
-				args[(int)MultiplayerAudioArgs.audioClip] = this.pickupSound;
-				listener.SendMessage("PlaySound", args, SendMessageOptions.DontRequireReceiver);
-//				AudioSource.PlayClipAtPoint(this.pickupSound, this.transform.position);
+				AudioUtil.PlaySound(this.pickupSound, this.gameObject.transform.position);
 			}
 
 			this.Hide();

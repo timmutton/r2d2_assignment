@@ -16,6 +16,7 @@ public class playerAttack : MonoBehaviour {
 	Vector3 currentPosition;
 	Vector3 initialPosition;
 	Event currentEvent;
+	public AudioClip attackSound;
 	
 	void Start(){
 		//link to the right hand
