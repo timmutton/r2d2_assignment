@@ -21,6 +21,7 @@ public class playerMovement : MonoBehaviour {
 
 	void Update(){
 		if(controller.isGrounded){
+			//keyboard input for movement
 			if(useKeyboard){				
 				rotDir = new Vector3(Input.GetAxis("lookX"), Input.GetAxis("lookY"), 0);
 				moveDir = new Vector3(Input.GetAxis("moveX")* 0.7F, 0, Input.GetAxis("moveZ"));
@@ -32,7 +33,7 @@ public class playerMovement : MonoBehaviour {
 						moveDir.y = jumpSpeed;
 					}
 				}
-			}else{
+			}else{ //wiimote input for movement
 				rotDir = new Vector3(
 					(Mathf.Abs(state.ncJoyY) > 0.1)?(state.ncJoyY):0,
 					(Mathf.Abs(state.ncJoyX) > 0.1)?(state.ncJoyX):0, 
@@ -61,6 +62,7 @@ public class playerMovement : MonoBehaviour {
 		
 		controller.Move(moveDir * Time.deltaTime);
 		
+		//rotation
 		if(useKeyboard){				
 			rotDir = new Vector3(Input.GetAxis("lookX"), Input.GetAxis("lookY"), 0);
 		}else{
@@ -71,12 +73,15 @@ public class playerMovement : MonoBehaviour {
 			rotDir.x *= -1.0f;
 		}
 		
+		
+		//camera rotation campling
 		if(playerCam.rotation.eulerAngles.x > 45 && playerCam.rotation.eulerAngles.x < 180){
 			if(rotDir.x > 0) rotDir.x = 0;
 		}else if(playerCam.rotation.eulerAngles.x < 315 && playerCam.rotation.eulerAngles.x >= 180){
 			if(rotDir.x < 0) rotDir.x = 0;
 		}
 		
+		//apply movement
 		transform.Rotate(new Vector3(0, rotDir.y * rotationSpeed, 0));
 		playerCam.Rotate(new Vector3(rotDir.x * rotationSpeed, 0, 0));
 	}
@@ -92,8 +97,6 @@ public class playerMovement : MonoBehaviour {
 	}
 	
 	void OnControllerColliderHit(ControllerColliderHit hit){
-		//Debug.Log("Hit: " + hit);
-		
 		if(hit.normal.y <= 0.6){
 			bJump = false;
 		}else{

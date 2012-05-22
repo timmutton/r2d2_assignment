@@ -32,45 +32,7 @@ public class playerAttack : MonoBehaviour {
 		return quad != null ? quad.DamageMultipier : 1.0f;
 	}
 	
-	void OnGUI() {
-        currentEvent = Event.current;
-    }
-	
-	// Update is called once per frame
-	void Update () {
-		if(currentEvent == null){
-		}else if (currentEvent.type == EventType.MouseDown) {
-			initialPosition = Input.mousePosition;
-			points.Clear();
-			points.Add(initialPosition);
-		} else if(currentEvent.type == EventType.MouseDrag) {
-			currentPosition = Input.mousePosition;
-			points.Add(currentPosition);
-		} else if(currentEvent.type == EventType.MouseUp) {
-			points.Add(currentPosition);
-		}
-		
-		if(gameObject.name == "player2"){
-			if(currentEvent != null && currentEvent.type == EventType.MouseUp) {				
-				var recognizer = gameObject.AddComponent<HMMRecognizer>();
-				var mouseGestures = new MouseGestures();
-				var gesture = mouseGestures.GetGestureFromPoints(points);
-				
-//				foreach(int g in gesture.HmmDirections)
-//					Debug.Log(g);
-				try {
-					var hmm = recognizer.hmmEvalute(gesture.HmmDirections);
-					Debug.Log(string.Format("Recognized gesture: {0}", hmm));
-					
-					gameObject.SendMessage("handleGesture", hmm, SendMessageOptions.DontRequireReceiver);
-				}
-				catch (UnityException e) {
-					Debug.Log(e);
-				}
-			}
-		}
-	}
-	
+	//set spell properties based off passed gesture
 	void handleGesture(GestureEnum gest){
 		if(gest == GestureEnum.V_DOWN)
 			elem = SpellElement.earth;
@@ -87,7 +49,7 @@ public class playerAttack : MonoBehaviour {
 			castSpell();
 	}
 
-
+	//cast spell based on properties
 	void castSpell() {
 		Dictionary<int, object> spellParams = new Dictionary<int, object>();
 		Rune selectedSpell;
@@ -100,6 +62,7 @@ public class playerAttack : MonoBehaviour {
 			return;
 		}
 		
+		//if we have a run for a spell, remove it		
 		RuneType runeToCheck;
 		if(elem == SpellElement.earth)
 			runeToCheck = RuneType.Earth;
@@ -128,15 +91,14 @@ public class playerAttack : MonoBehaviour {
 			
 		spellParams[(int)SpellParameter.parent] = transform;
 		
-		//instantiate the spell at given position, facing the players forward direction
-		//GameObject tempSpell = Instantiate(spell, spawnPos, transform.rotation) as GameObject;
+		//cast spell
 		GameObject tempSpell = Instantiate(spell, spawnPos, Quaternion.Euler(playerCam.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0)) as GameObject;
-//		tempSpell.transform.parent = transform;
 		tempSpell.SendMessage("setSpellProperties", spellParams);
 		
 		clearSpellData();
 	}
 	
+	//spell data
 	void clearSpellData(){
 		elem = SpellElement.invalid;
 		type = SpellType.invalid;

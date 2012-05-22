@@ -11,6 +11,7 @@ public class MultiplayerAudio : MonoBehaviour {
 	private GameObject[] players;
 	private Vector3 relPosition;
 	
+	//get players and play audio relative to each of them
 	public void PlaySound(Dictionary<int, object> args){
 		players = GameObject.FindGameObjectsWithTag("Player");
 		

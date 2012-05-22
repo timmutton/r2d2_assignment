@@ -4,11 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
-public class PlayerNotFoundException : Exception {
-	public PlayerNotFoundException(string message) : base(message) {
-	}
-}
-
 public class WiiReader : MonoBehaviour {
 	private WiiUnityClient client;
 	private bool connected;
@@ -27,11 +22,6 @@ public class WiiReader : MonoBehaviour {
 		}else{
 			Destroy(this);
 		}
-		
-		/*if(players.Length != client.numWiimotes){
-			print("Number of players and number of wiimotes do not match");
-			return;
-		}*/
 	}
 	
 	// Update is called once per frame
@@ -40,7 +30,8 @@ public class WiiReader : MonoBehaviour {
 			return;
 		
 		ClientWiiState state;
-
+		
+		//Get players
 		if(players.Count == 0){
 			for(int i = 0; i < client.numWiimotes; ++i){
 				players.Add(GameObject.Find("player" + (i+1).ToString()));
@@ -48,8 +39,7 @@ public class WiiReader : MonoBehaviour {
 			}
 		}
 		
-//		 this.UpdatePlayers();
-			
+		//Get updated wiimote input
 		for(int i = 0; i < client.numWiimotes; ++i){
 			client.UpdateButtons(i + 1);
 			client.UpdateAccel(i + 1);
@@ -59,6 +49,7 @@ public class WiiReader : MonoBehaviour {
 			
 			var player = players[i];
 			
+			//send values to player
 			player.SendMessage("updateWiiState",
 				state, 
 				SendMessageOptions.DontRequireReceiver);
@@ -67,6 +58,7 @@ public class WiiReader : MonoBehaviour {
 				state, 
 				SendMessageOptions.DontRequireReceiver);
 			
+			//record input
 			if(state.B){
 				if(!recording[i]){
 					recording[i] = true;
@@ -74,16 +66,13 @@ public class WiiReader : MonoBehaviour {
 				}
 				
 				points[i].Add(new Vector2( (1 - state.ir1PosX), (1 - state.ir1PosY)));
-//				print(state.ir1PosX + " " + state.ir1PosY);
 			}else if(recording[i]){
 				recording[i] = false;
 				
+				//Get guesture from input
 				var recognizer = gameObject.AddComponent<HMMRecognizer>();
 				var wiiGestures = new WiiGestures();
 				var gesture = wiiGestures.GetGestureFromPoints(points[i].ToArray());
-				
-//				foreach(int g in gesture.HmmDirections)
-//					Debug.Log(g);
 				
 				try {
 					var hmm = recognizer.hmmEvalute(gesture.HmmDirections);
@@ -94,33 +83,10 @@ public class WiiReader : MonoBehaviour {
 				catch (UnityException e) {
 					Debug.Log(e);
 				}
+				
+				Object.Destroy(recognizer);
 			}
 		}
-	}
-
-	private void UpdatePlayers() {
-		for(int i = 0; i < this.client.numWiimotes; ++i) {
-			this.UpdatePlayer(i + 1);
-		}
-	}
-
-	private void UpdatePlayer(int oneBasedPlayerNumber) {
-		try {
-			var player = this.GetPlayer(oneBasedPlayerNumber);
-			var movement = player.GetComponentInChildren<playerMovement>();
-			movement.useKeyboard = false;
-		}
-		catch(PlayerNotFoundException e) {
-			Debug.Log(e);
-		}
-	}
-
-	private GameObject GetPlayer(int oneBasedPlayerNumber) {
-		var player = GameObject.Find(string.Format("player{0}", oneBasedPlayerNumber));
-		if(player == null) {
-			throw new PlayerNotFoundException(string.Format("Player {0} not found", oneBasedPlayerNumber));
-		}
-		return player;
 	}
 	
 	void OnApplicationQuit() {

@@ -48,11 +48,8 @@ public class PlayerProperties : MonoBehaviour {
 		this.Health = Math.Min(this.Health + hp, this.maxHealth);
 	}
 	
-	//will need to be updated
 	private void playerDeath(){
 		this.OnDeath();
-		print("possible death animation here");
-//		Destroy(gameObject);
 	}
 
     public void Update() {

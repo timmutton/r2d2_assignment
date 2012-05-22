@@ -9,6 +9,7 @@ public class ShowAimer : MonoBehaviour {
 		state = _state;
 	}
 	
+	//draws texture on screen to show where player is aiming
 	void OnGUI(){
 		if(state == null)
 			return;
