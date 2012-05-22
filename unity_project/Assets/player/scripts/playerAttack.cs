@@ -57,8 +57,6 @@ public class playerAttack : MonoBehaviour {
 				var mouseGestures = new MouseGestures();
 				var gesture = mouseGestures.GetGestureFromPoints(points);
 				
-//				foreach(int g in gesture.HmmDirections)
-//					Debug.Log(g);
 				try {
 					var hmm = recognizer.hmmEvalute(gesture.HmmDirections);
 					Debug.Log(string.Format("Recognized gesture: {0}", hmm));
@@ -134,9 +132,7 @@ public class playerAttack : MonoBehaviour {
 		spellParams[(int)SpellParameter.parent] = transform;
 		
 		//instantiate the spell at given position, facing the players forward direction
-		//GameObject tempSpell = Instantiate(spell, spawnPos, transform.rotation) as GameObject;
 		GameObject tempSpell = Instantiate(spell, spawnPos, Quaternion.Euler(playerCam.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0)) as GameObject;
-//		tempSpell.transform.parent = transform;
 		tempSpell.SendMessage("setSpellProperties", spellParams);
 		
 		clearSpellData();

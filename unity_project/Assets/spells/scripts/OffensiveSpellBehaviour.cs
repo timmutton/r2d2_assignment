@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 
 public class OffensiveSpellBehaviour : MonoBehaviour {
 	public float movementSpeed = 10.0f, maxDistance = 10000.0f, maxAngle = 10.0f, rotateSpeed = 10.0f;
@@ -31,30 +30,17 @@ public class OffensiveSpellBehaviour : MonoBehaviour {
 	}
 
 	private void InteractWithCollider(Collider col) {
-		/*damageAmt = properties.spellDamage;
-		print(damageAmt);*/		
-		if(col.name == properties.parent.name)
-			return;
-		
-		if(this.hitSound != null) {
-			AudioUtil.PlaySound(this.hitSound, this.gameObject.transform.position);
-		}
+		if (col.name != properties.parent.name) {
+			if (this.hitSound != null) {
+				AudioUtil.PlaySound(this.hitSound, this.gameObject.transform.position);
+			}
 
-		if(col.name.ToLower().Contains("player")){
-			col.SendMessage("Damage", properties, SendMessageOptions.DontRequireReceiver);
-		//}else if(col.Name.ToLower().Contains("defensivespell")){
-		//	col.BroadcastMessage("Damage", properties, SendMessageOptions.DontRequireReceiver);
-		}else{
+			if (col.name.ToLower().Contains("player")) {
+				col.SendMessage("Damage", properties, SendMessageOptions.DontRequireReceiver);
+			}
+
 			Destroy(gameObject);
-			return;
 		}
-		
-		/*var asd = collider.GetComponent<PlayerProperties>();
-		if(asd != null) {
-			asd.Damage(damageAmt);
-		}*/
-	
-		Destroy(gameObject);
 	}
 	
 	//if its gone too far without hitting the player, destroy it
@@ -69,7 +55,6 @@ public class OffensiveSpellBehaviour : MonoBehaviour {
     		transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * rotateSpeed);
 		}
 		
-//		transform.Translate(transform.forward * movementSpeed * Time.deltaTime);
 		rigidbody.velocity = transform.forward * movementSpeed;
 		
 		if(Vector3.Distance(startPos, transform.position) > maxDistance){
