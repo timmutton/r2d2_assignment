@@ -13,17 +13,6 @@ public class Gesture {
 
 	public Vector2[] Moves { get; private set; }
 
-	/*
-	 * 	public const int NORTH = 0;
-	public const int SOUTH = 1;
-	public const int EAST = 2;
-	public const int WEST = 3;
-	public const int NORTH_EAST = 4;
-	public const int NORTH_WEST = 5;
-	public const int SOUTH_EAST = 6;
-	public const int SOUTH_WEST = 7;
-	 * */
-
 	private readonly Dictionary<Vector2, int> directionMap = new Dictionary<Vector2, int> {
 		{new Vector2(0, 1), HMMRecognizer.NORTH},
 		{new Vector2(0, -1), HMMRecognizer.SOUTH},
@@ -201,14 +190,7 @@ public class WiiGestures {
 			list.Add(new Vector2(distance.x, distance.y));
 		}
 		
-//		foreach(Vector2 v in list)
-//			Debug.Log(Vector3.Magnitude(v).ToString());
-
-		list = this.FilterAccelerations(list);
-		
-//		foreach(Vector2 v in list)
-//			Debug.Log(v.ToString());
-		
+		list = this.FilterAccelerations(list);	
 		return new Gesture(list.ToArray());
 	}
 
@@ -238,7 +220,6 @@ public class WiiGestures {
 				Vector2 b = accelerations[i];
 
 				float angle = Vector2.Angle(a, b);
-//				Debug.Log(Mathf.Abs(angle).ToString());
 				if (Mathf.Abs(angle) > angleThresholdDegrees) {
 					list.Add(b);
 				}
