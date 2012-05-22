@@ -8,6 +8,10 @@ public abstract class PickableItem : MonoBehaviour {
 
 	public bool Respawnable { get { return this.RespawnSeconds > 0.0f; } }
 
+	/// <summary>
+	/// True if item is active and ready to be picked up,
+	/// false if waits for respawn.
+	/// </summary>
     private bool visible = true;
 
     /// <summary>
@@ -23,9 +27,19 @@ public abstract class PickableItem : MonoBehaviour {
         }
     }
 
+	/// <summary>
+	/// Countdown timer for item respawn
+	/// </summary>
     private float secondsToNextRespawn = 0;
 
+	/// <summary>
+	/// Item inventory icon
+	/// </summary>
     public Texture2D Icon;
+
+	/// <summary>
+	/// Sound that's played when item is picked up
+	/// </summary>
     public AudioClip pickupSound;
 
     // Update is called once per frame

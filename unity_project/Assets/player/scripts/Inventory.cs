@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Assets.Code;
 using UnityEngine;
 using System.Linq;
@@ -32,6 +31,11 @@ public class Inventory : MonoBehaviour {
 		}
     }
 
+	/// <summary>
+	/// Calculate rect for each inventory item icon (depending on item index in inventory)
+	/// </summary>
+	/// <param name="index">Item index in the inventory (0-based)</param>
+	/// <returns>Rect for icon</returns>
 	private Rect RectForItemIndex(int index) {
 		var ui = this.gameObject.GetComponentInChildren<playerUI>();
 		var cameraRect = ui.CameraRect;
@@ -46,17 +50,22 @@ public class Inventory : MonoBehaviour {
 	}
 
 	
+	/// <summary>
+	/// Gets inventory items grouped by texture.
+	/// </summary>
+	/// <returns></returns>
 	private IOrderedEnumerable<IGrouping<Texture2D, IInventoryItem>> GetGroupings() {
     	return this.items
     		.GroupBy(rune => rune.Icon)
     		.OrderBy(grouping => grouping.Key.GetHashCode());
     }
 	
-	public IInventoryItem HasItem(RuneType type){
-		foreach(Rune item in items){
-			if(item.Type == type)
-			return item;
-		}
-		return null;
+	/// <summary>
+	/// Gets rune of specified type from the inventory or null if not found
+	/// </summary>
+	/// <param name="type"></param>
+	/// <returns></returns>
+	public Rune GetRune(RuneType type) {
+		return this.items.Cast<Rune>().FirstOrDefault(item => item.Type == type);
 	}
 }

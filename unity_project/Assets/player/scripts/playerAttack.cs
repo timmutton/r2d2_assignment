@@ -115,7 +115,7 @@ public class playerAttack : MonoBehaviour {
 		else
 			runeToCheck = RuneType.Water;
 		
-		if((selectedSpell = (Rune)playerInv.HasItem(runeToCheck)) == null){
+		if((selectedSpell = playerInv.GetRune(runeToCheck)) == null){
 			clearSpellData();
 			return;
 		}
