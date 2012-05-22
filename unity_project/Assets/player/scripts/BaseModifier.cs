@@ -1,11 +1,27 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Base class for player modifier/powerup
+/// </summary>
 class BaseModifier : MonoBehaviour {
+	/// <summary>
+	/// Base overlay texture
+	/// </summary>
 	public Texture2D White;
+
+	/// <summary>
+	/// Screen overlay will be drawn using basic texture and this color.
+	/// </summary>
 	public Color OverlayColor;
 
+	/// <summary>
+	/// Gets and sets powerup lasting time
+	/// </summary>
 	public float DurationSeconds = 25.0f;
 
+	/// <summary>
+	/// Current remaining second to exhaust
+	/// </summary>
 	private float durationRemainingSeconds;
 
 	public virtual void Start() {
@@ -15,7 +31,6 @@ class BaseModifier : MonoBehaviour {
 
 	private void Activate() {
 		this.durationRemainingSeconds = this.DurationSeconds;
-//		Debug.Log(string.Format("{0} activated", this));
 	}
 
 	public void Update() {
@@ -34,7 +49,6 @@ class BaseModifier : MonoBehaviour {
 	}
 
 	private void DeactivateAndDestroy() {
-//		Debug.Log(string.Format("{0} deactivated", this));
 		MonoBehaviour.Destroy(this);
 	}
 
@@ -42,6 +56,8 @@ class BaseModifier : MonoBehaviour {
 		var ui = this.gameObject.GetComponentInChildren<playerUI>();
 		var rect = ui.CameraRect;
 
+		// There's no simple way to semi-transparent rectangle on the screen (?)
+		// So we draw texture using color with alpha component lower than 1.0f
 		var previousColor = GUI.color;
 		var oc = this.OverlayColor;
 		GUI.color = new Color(oc.r, oc.g, oc.b, 0.25f);
