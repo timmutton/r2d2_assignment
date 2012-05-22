@@ -22,8 +22,6 @@ public class HMMRecognizer : MonoBehaviour
 	public const int NORTH_WEST = 5;
 	public const int SOUTH_EAST = 6;
 	public const int SOUTH_WEST = 7;
-		
-
 	
 	bool squareEvalution(int [] input){
 		if(input.Length != 4){

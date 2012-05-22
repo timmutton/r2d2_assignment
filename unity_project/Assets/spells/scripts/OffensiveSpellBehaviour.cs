@@ -59,11 +59,7 @@ public class OffensiveSpellBehaviour : MonoBehaviour {
 		rigidbody.velocity = transform.forward * movementSpeed;
 		
 		if(Vector3.Distance(startPos, transform.position) > maxDistance){
-			Debug.Log("TOO FAR: " + maxDistance);
 			Destroy(gameObject);
 		}
-		
-		
-		Debug.Log("MAX DISTANCE: " + maxDistance);
 	}
 }

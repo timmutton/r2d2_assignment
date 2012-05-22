@@ -65,7 +65,8 @@ public class WiiReader : MonoBehaviour {
 					points[i].Clear();	
 				}
 				
-				points[i].Add(new Vector2( (1 - state.ir1PosX), (1 - state.ir1PosY)));
+				points[i].Add(new Vector2( state.ir1PosX, state.ir1PosY));
+				print("Point " +  (1 - state.ir1PosX) + " " + (1 - state.ir1PosY));
 			}else if(recording[i]){
 				recording[i] = false;
 				

@@ -42,10 +42,11 @@ public class Gesture {
 			var result = new List<int>();
 			if(this.Moves.Length > 0) {
 				result.Add(this.hmmDirectionForVector(this.Moves[0]));
+				Debug.Log(this.hmmDirectionForVector(this.Moves[0]).ToString());
 
 				for(int i = 1; i < this.Moves.Length; ++i) {
 					var d = this.hmmDirectionForVector(this.Moves[i]);
-					if(result.Last() != d) {
+					if(result.Last() != d) {;
 						if(d == HMMRecognizer.NORTH && (result.Last() == HMMRecognizer.NORTH_EAST || result.Last() == HMMRecognizer.NORTH_WEST))
 							continue;
 						if(d == HMMRecognizer.SOUTH && (result.Last() == HMMRecognizer.SOUTH_EAST || result.Last() == HMMRecognizer.SOUTH_WEST))
@@ -63,7 +64,7 @@ public class Gesture {
 							continue;
 						if(d == HMMRecognizer.SOUTH_WEST && (result.Last() == HMMRecognizer.SOUTH || result.Last() == HMMRecognizer.WEST))
 							continue;
-						
+						Debug.Log(d.ToString());
 						result.Add(d);
 					}
 				}
@@ -132,6 +133,10 @@ public class WiiGestures {
 		}
 		
 		list = this.FilterAccelerations(list);	
+		
+		foreach(var l in list)
+			Debug.Log("Mag " + Vector3.Magnitude(l).ToString());
+		
 		return new Gesture(list.ToArray());
 	}
 
@@ -146,7 +151,7 @@ public class WiiGestures {
 	}
 
 	private List<Vector2> FilterAccelerationsByDirection(List<Vector2> accelerations) {
-		float angleThresholdDegrees = 5.0f;
+		float angleThresholdDegrees = 20.0f;
 
 		List<Vector2> list;
 		if (accelerations.Count < 2) {
@@ -161,6 +166,7 @@ public class WiiGestures {
 				Vector2 b = accelerations[i];
 
 				float angle = Vector2.Angle(a, b);
+				Debug.Log("Angle " + angle);
 				if (Mathf.Abs(angle) > angleThresholdDegrees) {
 					list.Add(b);
 				}
@@ -185,6 +191,9 @@ public class MouseGestures {
 		}
 
 		list = this.FilterAccelerations(list);
+		
+		foreach(var l in list)
+			Debug.Log("Mag " + Vector3.Magnitude(l).ToString());
 		return new Gesture(list.ToArray());
 	}
 
@@ -214,6 +223,7 @@ public class MouseGestures {
 				Vector2 b = accelerations[i];
 
 				float angle = Vector2.Angle(a, b);
+				Debug.Log("Angle " + angle);
 				if (Mathf.Abs(angle) > angleThresholdDegrees) {
 					list.Add(b);
 				}

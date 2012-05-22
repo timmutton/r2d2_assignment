@@ -41,13 +41,11 @@ public class playerAttack : MonoBehaviour {
 	void Update () {
 		if(currentEvent == null){
 		}else if (currentEvent.type == EventType.MouseDown) {
-			initialPosition = Input.mousePosition;
+			initialPosition = -Input.mousePosition;
 			points.Clear();
 			points.Add(initialPosition);
 		} else if(currentEvent.type == EventType.MouseDrag) {
-			currentPosition = Input.mousePosition;
-			points.Add(currentPosition);
-		} else if(currentEvent.type == EventType.MouseUp) {
+			currentPosition = -Input.mousePosition;
 			points.Add(currentPosition);
 		}
 		
@@ -68,6 +66,8 @@ public class playerAttack : MonoBehaviour {
 				catch (UnityException e) {
 					Debug.Log(e);
 				}
+				
+				GameObject.Destroy(recognizer);
 			}
 		}
 	}
