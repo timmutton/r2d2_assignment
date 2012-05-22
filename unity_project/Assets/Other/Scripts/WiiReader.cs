@@ -84,7 +84,7 @@ public class WiiReader : MonoBehaviour {
 					Debug.Log(e);
 				}
 				
-				Object.Destroy(recognizer);
+				GameObject.Destroy(recognizer);
 			}
 		}
 	}

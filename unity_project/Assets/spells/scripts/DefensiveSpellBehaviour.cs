@@ -7,30 +7,27 @@ public class DefensiveSpellBehaviour : MonoBehaviour {
 	public Material baseMat;
 	
 	SpellProperties properties;
-	//bool started = false;
 	List<Renderer> playerRenderers = new List<Renderer>();
 	Transform parent;
 	
 	void Start() {		
-		properties = GetComponent<SpellProperties>();			
-		//yeild return
+		properties = GetComponent<SpellProperties>();	
 		StartCoroutine("applyTexture");
 	}
 	
+	//apply texture based off spell to caster
 	IEnumerator applyTexture(){
 		parent = properties.parent;
 	
 		playerRenderers.Add(parent.Find("model/hatBase").renderer);
 		playerRenderers.Add(parent.Find("model/hatTop").renderer);
 		playerRenderers.Add(parent.Find("model/torso").renderer);
-		
-		print("changing mat to elem");
+
 		foreach(Renderer tRend in playerRenderers)
 			tRend.material = properties.spellMat[(int)properties.spellElem];
 		
 		yield return new WaitForSeconds(spellActiveTime);
-		
-		print("changing mat to drab");
+
 		foreach(Renderer tRend in playerRenderers)
 			tRend.material = baseMat;
 
@@ -38,6 +35,7 @@ public class DefensiveSpellBehaviour : MonoBehaviour {
 		
 	}
 	
+	//multiply damage if offensive spell type is defensive spell type
 	public static float spellDamageMultiplier(GameObject player, SpellElement spellElem){
 		Transform defensiveSpell;
 		SpellProperties properties;
@@ -53,6 +51,7 @@ public class DefensiveSpellBehaviour : MonoBehaviour {
 		return 1.0f;
 	}
 	
+	//get rock paper scissor damage multiplier
 	public static float spellResistanceMultiplier(GameObject player, SpellElement spellElem){
 		Transform defensiveSpell;
 		SpellProperties properties;
@@ -69,7 +68,6 @@ public class DefensiveSpellBehaviour : MonoBehaviour {
 						return dSpellBehave.weakAgainstMultiplier;
 					else
 						return 1.0f;
-					//break;
 				case SpellElement.water:
 					if(spellElem == SpellElement.fire)
 						return dSpellBehave.strongAgainstMultiplier;
@@ -77,7 +75,6 @@ public class DefensiveSpellBehaviour : MonoBehaviour {
 						return dSpellBehave.weakAgainstMultiplier;
 					else
 						return 1.0f;
-					//break;
 				case SpellElement.earth:
 					if(spellElem == SpellElement.water)
 						return dSpellBehave.strongAgainstMultiplier;
@@ -85,7 +82,6 @@ public class DefensiveSpellBehaviour : MonoBehaviour {
 						return dSpellBehave.weakAgainstMultiplier;
 					else
 						return 1.0f;
-					//break;
 			}
 		}
 		return 1.0f;

@@ -28,7 +28,8 @@ public class OffensiveSpellBehaviour : MonoBehaviour {
 	void OnTriggerEnter(Collider col){
 		InteractWithCollider(col);
 	}
-
+	
+	//send damage message to player
 	private void InteractWithCollider(Collider col) {
 		if (col.name != properties.parent.name) {
 			if (this.hitSound != null) {
