@@ -8,6 +8,7 @@ public class OffensiveSpellBehaviour : MonoBehaviour {
 	Vector3 startPos;
 	SpellProperties properties;
 	Transform target;
+	public AudioClip hitSound;
 	
 	// Use this for initialization
 	void Start() {		
@@ -35,6 +36,10 @@ public class OffensiveSpellBehaviour : MonoBehaviour {
 		if(col.name == properties.parent.name)
 			return;
 		
+		if(this.hitSound != null) {
+			AudioUtil.PlaySound(this.hitSound, this.gameObject.transform.position);
+		}
+
 		if(col.name.ToLower().Contains("player")){
 			col.SendMessage("Damage", properties, SendMessageOptions.DontRequireReceiver);
 		//}else if(col.Name.ToLower().Contains("defensivespell")){

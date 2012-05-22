@@ -90,6 +90,10 @@ public class playerAttack : MonoBehaviour {
 
 
 	void castSpell() {
+		if(this.attackSound != null) {
+			AudioUtil.PlaySound(this.attackSound, this.gameObject.transform.position);
+		}
+
 		Dictionary<int, object> spellParams = new Dictionary<int, object>();
 		Rune selectedSpell;
 		Inventory playerInv = gameObject.GetComponent<Inventory>();
