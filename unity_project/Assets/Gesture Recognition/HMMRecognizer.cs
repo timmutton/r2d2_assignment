@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections;
 using MyHMM;
 
+// all possible gestures used in the system
 public enum GestureEnum{
 	SQUARE = 8,
 	V_DOWN = 9,
@@ -14,6 +15,7 @@ public enum GestureEnum{
 
 public class HMMRecognizer : MonoBehaviour
 {
+	//all possible directions
 	public const int NORTH = 0;
 	public const int SOUTH = 1;
 	public const int EAST = 2;
@@ -25,6 +27,15 @@ public class HMMRecognizer : MonoBehaviour
 		
 
 	
+	/*
+	 * this method passes all the possible directions 
+	 * that can create a square to the HMM library 
+	 * as observations. A and B are the state and
+	 * observation probabilities for the model
+	 * pi is the intial state of the model
+	 * the function returns true if the input matches any 
+	 * of the observations used to train the model
+	*/
 	bool squareEvalution(int [] input){
 		if(input.Length != 4){
 			return false;
@@ -74,6 +85,15 @@ public class HMMRecognizer : MonoBehaviour
 		}		
 	}
 	
+	/*
+	 * this method passes all the possible directions 
+	 * that can create a V down to the HMM library 
+	 * as observations. A and B are the state and
+	 * observation probabilities for the model
+	 * pi is the intial state of the model
+	 * the function returns true if the input matches any 
+	 * of the observations used to train the model
+	*/
 	bool vDownEvalution(int [] input){
 		if(input.Length != 2){
 			return false;
@@ -121,6 +141,15 @@ public class HMMRecognizer : MonoBehaviour
 		}
 	}
 	
+	/*
+	 * this method passes all the possible directions 
+	 * that can create a V up to the HMM library 
+	 * as observations. A and B are the state and
+	 * observation probabilities for the model
+	 * pi is the intial state of the model
+	 * the function returns true if the input matches any 
+	 * of the observations used to train the model
+	*/
 	bool vUpEvalution(int [] input){
 		
 		if(input.Length != 2){
@@ -169,6 +198,15 @@ public class HMMRecognizer : MonoBehaviour
 		}
 	}
 	
+	/*
+	 * this method passes all the possible directions 
+	 * that can create a vertical line to the HMM library 
+	 * as observations. A and B are the state and
+	 * observation probabilities for the model
+	 * pi is the intial state of the model
+	 * the function returns true if the input matches any 
+	 * of the observations used to train the model
+	*/
 	bool verticalEvalution(int [] input){
 		if(input.Length != 1){
 			return false;
@@ -216,6 +254,15 @@ public class HMMRecognizer : MonoBehaviour
 		}
 	}
 	
+	/*
+	 * this method passes all the possible directions 
+	 * that can create a horizontal line to the HMM library 
+	 * as observations. A and B are the state and
+	 * observation probabilities for the model
+	 * pi is the intial state of the model
+	 * the function returns true if the input matches any 
+	 * of the observations used to train the model
+	*/
 	bool horizontalEvalution(int [] input){
 		
 		if(input.Length != 1){
@@ -264,6 +311,11 @@ public class HMMRecognizer : MonoBehaviour
 		}
 	}
 	
+	/**
+	 * this function runs all the gesture models above on any given
+	 * input and compares the results to get the best possible
+	 * gesture.
+	 **/
 	public int hmmEvalute(int [] input){
 		
 		bool square = squareEvalution(input);
