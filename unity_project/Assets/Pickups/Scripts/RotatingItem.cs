@@ -1,15 +1,10 @@
 using UnityEngine;
 
 public class RotatingItem : MonoBehaviour {
-    public float degreesPerSecond = 90f;
+    public float DegreesPerSecond = 90f;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
 	// Update is called once per frame
 	void Update () {
-        this.transform.RotateAround(Vector3.up, Time.deltaTime * Mathf.Deg2Rad * this.degreesPerSecond);
+        this.transform.RotateAround(Vector3.up, Time.deltaTime * Mathf.Deg2Rad * this.DegreesPerSecond);
 	}
 }
