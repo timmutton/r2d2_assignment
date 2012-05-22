@@ -29,7 +29,6 @@ public class playerMovement : MonoBehaviour {
 				
 				if(Input.GetButton("jump")){
 					if(bJump){
-						print("jump");
 						moveDir.y = jumpSpeed;
 					}
 				}
