@@ -1,8 +1,9 @@
 fileFormatVersion: 2
-guid: 4049740aae9ef43e886abbb34d936e5b
+guid: 5d9dc12d6ce342e45bae5c7d2d8726e7
 ModelImporter:
   fileIDToRecycleName:
-    4300000: crate
+    4300000: healthPickUpMesh
+    4300002: healthPickUpGlowPlane
   serializedVersion: 10
   materials:
     importMaterials: 1
@@ -22,9 +23,9 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 1
+    addColliders: 0
     swapUVChannels: 0
-    generateSecondaryUV: 1
+    generateSecondaryUV: 0
     useFileUnits: 1
     optimizeMesh: 0
     secondaryUVAngleDistortion: 8
@@ -33,7 +34,7 @@ ModelImporter:
     secondaryUVPackMargin: 4
   tangentSpace:
     normalSmoothAngle: 60
-    splitTangentsAcrossUV: 0
+    splitTangentsAcrossUV: 1
     normalImportMode: 0
     tangentImportMode: 1
   textMetaNamesToFileIDs:
@@ -45,14 +46,31 @@ ModelImporter:
         first: 4
         second: 801a0600
       data:
+        first: 111
+        second: 605fa900
+    healthPickUpGlowPlane:
+      data:
+        first: 1
+        second: a2860100
+      data:
+        first: 4
+        second: 821a0600
+      data:
         first: 23
         second: 60182300
       data:
         first: 33
         second: a05a3200
+    healthPickUpMesh:
       data:
-        first: 64
-        second: 00a86100
+        first: 1
+        second: a4860100
       data:
-        first: 111
-        second: 605fa900
+        first: 4
+        second: 841a0600
+      data:
+        first: 23
+        second: 62182300
+      data:
+        first: 33
+        second: a25a3200
