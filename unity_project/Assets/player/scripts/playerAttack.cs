@@ -74,13 +74,16 @@ public class playerAttack : MonoBehaviour {
 	
 	//set spell properties based off passed gesture
 	void handleGesture(GestureEnum gest){
-		if(gest == GestureEnum.V_DOWN)
+		if(gest == GestureEnum.V_DOWN){
 			elem = SpellElement.earth;
-		else if(gest == GestureEnum.V_UP)
+			type = SpellType.invalid;
+		}else if(gest == GestureEnum.V_UP){
 			elem = SpellElement.fire;
-		else if(gest == GestureEnum.SQUARE)
+			type = SpellType.invalid;
+		}else if(gest == GestureEnum.SQUARE){
 			elem = SpellElement.water;
-		else if(gest == GestureEnum.HORIZONTAL_LINE)
+			type = SpellType.invalid;
+		}else if(gest == GestureEnum.HORIZONTAL_LINE)
 			type = SpellType.offensive;
 		else if(gest == GestureEnum.VERTICAL_LINE)
 			type = SpellType.defensive;
@@ -91,10 +94,6 @@ public class playerAttack : MonoBehaviour {
 
 
 	void castSpell() {
-		if(this.attackSound != null) {
-			AudioUtil.PlaySound(this.attackSound, this.gameObject.transform.position);
-		}
-
 		Dictionary<int, object> spellParams = new Dictionary<int, object>();
 		Rune selectedSpell;
 		Inventory playerInv = gameObject.GetComponent<Inventory>();
@@ -121,6 +120,8 @@ public class playerAttack : MonoBehaviour {
 		}
 		playerInv.Remove(selectedSpell);
 		
+		Debug.Log(DefensiveSpellBehaviour.spellDamageMultiplier(gameObject, elem) );
+		
 		spellParams[(int)SpellParameter.element] = elem;
 		spellParams[(int)SpellParameter.type] = type;
 		spellParams[(int)SpellParameter.damageMultiplier] = 
@@ -141,6 +142,10 @@ public class playerAttack : MonoBehaviour {
 		GameObject tempSpell = Instantiate(spell, spawnPos, Quaternion.Euler(playerCam.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0)) as GameObject;
 //		tempSpell.transform.parent = transform;
 		tempSpell.SendMessage("setSpellProperties", spellParams);
+		
+		if(this.attackSound != null) {
+			AudioUtil.PlaySound(this.attackSound, this.gameObject.transform.position);
+		}
 		
 		clearSpellData();
 	}

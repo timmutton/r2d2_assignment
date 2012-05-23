@@ -23,7 +23,6 @@ public class playerMovement : MonoBehaviour {
 		if(controller.isGrounded){
 			//keyboard input for movement
 			if(useKeyboard){				
-				rotDir = new Vector3(Input.GetAxis("lookX"), Input.GetAxis("lookY"), 0);
 				moveDir = new Vector3(Input.GetAxis("moveX")* 0.7F, 0, Input.GetAxis("moveZ"));
 				moveDir = transform.TransformDirection(moveDir) * CurrentMovementSpeed();
 				
@@ -33,10 +32,6 @@ public class playerMovement : MonoBehaviour {
 					}
 				}
 			}else{ //wiimote input for movement
-				rotDir = new Vector3(
-					(Mathf.Abs(state.ncJoyY) > 0.1)?(state.ncJoyY):0,
-					(Mathf.Abs(state.ncJoyX) > 0.1)?(state.ncJoyX):0, 
-					0);
 				moveDir = new Vector3(0, 0, 0);
 				if(state.Left)
 					moveDir.x = -1.0f;
@@ -51,7 +46,6 @@ public class playerMovement : MonoBehaviour {
 				moveDir = transform.TransformDirection(moveDir) * CurrentMovementSpeed();
 				
 				if(state.ncZ){
-					print("jump");
 					moveDir.y = jumpSpeed;
 				}
 			}
@@ -65,7 +59,7 @@ public class playerMovement : MonoBehaviour {
 		if(useKeyboard){				
 			rotDir = new Vector3(Input.GetAxis("lookX"), Input.GetAxis("lookY"), 0);
 		}else{
-			rotDir = new Vector3(state.ncJoyY, state.ncJoyX, 0);	
+			rotDir = new Vector3((Mathf.Abs(state.ncJoyY) > 0.25)?(state.ncJoyY):0, (Mathf.Abs(state.ncJoyX) > 0.25)?(state.ncJoyX):0, 0);	
 		}
 		
 		if(!invertXAxes){

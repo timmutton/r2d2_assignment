@@ -47,22 +47,23 @@ public class Gesture {
 				for(int i = 1; i < this.Moves.Length; ++i) {
 					var d = this.hmmDirectionForVector(this.Moves[i]);
 					if(result.Last() != d) {;
-						if(d == HMMRecognizer.NORTH && (result.Last() == HMMRecognizer.NORTH_EAST || result.Last() == HMMRecognizer.NORTH_WEST))
+//						Debug.Log("Current: " + d + " Prev: " + result.Last());  
+						if(d == HMMRecognizer.NORTH && !(result.Last() == HMMRecognizer.EAST || result.Last() == HMMRecognizer.WEST))
 							continue;
-						if(d == HMMRecognizer.SOUTH && (result.Last() == HMMRecognizer.SOUTH_EAST || result.Last() == HMMRecognizer.SOUTH_WEST))
+						if(d == HMMRecognizer.SOUTH && !(result.Last() == HMMRecognizer.EAST || result.Last() == HMMRecognizer.WEST))
 							continue;
-						if(d == HMMRecognizer.EAST && (result.Last() == HMMRecognizer.NORTH_EAST || result.Last() == HMMRecognizer.SOUTH_EAST))
+						if(d == HMMRecognizer.EAST && !(result.Last() == HMMRecognizer.NORTH || result.Last() == HMMRecognizer.SOUTH))
 							continue;
-						if(d == HMMRecognizer.WEST && (result.Last() == HMMRecognizer.NORTH_WEST || result.Last() == HMMRecognizer.SOUTH_WEST))
+						if(d == HMMRecognizer.WEST && !(result.Last() == HMMRecognizer.NORTH || result.Last() == HMMRecognizer.SOUTH))
 							continue;
 						
-						if(d == HMMRecognizer.NORTH_EAST && (result.Last() == HMMRecognizer.NORTH || result.Last() == HMMRecognizer.EAST))
+						if(d == HMMRecognizer.NORTH_EAST && !(result.Last() == HMMRecognizer.NORTH_WEST || result.Last() == HMMRecognizer.SOUTH_EAST))
 							continue;
-						if(d == HMMRecognizer.NORTH_WEST && (result.Last() == HMMRecognizer.NORTH || result.Last() == HMMRecognizer.WEST))
+						if(d == HMMRecognizer.NORTH_WEST && !(result.Last() == HMMRecognizer.NORTH_EAST || result.Last() == HMMRecognizer.SOUTH_WEST))
 							continue;
-						if(d == HMMRecognizer.SOUTH_EAST && (result.Last() == HMMRecognizer.SOUTH || result.Last() == HMMRecognizer.EAST))
+						if(d == HMMRecognizer.SOUTH_EAST && !(result.Last() == HMMRecognizer.NORTH_EAST || result.Last() == HMMRecognizer.SOUTH_WEST))
 							continue;
-						if(d == HMMRecognizer.SOUTH_WEST && (result.Last() == HMMRecognizer.SOUTH || result.Last() == HMMRecognizer.WEST))
+						if(d == HMMRecognizer.SOUTH_WEST && !(result.Last() == HMMRecognizer.SOUTH_EAST || result.Last() == HMMRecognizer.NORTH_WEST))
 							continue;
 						Debug.Log(d.ToString());
 						result.Add(d);
@@ -146,7 +147,7 @@ public class WiiGestures {
 	}
 
 	private List<Vector2> FilterAccelerationsByMagnitude(List<Vector2> accelerations) {
-		float idleAccelerationThreshold = 0.01f;
+		float idleAccelerationThreshold = 0.025f;
 		return accelerations.Where(v => Vector3.Magnitude(v) > idleAccelerationThreshold).ToList();
 	}
 

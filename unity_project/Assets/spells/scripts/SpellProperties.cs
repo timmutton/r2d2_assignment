@@ -63,6 +63,7 @@ public class SpellProperties : MonoBehaviour {
 			gameObject.name = "defensiveSpell";
 			dSpellBehave.enabled = true;
 			renderer.enabled = false;
+			transform.parent = parent;
 			Destroy(oSpellBehave);
 			Destroy(trail);
 		}
