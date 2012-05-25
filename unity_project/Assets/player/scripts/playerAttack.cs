@@ -12,6 +12,8 @@ public class playerAttack : MonoBehaviour {
 	private SpellElement elem = SpellElement.invalid;
 	private SpellType type = SpellType.invalid;
 	
+	private playerUI ui;
+	
 	ArrayList points = new ArrayList();
 	Vector3 currentPosition;
 	Vector3 initialPosition;
@@ -26,6 +28,8 @@ public class playerAttack : MonoBehaviour {
 			Debug.Log("Could not find components");
 		}
 		currentEvent = null;
+		
+		ui = gameObject.GetComponentInChildren<playerUI>();
 	}
 
 	float GetQuadDamageMultiplier() {
@@ -88,8 +92,11 @@ public class playerAttack : MonoBehaviour {
 		else if(gest == GestureEnum.VERTICAL_LINE)
 			type = SpellType.defensive;
 		
-		if(elem != SpellElement.invalid && type != SpellType.invalid)
-			castSpell();
+		if(elem != SpellElement.invalid){
+			ui.SetEquippedSpell(elem);
+			if(type != SpellType.invalid)
+				castSpell();
+		}
 	}
 
 

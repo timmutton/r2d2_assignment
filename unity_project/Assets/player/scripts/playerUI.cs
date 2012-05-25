@@ -8,6 +8,8 @@ public class playerUI : MonoBehaviour {
 	
 	public Font font;
 	public float x,y,z;
+	
+	private SpellElement equippedSpell;
 
 	public Texture2D healthBackground;
 	public float pBarX, pBarY, pBarWidth, pBarHeight;
@@ -19,6 +21,9 @@ public class playerUI : MonoBehaviour {
 	public Texture2D damageTex;
 	public float damageDuration;
 	private bool _bDrawDamage;
+	
+	public float pEquipX, pEquipY, pEquipWidth, pEquipHeight;
+	private float equipLeft, equipTop, equipWidth, equipHeight;
 	
 	
 	private float barLeft, barTop, barWidth, barHeight;
@@ -45,9 +50,13 @@ public class playerUI : MonoBehaviour {
 		
 		//Draws the timer
 		DrawTimer (timerLeft, timerTop, timerWidth, timerHeight, gameManager.instance.CurrentTime, timerBackground);
+		DrawEquippedSpell (equipLeft, equipTop, equipWidth, equipHeight);
 		
 		//Draw damage indicator
 		StartCoroutine(DrawDamage ());
+		
+		//Draw equipped spell
+		//DrawEquippedSpell();
 		
     	this.DrawCrosshair();
     }
@@ -87,6 +96,7 @@ public class playerUI : MonoBehaviour {
 		GUI.EndGroup();
 	}
 	
+	//Draws the crosshair
 	private void DrawCrosshair() {
 		float size = 25f;
 		GUI.DrawTexture(new Rect(this.camRect.xMin + this.camRect.width /2f - size / 2f,
@@ -94,6 +104,7 @@ public class playerUI : MonoBehaviour {
 			size, size), this.Crosshair);
 	}
 	
+	//Draws the timer
 	private void DrawTimer(float left, float top, float width, float height,
 		float time, Texture2D background){
 		Rect locationRect = new Rect(left, top, width, height);
@@ -125,6 +136,34 @@ public class playerUI : MonoBehaviour {
 			
 	}
 	
+	public void SetEquippedSpell(SpellElement spell){
+		equippedSpell = spell;
+	}
+	
+	//Draws the currently equipped spell
+	private void DrawEquippedSpell(float left, float top, float width, float height){
+		Rect locationRect = new Rect(left, top, width, height);
+		Rect drawRect = new Rect(0, 0, width, height);
+		
+		
+		//Creating a style
+		GUIStyle style = new GUIStyle();
+		style.fontSize = Screen.width/30;
+		style.normal.textColor = Color.white;
+		style.font = font;
+
+		//Groups the timer elements and display them
+		GUI.BeginGroup (locationRect);
+			GUI.BeginGroup(new Rect(0, 0, width, height));
+				//GUI.DrawTexture(drawRect, background);
+			GUI.EndGroup();
+			GUI.Label(new Rect(Screen.width/20, Screen.height/15, width, height), "Element", style);
+			if(equippedSpell != null)
+				GUI.Label(new Rect(Screen.width/20, Screen.height/8, width, height), equippedSpell.ToString(), style);
+		GUI.EndGroup();
+					
+	}
+	
 	//Draws the red damage indicator around the player window upon taking damage
 	IEnumerator DrawDamage(){
 		
@@ -149,6 +188,12 @@ public class playerUI : MonoBehaviour {
 		timerTop = camRect.height * pTimerY/100;
 		timerWidth = camRect.width * pTimerWidth/100;
 		timerHeight = camRect.height * pTimerHeight/100;
+		
+		equipLeft = camRect.x + camRect.width * pEquipX/100;
+		equipTop = camRect.height * pEquipY/100;
+		equipWidth = camRect.width * pEquipWidth/100;
+		equipHeight = camRect.height * pEquipHeight/100;
+		
 		
 		screenWidth = Screen.width;
 		screenHeight = Screen.height;
